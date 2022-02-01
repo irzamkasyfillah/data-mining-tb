@@ -125,7 +125,6 @@ def preprocessing(dataset):
             elif ((z_score) >= 2):
                 status = "Obesitas"
 
-        print("IMT = ", imt, ", Z score = ", z_score)
         status_gizi.append(status)
         i += 1
 
@@ -148,9 +147,6 @@ def preprocessing(dataset):
     return df, data_array
 
 
-"""# Get Lat and Long"""
-
-
 def coordinate(df):
     df['location'] = df[['Alamat (Kelurahan)', 'Alamat (Kecamatan)',
                          'Alamat (Kab/Kota)']].agg(','.join, axis=1)
@@ -170,9 +166,6 @@ def coordinate(df):
     locations = pd.DataFrame(loc, columns=['address', 'lat', 'long'])
 
     return locations, geolocator, loc
-
-
-"""# Transform"""
 
 
 def transform(data_array, sparse=False):
@@ -212,12 +205,6 @@ def transform(data_array, sparse=False):
     return data_encoding
 
 
-"""# FP-Growth
-
-## Set FP-Tree
-"""
-
-
 def setup_fptree(df, min_support):
     num_itemsets = len(df.index)
 
@@ -255,9 +242,6 @@ def setup_fptree(df, min_support):
     return tree, rank
 
 
-"""## Generate Itemsets"""
-
-
 def generate_itemsets(generator, num_itemsets, colname_map):
     itemsets = []
     supports = []
@@ -272,9 +256,6 @@ def generate_itemsets(generator, num_itemsets, colname_map):
             .apply(lambda x: frozenset([colname_map[i] for i in x]))
 
     return res_df
-
-
-"""## FP-Tree"""
 
 
 class FPTree(object):
@@ -347,9 +328,6 @@ class FPTree(object):
               (count, cond_items), end="\n")
 
 
-"""## FP-Node"""
-
-
 class FPNode(object):
     def __init__(self, item, count=0, parent=None):
         self.item = item
@@ -372,9 +350,6 @@ class FPNode(object):
 
         path.reverse()
         return path
-
-
-"""## FP-Growth Step"""
 
 
 def fpg_step(tree, minsup, colnames, max_len, verbose):
@@ -406,9 +381,6 @@ def fpg_step(tree, minsup, colnames, max_len, verbose):
                 yield sup, iset
 
 
-"""## FP-Growth"""
-
-
 def fpgrowth(df, min_support=0.1, use_colnames=True, max_len=None, verbose=0):
     if min_support <= 0.:
         raise ValueError('`min_support` must be a positive '
@@ -426,12 +398,6 @@ def fpgrowth(df, min_support=0.1, use_colnames=True, max_len=None, verbose=0):
     return generate_itemsets(generator, len(df.index), colname_map)
 
 
-"""# Association Rules
-
-## Count Conviction
-"""
-
-
 def conviction(sAC, sA, sC):
     confidence = sAC / sA
     conviction = np.empty(confidence.shape, dtype=float)
@@ -446,9 +412,6 @@ def conviction(sAC, sA, sC):
                                    (1. - confidence[confidence < 1.]))
 
     return conviction
-
-
-"""## Get Rules"""
 
 
 def get_rules(res_df, metric="confidence", min_threshold=0.8, support_only=False):
@@ -602,7 +565,12 @@ def visualisation(dict_kec, rules, locations):
         location = locations[locations['address'].str.contains(kec)]
 
         if not location.empty:
-            dict_kec_rules_location[kec] = (*dict_kec_rules[kec], location['lat'].iloc[0], location['long'].iloc[0])
+            dict_kec_rules_location[kec] = {
+                "index": str(dict_kec_rules[kec][0]),
+                "rules": str(dict_kec_rules[kec][1]),
+                "lat": str(location['lat'].iloc[0]),
+                "long": str(location['long'].iloc[0])
+            }
 
     return dict_kec_rules_location
 
@@ -623,7 +591,9 @@ def asosiasi(dataset, min_support=0.4, min_threshold=0.9):
     print(rules)
     print(dict_kec_rules_location)
 
-    return {'df': df,
+    return {
+            'df': df,
             'data_array': data_array,
             'locations': locations,
-            'dict_kec_rules_location': dict_kec_rules_location}
+            'dict_kec_rules_location': dict_kec_rules_location
+    }
