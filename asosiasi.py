@@ -585,8 +585,6 @@ def asosiasi(dataset, min_support=0.4, min_threshold=0.9):
     dict_kec = getKecamatandict(list_kec, data_array)
     dict_kec_rules_location = visualisation(dict_kec, rules, locations)
 
-    print(df)
-    print(data_array)
     print(frequent_pattern)
     print(rules)
     print(dict_kec_rules_location)
@@ -594,6 +592,8 @@ def asosiasi(dataset, min_support=0.4, min_threshold=0.9):
     return {
             'df': df,
             'data_array': data_array,
+            'fp': frequent_pattern,
+            'rules': rules.to_json(),
             'locations': locations,
             'dict_kec_rules_location': dict_kec_rules_location
     }
