@@ -7,7 +7,6 @@ from datetime import date
 
 app = FastAPI()
 dataset = 'api/csv/databaru.csv'
-start = date.today()
 format = "%Y%m%d_%H%M%S"
 
 
@@ -18,6 +17,7 @@ async def root(start_date: date = start):
 
 @app.post("/upload-file/")
 async def create_upload_file(uploaded_file: UploadFile = File(...)):
+    start = date.today()
     date_time = start.strftime(format)
     file_location = f"files/{ date_time + uploaded_file.filename}"
     with open(file_location, "wb+") as file_object:
