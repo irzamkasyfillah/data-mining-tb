@@ -6,7 +6,7 @@ from fastapi import FastAPI, UploadFile, File
 from datetime import date
 
 app = FastAPI()
-dataset = 'databaru.csv'
+dataset = 'api/csv/databaru.csv'
 start = date.today()
 format = "%Y%m%d_%H%M%S"
 

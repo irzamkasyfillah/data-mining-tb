@@ -12,8 +12,8 @@ from geopy.geocoders import Nominatim
 
 
 def preprocessing(dataset):
-    IMT_laki = pd.read_csv('status_gizi_laki.csv', header=1)
-    IMT_perempuan = pd.read_csv('status_gizi_perempuan.csv', header=1)
+    IMT_laki = pd.read_csv('api/csv/status_gizi_laki.csv', header=1)
+    IMT_perempuan = pd.read_csv('api/csv/status_gizi_perempuan.csv', header=1)
     df = pd.read_csv(dataset)
     df = df.rename(columns={
         'Alamat (mohon sertakan nama kelurahan dan kecamatan)': 'Alamat lengkap',
