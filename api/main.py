@@ -3,26 +3,29 @@ import shutil
 
 from asosiasi import asosiasi
 from fastapi import FastAPI, UploadFile, File
-from datetime import date
+from datetime import datetime
 
 app = FastAPI()
 dataset = 'api/csv/databaru.csv'
-start = date.today()
-format = "%Y%m%d_%H%M%S"
+start = datetime.today()
+format = "%d%m%Y_%H%M%S_"
 
 
 @app.get("/")
-async def root(start_date: date = start):
+async def root(start_date: datetime = start):
     return {"start_date": start_date}
 
 
-@app.post("/upload-file/")
+
+@app.post("/uploadfile/")
 async def create_upload_file(uploaded_file: UploadFile = File(...)):
     date_time = start.strftime(format)
-    file_location = f"files/{ date_time + uploaded_file.filename}"
+    file_location = f"{ date_time + uploaded_file.filename}"
     with open(file_location, "wb+") as file_object:
         shutil.copyfileobj(uploaded_file.file, file_object)
-    return {"info": f"file '{uploaded_file.filename}' saved at '{file_location}'"}
+
+
+    return {"info": f"file '{uploaded_file.filename}' saved at '{file_location}'",}
 
 
 @app.get("/asosiasi")
