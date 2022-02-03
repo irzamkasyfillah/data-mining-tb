@@ -16,12 +16,6 @@ async def root(start_date: date = start):
     return {"start_date": start_date}
 
 
-
-@app.post("/files/")
-async def create_file(file: bytes = File(...)):
-    return {"file_size": len(file)}
-
-
 @app.post("/upload-file/")
 async def create_upload_file(uploaded_file: UploadFile = File(...)):
     date_time = start.strftime(format)
