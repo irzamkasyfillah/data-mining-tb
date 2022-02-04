@@ -1,12 +1,13 @@
 import uvicorn
 import shutil
 
+from os import path
 from asosiasi import asosiasi
 from fastapi import FastAPI, UploadFile, File
 from datetime import datetime
 
 app = FastAPI()
-dataset = 'api/csv/databaru.csv'
+dataset = "api/dataset/databaru.csv"
 start = datetime.today()
 format = "%d%m%Y_%H%M%S_"
 
@@ -19,13 +20,21 @@ async def root(start_date: datetime = start):
 
 @app.post("/uploadfile/")
 async def create_upload_file(uploaded_file: UploadFile = File(...)):
-    date_time = start.strftime(format)
-    file_location = f"{ date_time + uploaded_file.filename}"
-    with open(file_location, "wb+") as file_object:
-        shutil.copyfileobj(uploaded_file.file, file_object)
+    allowedFiles = {"application/vnd.ms-excel"}
+    if uploaded_file.content_type in allowedFiles:
+        date_time = start.strftime(format)
+        file_location = path.join("api","dataset", date_time + uploaded_file.filename)
+        with open(file_location, "wb") as file_object:
+            shutil.copyfileobj(uploaded_file.file, file_object)
 
+        global dataset
+        dataset = file_location
 
-    return {"info": f"file '{uploaded_file.filename}' saved at '{file_location}'",}
+        return {"info": f"file '{uploaded_file.filename}' saved at '{file_location}'"}
+
+    else:
+        return {"info": 'Hanya menerima file CSV'}
+
 
 
 @app.get("/asosiasi")
