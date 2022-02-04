@@ -1,13 +1,13 @@
 import { withMainLayout } from "../../src/components/MainLayout"
 
-function Asosiasi() {
+function Cluster() {
     return (
       <div>
         <p>
-            Dashboard
+            cluster
         </p>
       </div>
     )
   }
-  
-  export default withMainLayout(Asosiasi)
+
+export default withMainLayout(Cluster)
