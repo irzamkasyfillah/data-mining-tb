@@ -5,7 +5,7 @@ import {statesData} from '../data_coordinate_mks'
 
 const center = [-5.136143, 119.469370];
 
-const Map = () => {
+const MapClustering = () => {
     return (
         <MapContainer center={center} zoom={12} scrollWheelZoom={true} className={'mapid'}>
             <TileLayer
@@ -69,4 +69,4 @@ const Map = () => {
     )
 }
 
-export default Map
+export default MapClustering
