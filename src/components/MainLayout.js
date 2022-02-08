@@ -75,7 +75,7 @@ const MainLayout = ({ children }) => {
           <div className="flex">
             <Link href="/">
               <button class="bg-[#F9663A] hover:bg-[#C7512E] text-white font-bold py-2 px-4 rounded-full">
-                Homepage
+                Upload Data Baru
               </button>
             </Link>
 
