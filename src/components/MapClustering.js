@@ -9,7 +9,7 @@ const MapClustering = () => {
     return (
         <MapContainer center={center} zoom={12} scrollWheelZoom={true} className={'mapid'}>
             <TileLayer
-                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                attribution='&copy; <a href="https://osm.org/copyright" target="_blank">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <Marker position={[51.505, -0.09]}>
@@ -20,10 +20,20 @@ const MapClustering = () => {
 
             {
                 statesData.features.map((state) => {
-                    const coordinates = state.geometry.coordinates[0].map((item) => [item[1], item[0]]);
+                    let coordinates = [];
+                    if (state.geometry.type === 'MultiPolygon') {
+                        const array_polygon = [];
 
-                    // console.log(coordinates)
+                        for (const i in state.geometry.coordinates) {
+                            const coord = state.geometry.coordinates[i][0].map((item) => [item[1], item[0]]);
+                            array_polygon.push(coord);
+                        }
+                        coordinates = array_polygon;
+                    } else {
+                        coordinates = state.geometry.coordinates[0].map((item) => [item[1], item[0]]);
+                    }
 
+                    // eslint-disable-next-line react/jsx-key
                     return (<Polygon
                             pathOptions={{
                                 fillColor: '#FD8D3C',
