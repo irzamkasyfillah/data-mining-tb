@@ -1,7 +1,8 @@
 import React from 'react';
+import Router from 'next/router';
 import Link from 'next/link';
 import { data } from 'autoprefixer';
-import { Router } from 'next/router';
+// import { Router } from 'next/router';
 import Uploader from '../src/components/Uploader';
 
 class Home extends React.Component {
@@ -32,7 +33,7 @@ class Home extends React.Component {
     .then((req) => {
       return req.json()
     })
-    // Router.push("/dashboard")
+    Router.push("/dashboard")
   }
 
   

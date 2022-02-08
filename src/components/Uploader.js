@@ -30,13 +30,13 @@ export default function Uploader(props) {
       <div className="container">
         <div {...getRootProps({className: 'dropzone'})}>
           <input {...getInputProps()} />
-          <p>Drag 'n' drop some files here</p>
+          <p>Drag and drop some files here</p>
           <button type="button" onClick={open} className="bg-blue-300 hover:bg-blue-400 text-white rounded py-1 px-4 m-2">
             Browse
           </button>
         </div>
         <aside>
-          <h4>Files</h4>
+          {/* <h4>Files</h4> */}
           <ul>{fileName}</ul>
         </aside>
       </div>
