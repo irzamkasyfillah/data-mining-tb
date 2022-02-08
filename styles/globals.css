@@ -120,3 +120,8 @@
 .disabled {
   color: #c2c9d1;
 }
+
+.mapid {
+  height: 70vh;
+  width: 100%;
+}

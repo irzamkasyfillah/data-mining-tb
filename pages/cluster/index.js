@@ -1,13 +1,12 @@
-import { withMainLayout } from "../../src/components/MainLayout"
+import {withMainLayout} from "../../src/components/MainLayout"
+import dynamic from "next/dynamic";
 
 function Cluster() {
-    return (
-      <div>
-        <p>
-            cluster
-        </p>
-      </div>
+    const Map = dynamic(
+        () => import('../../src/components/Map'), // replace '@components/map' with your component's location
+        {ssr: false} // This line is important. It's what prevents server-side render
     )
-  }
+    return <Map/>
+}
 
 export default withMainLayout(Cluster)
