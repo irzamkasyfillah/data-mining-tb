@@ -71,16 +71,6 @@ const MainLayout = ({ children }) => {
               height="20"
             /> */}
           </div>
-
-          <div className="flex">
-            <Link href="/">
-              <button class="bg-[#F9663A] hover:bg-[#C7512E] text-white font-bold py-2 px-4 rounded-full">
-                Upload Data Baru
-              </button>
-            </Link>
-
-            {/* <ProfilePopover /> */}
-          </div>
         </div>
       </div>
       <nav

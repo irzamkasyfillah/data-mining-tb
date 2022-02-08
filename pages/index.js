@@ -12,6 +12,7 @@ class Home extends React.Component {
       files: null
     }
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleGenerateData = this.handleGenerateData.bind(this)
   }
  
   // Callback~
@@ -31,9 +32,21 @@ class Home extends React.Component {
       
     })
     .then((req) => {
-      return req.json()
+      this.handleGenerateData()
+      // return req.json()
     })
     Router.push("/dashboard")
+  }
+
+  
+  handleGenerateData = async () => {
+    const req = fetch(`http://127.0.0.1:80/asosiasi/`, {
+      method: "GET",
+    })
+    .then((req) => {
+    console.log(req, req.json())
+    return req.json()
+    })
   }
 
   
@@ -49,7 +62,7 @@ class Home extends React.Component {
                 </div>
               </div>
               <div className='m-2 grid place-content-center'>
-                 <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Generate Data</button>
+                 <button type='submit' className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Generate Data</button>
               </div>
             </form>
           </div>
