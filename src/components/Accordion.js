@@ -12,7 +12,7 @@ export const Accordion = ({ title, content }) => {
     setActive(active === false ? true : false)
     // @ts-ignore
     setHeight(active ? '0px' : `${contentSpace.current.scrollHeight}px`)
-    setRotate(active ? 'transform duration-700 ease' : 'transform duration-700 ease rotate-180')
+    setRotate(active ? 'transform duration-700 ease' : 'transform duration-700 ease rotate-90')
   }
 
   return (
@@ -32,13 +32,13 @@ export const Accordion = ({ title, content }) => {
                 </button>
             </div>
         </div>
-        <div class="px-6 pb-2">
+        <div className="px-6 pb-2">
             <div
                 ref={contentSpace}
                 style={{ maxHeight: `${height}` }}
                 className="overflow-auto transition-max-height duration-700 ease-in-out"
             >
-                <p className="text-gray-700 text-base">{content}</p>
+                {content}
             </div>
         </div>
     </div>

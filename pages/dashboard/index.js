@@ -31,7 +31,7 @@ function Asosiasi() {
         setLoading(false)
         Router.push({
           pathname: "/asosiasi",
-          query: {asosiasi: 1}
+          query: {generate: 1}
         })
         // return req.json()
       })
@@ -51,7 +51,7 @@ function Asosiasi() {
       setLoading(false)
       Router.push({
         pathname: "/asosiasi",
-        query: data
+        query: {generate: 1}
       })
     // return req.json()
     })
