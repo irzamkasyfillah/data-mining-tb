@@ -13,7 +13,7 @@ function Asosiasi() {
   const [markers, setMarkers] = useState(null);
 
   const Map = dynamic(
-    () => import('../../src/components/MapAsosiasi'), // replace '@components/map' with your component's location
+    () => import('../../src/components/NewMapAsosiasi'), // replace '@components/map' with your component's location
     { ssr: false } // This line is important. It's what prevents server-side render
   )
 
@@ -101,7 +101,10 @@ function Asosiasi() {
           )}
         </div>
         <div className='col-span-2'>
-          <Map data={data} selectedData={selectedData}/>
+          <Map 
+            data={data} 
+            // selectedData={selectedData} 
+            center={{lat:-5.136143, lng:119.469370}}/>
         </div>
       </div>
     </>
