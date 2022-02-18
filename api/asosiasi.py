@@ -308,7 +308,7 @@ class FPTree(object):
             self.nodes[item].append(child_node)
             node = child_node
 
-        print(node)
+        # print(node)
 
     def is_path(self):
         if len(self.root.children) > 1:
@@ -544,7 +544,7 @@ def getKecamatandict(list_kec, data_array):
 def visualisation(dict_kec, rules, locations):
     dict_kec_rules = {}
 
-    for kec in dict_kec:
+    for i, kec in enumerate(dict_kec):
         for arr in dict_kec[kec]:
             for row in rules.iterrows():
                 exist = True
@@ -557,7 +557,13 @@ def visualisation(dict_kec, rules, locations):
                         exist = False
 
                 if exist:
-                    dict_kec_rules[kec] = row
+                    dict_rule = {}
+                    list_antecedents = [antecedent for antecedent in dict(row[1].items())['antecedents']]
+                    list_consequents = [antecedent for antecedent in dict(row[1].items())['consequents']]
+                    dict_rule['index'] = i
+                    dict_rule['antecedents'] = list_antecedents
+                    dict_rule['consequents'] = list_consequents
+                    dict_kec_rules[kec] = dict_rule
 
     dict_kec_rules_location = {}
     for kec in dict_kec_rules:
@@ -565,13 +571,29 @@ def visualisation(dict_kec, rules, locations):
 
         if not location.empty:
             dict_kec_rules_location[kec] = {
-                "index": str(dict_kec_rules[kec][0]),
-                "rules": str(dict_kec_rules[kec][1]),
-                "lat": str(location['lat'].iloc[0]),
-                "long": str(location['long'].iloc[0])
+                "index": dict_kec_rules[kec]['index'],
+                "antecedents": dict_kec_rules[kec]['antecedents'],
+                "consequents": dict_kec_rules[kec]['consequents'],
+                "lat": location['lat'].iloc[0],
+                "long": location['long'].iloc[0]
             }
 
     return dict_kec_rules_location
+
+
+def get_result(dict_kec_rules_location):
+    result = {}
+    for kec in dict_kec_rules_location:
+        antecedents = dict_kec_rules_location[kec]["rules"]
+        consequents = dict_kec_rules_location[kec]["rules"]
+        result[kec] = {
+            "id": dict_kec_rules_location[kec]["index"],
+            "antecedents": antecedents,
+            "consequents": consequents,
+            "lat": dict_kec_rules_location[kec]["lat"],
+            "long": dict_kec_rules_location[kec]["long"]
+        }
+    return result
 
 
 def asosiasi(dataset, min_support=0.4, min_threshold=0.9):
