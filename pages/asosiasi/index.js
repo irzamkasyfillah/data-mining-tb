@@ -74,7 +74,8 @@ function Asosiasi() {
     console.log("data", data?.dict_kec_rules_location)
     const result = data?.dict_kec_rules_location
     if (result) {
-      return Object.keys(result)?.map(kec => {
+      const sortedResult = Object.keys(result).sort()
+      return sortedResult?.map(kec => {
         const resultKec = result[kec]
         const antecedent = resultKec?.antecedents?.join(', ')
         const consequent = resultKec?.consequents?.join(', ')
