@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { withMainLayout } from '../../src/components/MainLayout'
 import { useRouter, withRouter } from 'next/router'
 import { Accordion } from '../../src/components/Accordion'
@@ -11,9 +11,10 @@ function Asosiasi() {
   const [data, setData] = useState(null);
   const [selectedData, setSelectedData] = useState(null);
   const [markers, setMarkers] = useState(null);
+  const [center, setCenter] = useState(null)
 
   const Map = dynamic(
-    () => import('../../src/components/NewMapAsosiasi'), // replace '@components/map' with your component's location
+    () => import('../../src/components/MapAsosiasi'), // replace '@components/map' with your component's location
     { ssr: false } // This line is important. It's what prevents server-side render
   )
 
@@ -63,6 +64,10 @@ function Asosiasi() {
 
   const handleClick = (data) => {
     setSelectedData(data)
+    const center = [data?.lat, data?.long]
+    setCenter(center)
+        console.log("center", center, data?.index)
+
   }
 
   const generateKec = () => {
@@ -74,8 +79,8 @@ function Asosiasi() {
         const antecedent = resultKec?.antecedents?.join(', ')
         const consequent = resultKec?.consequents?.join(', ')
         return (
-          <div onClick={() => handleClick(resultKec)}>
-            <Accordion key={resultKec?.index}  title={kec} content={(
+          <div key={resultKec?.index} onClick={() => handleClick(resultKec)}>
+            <Accordion title={kec} content={(
               <div>
                 <p>antecedent : {antecedent}</p>
                 <p>consequent : {consequent}</p>
@@ -90,24 +95,23 @@ function Asosiasi() {
   }
 
   return (
-    <>
-      <div className="grid grid-cols-3 gap-4">
-        <div>
-          {loading && <p>Please Wait...</p>}
-          {data && (
-            <div style={{height: '93vh', overflowY: 'auto'}}>
-              {generateKec()}
-            </div>
-          )}
-        </div>
-        <div className='col-span-2'>
-          <Map 
-            data={data} 
-            // selectedData={selectedData} 
-            center={{lat:-5.136143, lng:119.469370}}/>
-        </div>
+    <div className="grid grid-cols-3 gap-4">
+      <div>
+        {loading && <p>Please Wait...</p>}
+        {data && (
+          <div style={{height: '93vh', overflowY: 'auto'}}>
+            {generateKec()}
+          </div>
+        )}
       </div>
-    </>
+      <div className='col-span-2'>
+        <Map 
+          data={data} 
+          selectedData={selectedData} 
+          center={center || [-5.136143, 119.469370]}
+          />
+      </div>
+    </div>
   )
 }
 

@@ -24,11 +24,11 @@ export const Accordion = ({ title, content }) => {
                     onClick={toggleAccordion}
                 >
                     <p className="font-bold text-xl mb-2 inline-block">{title}</p>
-                    <img
+                    {/* <img
                         src={`/img/icons/chevron-up.svg`}
                         alt=">"
                         className={`${rotate} inline-block`}
-                    />
+                    /> */}
                 </button>
             </div>
         </div>
@@ -38,7 +38,7 @@ export const Accordion = ({ title, content }) => {
                 style={{ maxHeight: `${height}` }}
                 className="overflow-auto transition-max-height duration-700 ease-in-out"
             >
-                {content}
+                {/* {content} */}
             </div>
         </div>
     </div>

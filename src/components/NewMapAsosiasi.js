@@ -69,8 +69,11 @@ L.Marker.prototype.options.icon = DefaultIcon;
 function PointsList(props) {
     const { data, onItemClick } = props;
     const result = data?.dict_kec_rules_location
-    if (result) {
-      return Object.keys(result)?.map((kec, index) => {
+
+    return(
+    <>
+    {
+      result && Object.keys(result)?.map((kec, index) => {
         const resultKec = result[kec]
         return (
           <div>
@@ -81,14 +84,17 @@ function PointsList(props) {
                     onItemClick(kec);
                   }}
                 >
-                  {kec}
+                {kec}
                 </li>
             </ul>
           </div>
         )    
         
       })
+    
     }
+    </>
+    )
   }
   
   function PointsLayer(props) {
