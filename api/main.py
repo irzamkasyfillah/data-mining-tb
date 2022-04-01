@@ -39,7 +39,7 @@ async def create_upload_file(uploaded_file: UploadFile = File(...)):
     allowedFiles = {"application/vnd.ms-excel"}
     if uploaded_file.content_type in allowedFiles:
         date_time = start.strftime(format)
-        file_location = path.join("api","dataset", date_time + uploaded_file.filename)
+        file_location = path.join("./dataset", date_time + uploaded_file.filename)
         with open(file_location, "wb") as file_object:
             shutil.copyfileobj(uploaded_file.file, file_object)
 
