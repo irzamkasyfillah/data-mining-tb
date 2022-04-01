@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pandas as pd
 import numpy as np
 import itertools
@@ -9,12 +7,45 @@ import math
 from scipy.sparse import csr_matrix
 from itertools import combinations
 from geopy.geocoders import Nominatim
+from api.data import Data
 
 
 def preprocessing(dataset):
     IMT_laki = pd.read_csv('api/csv/status_gizi_laki.csv', header=1)
     IMT_perempuan = pd.read_csv('api/csv/status_gizi_perempuan.csv', header=1)
     df = pd.read_csv(dataset)
+
+    for df_data in df.iterrows():
+        db_data = Data(
+            code = df_data['code'],
+            timestamp = df_data['timestamp'],
+            tanggal_lahir = df_data['tanggal_lahir'],
+            umur = df_data['umur'],
+            tinggi_badan = df_data['tinggi_badan'],
+            berat_badan = df_data['berat_badan'],
+            jenis_kelamin = df_data['jenis_kelamin'],
+            alamat_kelurahan = df_data['alamat_kelurahan'],
+            alamat_kecamatan = df_data['alamat_kecamatan'],
+            alamat_kota = df_data['alamat_kota'],
+            alamat_lengkap = df_data['alamat_lengkap'],
+            pekerjaan_ayah = df_data['pekerjaan_ayah'],
+            pekerjaan_ibu = df_data['pekerjaan_ibu'],
+            pernah_sedang_tb = df_data['pernah_sedang_tb'],
+            diabetes_anak = df_data['diabetes_anak'],
+            vaksin_bcg = df_data['vaksin_bcg'],
+            riwayat_opname_anak = df_data['riwayat_opname_anak'],
+            penyakit_anak = df_data['penyakit_anak'],
+            asi_ekslusif = df_data['asi_ekslusif'],
+            tb_serumah = df_data['tb_serumah'],
+            penyakit_lainnya = df_data['penyakit_lainnya'],
+            penyakit_serumah = df_data['penyakit_serumah'],
+            konsumsi_obat_tb = df_data['konsumsi_obat_tb'],
+            luas_rumah = df_data['luas_rumah'],
+            jumlah_kamar = df_data['jumlah_kamar'],
+            jumlah_orang = df_data['jumlah_orang'],
+            sistem_ventilasi = df_data['sistem_ventilasi']
+        )
+
     df = df.rename(columns={
         'Alamat (mohon sertakan nama kelurahan dan kecamatan)': 'Alamat lengkap',
         'Apakah anak pernah atau sedang dalam pengobatan tuberkulosis?': 'pernah/sedang TB',
@@ -32,7 +63,8 @@ def preprocessing(dataset):
         'Berapa jumlah orang yang tinggal dalam satu rumah?': 'jumlah orang dalam rumah',
         'Bagaimana sistem ventilasi di rumah Anda? ': 'sistem ventilasi'})
 
-    df.drop(['Timestamp',
+    df.drop([
+            'Timestamp',
              'Tanggal Lahir',
              'Alamat lengkap',
              'pernah/sedang TB',
@@ -147,8 +179,10 @@ def preprocessing(dataset):
 
 
 def coordinate(df):
-    df['location'] = df[['Alamat (Kelurahan)', 'Alamat (Kecamatan)',
-                         'Alamat (Kab/Kota)']].agg(','.join, axis=1)
+    df['location'] = df[[
+                        # 'Alamat (Kelurahan)',
+                        'Alamat (Kecamatan)',
+                        'Alamat (Kab/Kota)']].agg(','.join, axis=1)
     coord = df['location'].apply(lambda x: x.split(','))
 
     geolocator = Nominatim(user_agent="arcgis")
@@ -579,6 +613,7 @@ def visualisation(dict_kec, rules, locations):
             }
 
     return dict_kec_rules_location
+
 
 
 def get_result(dict_kec_rules_location):
