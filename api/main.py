@@ -56,6 +56,10 @@ async def create_upload_file(uploaded_file: UploadFile = File(...)):
 def read_root():
     return asosiasi(dataset, 0.3, 0.9)
 
+@app.get("/cluster")
+async def do_cluster():
+    return cluster()
+
 
 if __name__ == '__main__':
     uvicorn.run("main:app", host='127.0.0.1', port=8080, reload=True)
