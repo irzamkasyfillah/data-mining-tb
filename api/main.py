@@ -3,8 +3,13 @@ import shutil
 
 from fastapi.middleware.cors import CORSMiddleware
 from os import path
+
+from sqlalchemy.orm import Session
+
+from api.clustering import cluster
+from api.database import Base, get_db
 from asosiasi import asosiasi
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Depends
 from datetime import datetime
 
 
@@ -34,12 +39,12 @@ async def root(start_date: datetime = start):
 
 
 @app.post("/uploadfile/")
-async def create_upload_file(uploaded_file: UploadFile = File(...)):
+async def create_upload_file(db: Session = Depends(get_db), uploaded_file: UploadFile = File(...)):
     print(uploaded_file)
     allowedFiles = {"application/vnd.ms-excel"}
     if uploaded_file.content_type in allowedFiles:
         date_time = start.strftime(format)
-        file_location = path.join("./dataset", date_time + uploaded_file.filename)
+        file_location = path.join("api/dataset", date_time + uploaded_file.filename)
         with open(file_location, "wb") as file_object:
             shutil.copyfileobj(uploaded_file.file, file_object)
 
@@ -53,8 +58,8 @@ async def create_upload_file(uploaded_file: UploadFile = File(...)):
 
 
 @app.get("/asosiasi")
-def read_root():
-    return asosiasi(dataset, 0.3, 0.9)
+def read_root(db: Session = Depends(get_db)):
+    return asosiasi(db, dataset, 0.3, 0.9)
 
 @app.get("/cluster")
 async def do_cluster():
