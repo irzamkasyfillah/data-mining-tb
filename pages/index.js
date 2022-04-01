@@ -1,5 +1,6 @@
 import React from 'react';
 import Router from 'next/router';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Link from 'next/link';
 import { data } from 'autoprefixer';
 // import { Router } from 'next/router';
