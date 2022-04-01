@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { withMainLayout } from '../../src/components/MainLayout'
 import { useRouter, withRouter } from 'next/router'
 import { Accordion } from '../../src/components/Accordion'
+import LoadingOverlay from 'react-loading-overlay';
 
 function Asosiasi() {
   const router = useRouter()
@@ -35,7 +36,7 @@ function Asosiasi() {
         setLoading(false)
     } else {
 
-      const req = fetch(`http://127.0.0.1:80/asosiasi/`, {
+      const req = fetch(`http://127.0.0.1:8080/asosiasi/`, {
         method: "GET",
       })
       .then((res) => res.json())
@@ -96,23 +97,31 @@ function Asosiasi() {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-4">
-      <div>
-        {loading && <p>Please Wait...</p>}
-        {data && (
-          <div style={{height: '93vh', overflowY: 'auto'}}>
-            {generateKec()}
-          </div>
-        )}
+    <LoadingOverlay
+          active={loading}
+          spinner
+          text='Creating Association Rules, Please wait!'
+    >
+      <div className="grid grid-cols-3 gap-4">
+        <div>
+          
+            {data && (
+            <div style={{height: '93vh', overflowY: 'auto'}}>
+              <h2 style={{fontWeight: "bold", fontSize: 25}}>Daftar Kecamatan</h2>
+              {generateKec()}
+            </div>
+          )}
+          
+        </div>
+        <div className='col-span-2'>
+          <Map 
+            data={data} 
+            selectedData={selectedData} 
+            center={center || [-5.136143, 119.469370]}
+            />
+        </div>
       </div>
-      <div className='col-span-2'>
-        <Map 
-          data={data} 
-          selectedData={selectedData} 
-          center={center || [-5.136143, 119.469370]}
-          />
-      </div>
-    </div>
+    </LoadingOverlay>
   )
 }
 
