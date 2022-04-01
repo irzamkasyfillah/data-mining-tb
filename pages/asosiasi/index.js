@@ -102,7 +102,7 @@ function Asosiasi() {
           spinner
           text='Creating Association Rules, Please wait!'
     >
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-4 gap-4">
         <div>
           
             {data && (
@@ -113,7 +113,7 @@ function Asosiasi() {
           )}
           
         </div>
-        <div className='col-span-2'>
+        <div className='col-span-3'>
           <Map 
             data={data} 
             selectedData={selectedData} 
