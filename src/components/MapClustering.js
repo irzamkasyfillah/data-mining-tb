@@ -362,7 +362,7 @@ const Map = (props) => {
                     spinner
                     text='Building cluster, please wait...'>
                     <MapContainer center={center || [-5.136143, 119.469370]} zoom={12} scrollWheelZoom={true}
-                                  className={'mapid'}>
+                                  className={'cluster-mapid'}>
                         <TileLayer
                             attribution='&copy; <a href="https://osm.org/copyright" target="_blank">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

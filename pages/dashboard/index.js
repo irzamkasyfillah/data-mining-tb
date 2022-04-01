@@ -22,7 +22,7 @@ function Asosiasi() {
       const data = new FormData()
       data.append("uploaded_file", files)
       console.log(data)
-      const req = fetch(`http://127.0.0.1:80/uploadfile/`, {
+      const req = fetch(`http://127.0.0.1:8080/uploadfile/`, {
         method: "POST",
         body: data,
         

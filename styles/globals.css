@@ -122,6 +122,11 @@
 }
 
 .mapid {
+  height: 93.5vh;
+  width: 100%;
+}
+
+.cluester-mapid {
   height: 70vh;
   width: 100%;
 }
