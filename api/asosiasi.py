@@ -627,7 +627,6 @@ def visualisation(dict_kec, rules, locations):
     return dict_kec_rules_location
 
 
-
 def get_result(dict_kec_rules_location):
     result = {}
     for kec in dict_kec_rules_location:
@@ -654,6 +653,7 @@ def asosiasi(db: Session, dataset, min_support=0.4, min_threshold=0.9):
     dict_kec_rules_location = visualisation(dict_kec, rules, locations)
     rules.to_csv("./rules/rules.csv")
 
+    print(locations)
     print(frequent_pattern)
     print(rules)
     print(dict_kec_rules_location)

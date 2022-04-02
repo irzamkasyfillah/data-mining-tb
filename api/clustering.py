@@ -16,7 +16,7 @@ from geopy.geocoders import Nominatim
 
 def cluster():
     # ============= READ ALL REQUIRED DATA ============== #
-    data_original = pd.read_csv('csv/KUESIONER TUBERKULOSIS ANAK 211.csv')
+    data_original = pd.read_csv('./dataset/databaru.csv')
     data_status_gizi_laki = pd.read_csv('csv/status_gizi_laki.csv', header=1)
     data_status_gizi_perempuan = pd.read_csv('csv/status_gizi_perempuan.csv', header=1)
 

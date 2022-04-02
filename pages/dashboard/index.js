@@ -19,7 +19,7 @@ function Asosiasi() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    if (!files) setMessage("Upload dataset terlebih dahulu")
+    if (!files) setMessage("Pilih dataset terlebih dahulu")
     else {
       setLoading(true)
       const data = new FormData()
@@ -82,10 +82,6 @@ function Asosiasi() {
   }
 
   const columns = [
-    {
-      field: "code",
-      use: "Code",
-    },
     {
       field: "timestamp",
       use: "Timestamp",

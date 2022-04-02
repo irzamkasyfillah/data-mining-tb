@@ -161,8 +161,8 @@
 
 
 .dasboardTable table thead th, .dasboardTable table tbody tr td {
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-left: 16px;
+  padding-right: 16px;
   padding-top: 0px;
   padding-bottom: 0px;
 }
