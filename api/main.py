@@ -12,7 +12,7 @@ from api.data import Data
 from api.database import get_db
 
 app = FastAPI()
-dataset = "api/dataset/databaru.csv"
+dataset = "./dataset/databaru.csv"
 start = datetime.today()
 format = "%d%m%Y_%H%M%S_"
 

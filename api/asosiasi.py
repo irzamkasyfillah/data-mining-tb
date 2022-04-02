@@ -12,8 +12,8 @@ from api.data import Data
 
 
 def preprocessing(db, dataset):
-    IMT_laki = pd.read_csv('api/csv/status_gizi_laki.csv', header=1)
-    IMT_perempuan = pd.read_csv('api/csv/status_gizi_perempuan.csv', header=1)
+    IMT_laki = pd.read_csv('./csv/status_gizi_laki.csv', header=1)
+    IMT_perempuan = pd.read_csv('./csv/status_gizi_perempuan.csv', header=1)
     df = pd.read_csv(dataset)
     df.replace(np.nan, 'Tidak Ada', inplace=True)
 
@@ -652,6 +652,7 @@ def asosiasi(db: Session, dataset, min_support=0.4, min_threshold=0.9):
     list_kec = getKecamatan(df)
     dict_kec = getKecamatandict(list_kec, data_array)
     dict_kec_rules_location = visualisation(dict_kec, rules, locations)
+    rules.to_csv("./rules/rules.csv")
 
     print(frequent_pattern)
     print(rules)
