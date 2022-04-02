@@ -184,11 +184,46 @@ function Asosiasi() {
     },
   ]
 
+  const data2 = [
+    {
+        id: 1,
+        code: 'Beetlejuice',
+        timestamp: '1988',
+        umur: '20',
+        tinggi_badan: '165',
+        berat_badan: '60',
+    },
+]
+
     return (
       <div>
-        <div className="grid grid-cols-4 gap-4">
-          <div className='col-span-3'>
-            <div className='dasboardTable px-8 py-0 shadow-xl rounded-lg bg-white overflow-x-auto overflow-y-hidden' style={{maxHeight: "93.5vh"}}>
+        <div className="grid">
+            <div className="flex flex-col items-center">
+              <div className="grid p-5 justify-items-center	max-w-full">
+                <div className='max-w-7xl p-2 shadow-xl rounded-lg bg-white'>
+                  <form onSubmit={handleSubmit} className="grid grid-rows-1 place-content-center" encType='multipart/form-data'>
+                    <div className='grid grid-cols-2'>
+                      <div className='m-2 bg-slate-100 box-content p-4 border-2 rounded-lg border-dashed'>
+                        <div className='flex place-items-center'>
+                          <Uploader onUploaded={(file) => getFiles(file)}/>
+                          <div className='grid grid-rows-1 place-content-center'>
+                          {message && <p>{message}</p>}
+                        </div>
+                        </div>
+                      </div>
+                      <div className='m-2 grid place-content-center'>
+                        <button type='submit' className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Upload Data</button>
+                        <button type='button' onClick={handleGenerate} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-2 rounded">Generate Data</button>
+                        {loading && <p>Please Wait...</p>}
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>     
+            <div className="flex flex-col items-center">
+              <div className="grid p-5 justify-items-center p-3 lg:p-5 flex flex-col md:flex-row w-full">
+                  <div className='bg-white rounded-2xl shadow-lg max-w-full dasboardTable px-8 py-0 overflow-x-auto overflow-y-hidden' style={{maxHeight: "93.5vh"}}>
               {/* <table className="table-auto ">
                 <thead>
                   <th className="border px-4 py-2">Code</th>
@@ -255,31 +290,9 @@ function Asosiasi() {
               </table> */}
             <Table className="" columns={columns} rows={data} show_search={false} should_export={false} bordered={true}/>
               
-            </div>
-          </div>
-        <div className='col-span-1'>
-        <div className="flex flex-col items-center">
-          <div className="grid p-5 justify-items-center	max-w-full">
-            <div className='max-w-xl p-16 shadow-xl rounded-lg bg-white'>
-              <form onSubmit={handleSubmit} className="grid grid-rows-1 place-content-center" encType='multipart/form-data'>
-                <div className='m-2 bg-slate-100 box-content p-4 border-2 rounded-lg border-dashed'>
-                  <div className='flex place-items-center'>
-                    <Uploader onUploaded={(file) => getFiles(file)}/>
                   </div>
-                </div>
-                <div className='grid grid-rows-1 place-content-center'>
-                  {message && <p>{message}</p>}
-                </div>
-                <div className='m-2 grid place-content-center'>
-                  <button type='submit' className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Upload Data</button>
-                  <button type='button' onClick={handleGenerate} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-2 rounded">Generate Data</button>
-                  {loading && <p>Please Wait...</p>}
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>     
-        </div>
+              </div>
+            </div>     
       </div>
         
       </div>
