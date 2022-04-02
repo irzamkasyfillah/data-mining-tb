@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Table, MetaData, Column, Integer, String, Boolean, DateTime, Date, Float
+from sqlalchemy import create_engine, Table, MetaData, Column, Integer, String, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -11,8 +11,8 @@ data = Table(
     metadata,
     Column("id", Integer, primary_key=True),
     Column("code", String(255), unique=True, index=True),
-    Column("timestamp", DateTime),
-    Column("tanggal_lahir", Date),
+    Column("timestamp", String(255)),
+    Column("tanggal_lahir", String(255)),
     Column("umur", String(255)),
     Column("tinggi_badan", Float),
     Column("berat_badan", Float),
@@ -24,17 +24,17 @@ data = Table(
     Column("pekerjaan_ayah", String(255)),
     Column("pekerjaan_ibu", String(255)),
     Column("pendapatan", String(255)),
-    Column("pernah_sedang_tb", Boolean),
-    Column("diabetes_anak", Boolean),
-    Column("vaksin_bcg", Boolean),
-    Column("riwayat_opname_anak", Boolean),
+    Column("pernah_sedang_tb", String(10)),
+    Column("diabetes_anak", String(10)),
+    Column("vaksin_bcg", String(10)),
+    Column("riwayat_opname_anak", String(10)),
     Column("penyakit_anak", String(255)),
-    Column("asi_ekslusif", Boolean),
-    Column("tb_serumah", Boolean),
-    Column("diabetes_serumah", Boolean),
+    Column("asi_ekslusif", String(10)),
+    Column("tb_serumah", String(10)),
+    Column("diabetes_serumah", String(10)),
     Column("penyakit_lainnya", String(255)),
     Column("penyakit_serumah", String(255)),
-    Column("konsumsi_obat_tb", Boolean),
+    Column("konsumsi_obat_tb", String(10)),
     Column("luas_rumah", String(255)),
     Column("jumlah_kamar", Integer),
     Column("jumlah_orang", Integer),

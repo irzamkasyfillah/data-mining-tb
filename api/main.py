@@ -7,6 +7,7 @@ from os import path
 from sqlalchemy.orm import Session
 
 from api.clustering import cluster
+from api.data import Data
 from api.database import Base, get_db
 from asosiasi import asosiasi
 from fastapi import FastAPI, UploadFile, File, Depends
@@ -57,9 +58,15 @@ async def create_upload_file(db: Session = Depends(get_db), uploaded_file: Uploa
         return {"info": 'Hanya menerima file CSV'}
 
 
+@app.get("/get_data")
+def read_root(db: Session = Depends(get_db)):
+    return db.query(Data).all()
+
+
 @app.get("/asosiasi")
 def read_root(db: Session = Depends(get_db)):
     return asosiasi(db, dataset, 0.3, 0.9)
+
 
 @app.get("/cluster")
 async def do_cluster():
