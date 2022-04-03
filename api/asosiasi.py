@@ -200,8 +200,10 @@ def coordinate(df):
     geolocator = Nominatim(user_agent="arcgis")
     # print(geolocator)
 
+    keckota = []
     loc = []
     for i in coord:
+        keckota.append(','.join(str(x) for x in i))
         location = geolocator.geocode(i)
         # print(location)
         if location != None:
@@ -210,7 +212,7 @@ def coordinate(df):
 
     locations = pd.DataFrame(loc, columns=['address', 'lat', 'long'])
 
-    return locations, geolocator, loc
+    return locations, geolocator, loc, keckota
 
 
 def transform(data_array, sparse=False):
@@ -568,6 +570,12 @@ def get_rules(res_df, metric="confidence", min_threshold=0.8, support_only=False
         return df_res
 
 
+def getKota(df):
+    list_kota = df['Alamat (Kab/Kota)'].unique()
+
+    return list_kota
+
+
 def getKecamatan(df):
     list_kec = df['Alamat (Kecamatan)'].unique()
 
@@ -644,16 +652,17 @@ def get_result(dict_kec_rules_location):
 
 def asosiasi(db: Session, dataset, min_support=0.4, min_threshold=0.9):
     df, data_array = preprocessing(db, dataset)
-    locations, geolocator, loc = coordinate(df)
+    locations, geolocator, loc, keckota = coordinate(df)
     data_all = transform(data_array)
     frequent_pattern = fpgrowth(data_all, min_support)
     rules = get_rules(frequent_pattern, 'confidence', min_threshold)
     list_kec = getKecamatan(df)
     dict_kec = getKecamatandict(list_kec, data_array)
     dict_kec_rules_location = visualisation(dict_kec, rules, locations)
+    list_kota = getKota(df)
     rules.to_csv("./rules/rules.csv")
 
-    print(locations)
+    print(keckota)
     print(frequent_pattern)
     print(rules)
     print(dict_kec_rules_location)
@@ -661,8 +670,9 @@ def asosiasi(db: Session, dataset, min_support=0.4, min_threshold=0.9):
     return {
             'df': df,
             'data_array': data_array,
+            # 'list_kota': list_kota,
             'fp': frequent_pattern,
             'rules': rules.to_json(),
-            'locations': locations,
+            'locations': keckota,
             'dict_kec_rules_location': dict_kec_rules_location
     }

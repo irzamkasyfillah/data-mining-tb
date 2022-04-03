@@ -71,16 +71,29 @@ function Asosiasi() {
 
   }
 
+  const getKota = (kec, locations) => {
+    const kota = locations.find(location => location.split(',')[0] == kec)
+    console.log("kota", kec, kota)
+
+    return kota.split(',')[1]
+  }
+
   const generateKec = () => {
     console.log("data", data?.dict_kec_rules_location)
+    const locations = data?.locations
+    console.log("locations", data?.locations)
+    // console.log("locations", locations)
     const result = data?.dict_kec_rules_location
     if (result) {
       const sortedResult = Object.keys(result).sort()
-      return sortedResult?.map(kec => {
+      const listkota = {}
+      sortedResult?.map(kec => {
         const resultKec = result[kec]
+        const kota = getKota(kec, locations)
         const antecedent = resultKec?.antecedents?.join(', ')
         const consequent = resultKec?.consequents?.join(', ')
-        return (
+        if (listkota[kota] === undefined) listkota[kota] = []
+        listkota[kota].push(
           <div key={resultKec?.index} onClick={() => handleClick(resultKec)}>
             <Accordion title={kec} content={(
               <div>
@@ -93,6 +106,14 @@ function Asosiasi() {
         )
       })
     }
+    console.log("listkota", listkota)
+    return Object.keys(listkota).map(kota => (
+      <div>
+        <h2 style={{fontWeight: "bold", fontSize: 20, margin: "4px 0px 0px 8px", color: "rgb(59 130 246)"}}>{kota}</h2>
+        {listkota[kota]}
+      </div>
+      
+    ))
     
   }
 
