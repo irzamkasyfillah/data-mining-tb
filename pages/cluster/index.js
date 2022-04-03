@@ -17,7 +17,7 @@ function Cluster() {
     )
 
     const handleGenerateData = () => {
-        const dataExist = localStorage.getItem("result")
+        const dataExist = localStorage.getItem("result2")
         // console.log("tes")
         console.log(router?.query, reg)
         if (dataExist && !router?.query?.generate && !reg) {
@@ -26,12 +26,12 @@ function Cluster() {
             setLoading(false)
         } else {
             setLoading(true);
-            const req = fetch(`http://127.0.0.1:8000/cluster/`, {
+            const req = fetch(`http://127.0.0.1:8080/cluster/`, {
                 method: "GET",
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    localStorage.setItem("result", JSON.stringify(data))
+                    localStorage.setItem("result2", JSON.stringify(data))
                     setData(data)
                     setLoading(false)
                     console.log('sudah load')

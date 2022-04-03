@@ -212,6 +212,7 @@ function ClusterModal() {
 
 function Example(props) {
     const {data, selectedData, center, loading} = props
+    console.log("data", data)
     const coord = data?.data_cluster
     let i = 0;
 

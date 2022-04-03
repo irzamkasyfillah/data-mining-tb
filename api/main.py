@@ -66,8 +66,8 @@ def read_root(db: Session = Depends(get_db)):
 
 
 @app.get("/cluster")
-async def do_cluster():
-    return cluster()
+async def do_cluster(db: Session = Depends(get_db)):
+    return cluster(db, dataset)
 
 
 if __name__ == '__main__':

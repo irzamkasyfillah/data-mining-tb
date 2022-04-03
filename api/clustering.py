@@ -13,15 +13,60 @@ from sklearn.model_selection import cross_val_score
 
 from geopy.geocoders import Nominatim
 
+from api.data import Data
 
-def cluster():
-    # ============= READ ALL REQUIRED DATA ============== #
-    data_original = pd.read_csv('./dataset/databaru.csv')
+
+def cluster(db, dataset):
+    df = pd.read_csv(dataset)
     data_status_gizi_laki = pd.read_csv('csv/status_gizi_laki.csv', header=1)
     data_status_gizi_perempuan = pd.read_csv('csv/status_gizi_perempuan.csv', header=1)
 
-    data = data_original.copy()
-    data = data.rename(columns={'Alamat (mohon sertakan nama kelurahan dan kecamatan)': 'Alamat lengkap',
+    age = df['Umur'].str.split(r'(\d+)', expand=True)
+    age = age.replace([None], '0')
+
+    for index, df_data in df.iterrows():
+        existing_data = db.query(Data).filter(Data.code == df_data['code']).first()
+        if not existing_data:
+            db_data = Data(
+                code = df_data['code'],
+                timestamp = df_data['Timestamp'],
+                tanggal_lahir = df_data['Tanggal Lahir'],
+                umur = df_data['Umur'],
+                tinggi_badan = df_data['Tinggi badan (dalam cm)'],
+                berat_badan = df_data['Berat badan (dalam kg)'],
+                jenis_kelamin = df_data['Jenis Kelamin'],
+                alamat_kelurahan = df_data['Alamat (Kelurahan)'],
+                alamat_kecamatan = df_data['Alamat (Kecamatan)'],
+                alamat_kota = df_data['Alamat (Kab/Kota)'],
+                alamat_lengkap = df_data['Alamat (mohon sertakan nama kelurahan dan kecamatan)'],
+                pekerjaan_ayah  =df_data['Pekerjaan Ayah'],
+                pekerjaan_ibu = df_data['Pekerjaan Ibu'],
+                pendapatan = df_data['Pendapatan Orang Tua'],
+                pernah_sedang_tb=df_data['Apakah anak pernah atau sedang dalam pengobatan tuberkulosis?'],
+                diabetes_anak=df_data['Apakah anak pernah mengalami penyakit diabetes?'],
+                vaksin_bcg=df_data[
+                    'Apakah anak telah menerima imunisasi BCG (Bacillus Calmette-Guérin, imunisasi untuk mencegah penyakit TB)?'],
+                riwayat_opname_anak=df_data['Apakah anak pernah di opname sebelumnya?'],
+                penyakit_anak=df_data['Jika pernah, anak diopname karena penyakit apa saja?'],
+                asi_ekslusif=df_data[
+                    'Apakah anak mengkonsumsi ASI secara eksklusif? (ASI Eksklusif adalah pemberian ASI tanpa makanan/minuman (susu formula) tambahan hingga berusia 6 bulan)'],
+                tb_serumah=df_data['Apakah ada riwayat penyakit tuberkulosis dalam orang serumah?'],
+                diabetes_serumah=df_data['Apakah ada riwayat penyakit diabetes dalam keluarga (orang tua)?'],
+                penyakit_lainnya=df_data[
+                    'Apakah ada riwayat penyakit lainnya selain tuberkulosis, diabetes dalam orang  serumah?'],
+                penyakit_serumah=df_data['Jika ada, penyakit apa saja?'],
+                konsumsi_obat_tb=df_data[
+                    'Apakah ada yang pernah atau sedang mengkonsumsi obat tuberkulosis dalam orang serumah?'],
+                luas_rumah=df_data['Berapa luas rumah tempat anak tinggal?'],
+                jumlah_kamar=df_data['Berapa jumlah kamar tidur dalam rumah?'],
+                jumlah_orang=df_data['Berapa jumlah orang yang tinggal dalam satu rumah?'],
+                sistem_ventilasi=df_data['Bagaimana sistem ventilasi di rumah Anda? ']
+            )
+
+            db.add(db_data)
+    db.commit()
+
+    data = df.rename(columns={'Alamat (mohon sertakan nama kelurahan dan kecamatan)': 'Alamat lengkap',
                                 'Apakah anak pernah atau sedang dalam pengobatan tuberkulosis?': 'pernah/sedang TB',
                                 'Apakah anak pernah mengalami penyakit diabetes?': 'riwayat diabetes anak',
                                 'Apakah anak telah menerima imunisasi BCG (Bacillus Calmette-Guérin, imunisasi untuk mencegah penyakit TB)?': 'riwayat vaksin BCG',
@@ -37,12 +82,8 @@ def cluster():
                                 'Berapa jumlah orang yang tinggal dalam satu rumah?': 'jumlah orang dalam rumah',
                                 'Bagaimana sistem ventilasi di rumah Anda? ': 'sistem ventilasi'})
 
-    # =========================  PRE PROCESSING  ========================== #
 
     # ADD NEW COLUMN FOR 'TAHUN' AND 'BULAN'
-
-    age = data['Umur'].str.split(r'(\d+)', expand=True)
-    age = age.replace([None], '0')
 
     data['Tahun'] = age[1]
     data['Bulan'] = age[3]
