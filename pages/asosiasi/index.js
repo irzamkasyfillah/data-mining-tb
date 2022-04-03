@@ -109,7 +109,7 @@ function Asosiasi() {
     console.log("listkota", listkota)
     return Object.keys(listkota).map(kota => (
       <div>
-        <h2 style={{fontWeight: "bold", fontSize: 20, margin: "4px 0px 0px 8px", color: "rgb(59 130 246)"}}>{kota}</h2>
+        <h2 style={{fontWeight: "bold", fontSize: 20, margin: "4px 0px 0px 8px"}}>{kota}</h2>
         {listkota[kota]}
       </div>
       
