@@ -47,10 +47,10 @@
 /* events table style */
 /*.hkMDrI{
   min-height: 630px !important;
-   overflow-x: hidden !important; 
+   overflow-x: hidden !important;
 }
 */
-/* 
+/*
 .hLGqlg{
   width: 65% !important;
 }
@@ -170,3 +170,19 @@
 .dasboardTable table tr:nth-child(even) {
   background-color: #f2f2f2;
 }
+
+/* To fix react-data-table-component's styling */
+
+/* Header Cells */
+.eUeqdG {
+	white-space: unset !important;
+	text-overflow: unset !important;
+}
+
+/* Rows Cells Text */
+.bMgaAx div:first-child {
+	 white-space: unset !important;
+	 overflow: unset !important;
+	 text-overflow: unset !important;
+}
+
