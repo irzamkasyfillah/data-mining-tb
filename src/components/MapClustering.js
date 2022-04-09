@@ -131,6 +131,7 @@ import 'leaflet/dist/leaflet.css'
 import {Button} from 'react-bootstrap'
 import LoadingOverlay from 'react-loading-overlay';
 import Router from "next/router";
+import Table from 'react-tailwind-table';
 
 let DefaultIcon = L.icon({
     iconUrl: 'icons/marker-icon.png',
@@ -228,13 +229,62 @@ function Example(props) {
         // console.log(random, months[random]);
 
         const resultClust = coord[clust]
+        const keys = Object.keys(resultClust)
+        let daftar_opname = []
+        let daftar_penyakit_lain = []
+
+        for (let i of keys) {
+            if (i.includes("(opname)")) {
+                daftar_opname.push(i)
+            }
+            if (i.includes("(org serumah)")) {
+                daftar_penyakit_lain.push(i)
+            }
+        }
+
+        console.log(daftar_opname, daftar_penyakit_lain)
+
+        let daftar_opname_ya = []
+        let daftar_penyakit_lain_ya = []
+        for (let i of daftar_opname) {
+            for (let j in resultClust) {
+                if (i === j) {
+                    // console.log('resultClust[i]', resultClust[i], i,j)
+                    if (resultClust[i] === "Ya") {
+                        daftar_opname_ya.push(i)
+                    }
+                }
+            }
+        }
+
+        for (let i of daftar_penyakit_lain) {
+            for (let j in resultClust) {
+                if (i === j) {
+                    console.log('resultClust[i]', resultClust[i], i,j)
+                    if (resultClust[i] === "Ya") {
+                        daftar_penyakit_lain_ya.push(i)
+                    }
+                }
+            }
+        }
+
         const kasus = resultClust?.Total
         const cluster = resultClust?.Segment
         const umur = Math.round(resultClust?.['Tahun (mean)'])
         const jenis_kelamin = resultClust?.['Jenis Kelamin']
+        const alamat = 'Kec. ' + resultClust?.['Alamat (Kecamatan)'] + ', Kel. ' + resultClust?.['Alamat (Kelurahan)']
         const pekerjaan = resultClust?.['Pekerjaan Ayah'] + ' & ' + resultClust?.['Pekerjaan Ibu']
         const pendapatan = resultClust?.['Pendapatan Orang Tua']
         const status_gizi = resultClust?.['Status Gizi']
+
+        const diabetes_anak = resultClust?.['riwayat diabetes anak']
+        const opname = resultClust?.['riwayat opname']
+        const asi_eksklusif = resultClust?.['ASI eksklusif']
+
+        const tb_orang_serumah = resultClust?.['riwayat TB orang serumah']
+        const diabetes_keluarga = resultClust?.['riwayat diabetes keluarga']
+        const penyakit_lain = resultClust?.['riwayat penyakit lain orang serumah']
+
         const luas_rumah = resultClust?.['luas rumah']
         const jumlah_kamar = Math.round(resultClust?.['jumlah kamar tidur (mean)'])
         const jumlah_orang = Math.round(resultClust?.['jumlah orang dalam rumah (mean)'])
@@ -254,7 +304,7 @@ function Example(props) {
                 {showModal ? (
                     <>
                         <div
-                            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-[999] outline-none focus:outline-none"
+                            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-[1000] outline-none focus:outline-none"
                         >
                             <div className="relative w-auto my-6 mx-auto max-w-6xl">
                                 {/*content*/}
@@ -277,43 +327,94 @@ function Example(props) {
                                         </button>
                                     </div>
                                     {/*body*/}
-                                    <div className="relative p-6 flex-auto m-2">
-                                        <table className="table-auto ">
+                                    <div style={{maxHeight:400, overflowY:"auto", overflowX:"auto"}}  className="table-modal relative p-6 flex-auto m-2">
+                                        <h3 className="font-semibold" style={{textAlign:"start"}}>DATA ANAK</h3>
+                                        <br/><hr/>
+                                        <table style={{border:1}} className="table-auto">
                                             <thead>
                                             <tr>
-                                                <th className="w-1/2 px-4 py-2">Total</th>
-                                                <th className="w-1/4 px-4 py-2">Umur</th>
-                                                <th className="w-1/4 px-4 py-2">JK</th>
-                                                <th className="w-1/4 px-4 py-2">Pekerjaan</th>
-                                                <th className="w-1/4 px-4 py-2">Pendapatan</th>
+                                                <td className="w-1/2 px-4 py-2">Total</td>
+                                                <td className="w-1/4 px-4 py-2">Umur</td>
+                                                <td className="w-1/4 px-4 py-2">Jenis Kelamin</td>
+                                                <td className="w-1/4 px-4 py-2">Alamat</td>
+                                                <td className="w-1/4 px-4 py-2">Pekerjaan</td>
+                                                <td className="w-1/4 px-4 py-2">Pendapatan</td>
+                                                <td className="w-1/4 px-4 py-2">Status Gizi</td>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr>
-                                                <td className="border px-4 py-2">Total</td>
                                                 <td className="border px-4 py-2">{kasus}</td>
-                                                <td className="border px-4 py-2">{kasus}</td>
-                                            </tr>
-                                            <tr>
-                                                <td className="border px-4 py-2">Umur</td>
                                                 <td className="border px-4 py-2">{umur}</td>
-                                                <td className="border px-4 py-2">{kasus}</td>
-                                            </tr>
-                                            <tr>
-                                                <td className="border px-4 py-2">Jenis Kelamin</td>
                                                 <td className="border px-4 py-2">{jenis_kelamin}</td>
-                                            </tr>
-                                            <tr>
-                                                <td className="border px-4 py-2">Pekerjaan Orang Tua</td>
+                                                <td className="border px-4 py-2">{alamat}</td>
                                                 <td className="border px-4 py-2">{pekerjaan}</td>
-                                            </tr>
-                                            <tr>
-                                                <td className="border px-4 py-2">Pendapatan Orang Tua</td>
                                                 <td className="border px-4 py-2">{pendapatan}</td>
+                                                <td className="border px-4 py-2">{status_gizi}</td>
                                             </tr>
+                                            </tbody>
+                                        </table>
+                                        <br/>
+
+                                        <h3 className="font-semibold" style={{textAlign:"start"}}>RIWAYAT KESEHATAN ANAK</h3>
+                                        <br/><hr/>
+                                        <table className="table-auto">
+                                            <thead>
                                             <tr>
-                                                <td className="border px-4 py-2">Umur</td>
-                                                <td className="border px-4 py-2">{umur}</td>
+                                                <th  className="w-1/2 px-4 py-2">Riwayat Diabetes</th>
+                                                <th className="w-1/4 px-4 py-2">Riwayat Opname</th>
+                                                <th className="w-1/4 px-4 py-2">Daftar Opname</th>
+                                                <th className="w-1/4 px-4 py-2">Vaksin BCG</th>
+                                                <th className="w-1/4 px-4 py-2">ASI Eksklusif</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td className="border px-4 py-2">{diabetes_anak}</td>
+                                                <td className="border px-4 py-2">{opname}</td>
+                                                <td className="border px-4 py-2">{daftar_opname_ya}</td>
+                                                <td className="border px-4 py-2">{bcg}</td>
+                                                <td className="border px-4 py-2">{asi_eksklusif}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <br/>
+                                        <h3 className="font-semibold" style={{textAlign:"start"}}>RIWAYAT PENYAKIT ORANG SERUMAH</h3>
+                                        <br/><hr/>
+                                        <table className="table-auto">
+                                            <thead>
+                                            <tr>
+                                                <th className="w-1/2 px-4 py-2">Riwayat TB</th>
+                                                <th className="w-1/4 px-4 py-2">Riwayat Diabetes Keluarga</th>
+                                                <th className="w-1/4 px-4 py-2">Riwayat Penyakit Lain</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td className="border px-4 py-2">{tb_orang_serumah}</td>
+                                                <td className="border px-4 py-2">{diabetes_keluarga}</td>
+                                                <td className="border px-4 py-2">{daftar_penyakit_lain_ya}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <br/>
+                                        <h3 className="font-semibold" style={{textAlign:"start"}}>KONDISI RUMAH</h3>
+                                        <br/><hr/>
+                                        <table className="table-auto">
+                                            <thead>
+                                            <tr>
+                                                <th className="w-1/2 px-4 py-2">Luas Rumah</th>
+                                                <th className="w-1/4 px-4 py-2">Jumlah Kamar</th>
+                                                <th className="w-1/4 px-4 py-2">Jumlah Orang</th>
+                                                <th className="w-1/4 px-4 py-2">Sistem Ventilasi</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td className="border px-4 py-2">{luas_rumah}</td>
+                                                <td className="border px-4 py-2">{jumlah_kamar}</td>
+                                                <td className="border px-4 py-2">{jumlah_orang}</td>
+                                                <td className="border px-4 py-2">{sistem_ventilasi}</td>
                                             </tr>
                                             </tbody>
                                         </table>

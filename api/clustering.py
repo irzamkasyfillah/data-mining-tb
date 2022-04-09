@@ -1,17 +1,11 @@
+import re
+
 import numpy as np
 import pandas as pd
-import re
-import matplotlib.pyplot as plt
-import seaborn as sns
-import shap
-from sklearn.preprocessing import StandardScaler
+from geopy.geocoders import Nominatim
 # from sklearn.metrics import silhouette_score
 from kmodes.kprototypes import KPrototypes
-from lightgbm import LGBMClassifier
-from sklearn.model_selection import cross_val_score
-
-
-from geopy.geocoders import Nominatim
+from sklearn.preprocessing import StandardScaler
 
 from api.data import Data
 
@@ -24,24 +18,28 @@ def cluster(db, dataset):
     age = df['Umur'].str.split(r'(\d+)', expand=True)
     age = age.replace([None], '0')
 
+    df['Jika pernah, anak diopname karena penyakit apa saja?'] = df[
+        'Jika pernah, anak diopname karena penyakit apa saja?'].replace(np.nan, 'Tidak Pernah')
+    df['Jika ada, penyakit apa saja?'] = df['Jika ada, penyakit apa saja?'].replace(np.nan, 'Tidak Ada')
+
     for index, df_data in df.iterrows():
         existing_data = db.query(Data).filter(Data.code == df_data['code']).first()
         if not existing_data:
             db_data = Data(
-                code = df_data['code'],
-                timestamp = df_data['Timestamp'],
-                tanggal_lahir = df_data['Tanggal Lahir'],
-                umur = df_data['Umur'],
-                tinggi_badan = df_data['Tinggi badan (dalam cm)'],
-                berat_badan = df_data['Berat badan (dalam kg)'],
-                jenis_kelamin = df_data['Jenis Kelamin'],
-                alamat_kelurahan = df_data['Alamat (Kelurahan)'],
-                alamat_kecamatan = df_data['Alamat (Kecamatan)'],
-                alamat_kota = df_data['Alamat (Kab/Kota)'],
-                alamat_lengkap = df_data['Alamat (mohon sertakan nama kelurahan dan kecamatan)'],
-                pekerjaan_ayah  =df_data['Pekerjaan Ayah'],
-                pekerjaan_ibu = df_data['Pekerjaan Ibu'],
-                pendapatan = df_data['Pendapatan Orang Tua'],
+                code=df_data['code'],
+                timestamp=df_data['Timestamp'],
+                tanggal_lahir=df_data['Tanggal Lahir'],
+                umur=df_data['Umur'],
+                tinggi_badan=df_data['Tinggi badan (dalam cm)'],
+                berat_badan=df_data['Berat badan (dalam kg)'],
+                jenis_kelamin=df_data['Jenis Kelamin'],
+                alamat_kelurahan=df_data['Alamat (Kelurahan)'],
+                alamat_kecamatan=df_data['Alamat (Kecamatan)'],
+                alamat_kota=df_data['Alamat (Kab/Kota)'],
+                alamat_lengkap=df_data['Alamat (mohon sertakan nama kelurahan dan kecamatan)'],
+                pekerjaan_ayah=df_data['Pekerjaan Ayah'],
+                pekerjaan_ibu=df_data['Pekerjaan Ibu'],
+                pendapatan=df_data['Pendapatan Orang Tua'],
                 pernah_sedang_tb=df_data['Apakah anak pernah atau sedang dalam pengobatan tuberkulosis?'],
                 diabetes_anak=df_data['Apakah anak pernah mengalami penyakit diabetes?'],
                 vaksin_bcg=df_data[
@@ -67,21 +65,20 @@ def cluster(db, dataset):
     db.commit()
 
     data = df.rename(columns={'Alamat (mohon sertakan nama kelurahan dan kecamatan)': 'Alamat lengkap',
-                                'Apakah anak pernah atau sedang dalam pengobatan tuberkulosis?': 'pernah/sedang TB',
-                                'Apakah anak pernah mengalami penyakit diabetes?': 'riwayat diabetes anak',
-                                'Apakah anak telah menerima imunisasi BCG (Bacillus Calmette-Guérin, imunisasi untuk mencegah penyakit TB)?': 'riwayat vaksin BCG',
-                                'Apakah anak pernah di opname sebelumnya?': 'riwayat opname',
-                                'Jika pernah, anak diopname karena penyakit apa saja?': 'daftar penyakit opname',
-                                'Apakah anak mengkonsumsi ASI secara eksklusif? (ASI Eksklusif adalah pemberian ASI tanpa makanan/minuman (susu formula) tambahan hingga berusia 6 bulan)': 'ASI eksklusif',
-                                'Apakah ada riwayat penyakit tuberkulosis dalam orang serumah?': 'riwayat TB orang serumah',
-                                'Apakah ada riwayat penyakit diabetes dalam keluarga (orang tua)?': 'riwayat diabetes keluarga',
-                                'Apakah ada riwayat penyakit lainnya selain tuberkulosis, diabetes dalam orang  serumah?': 'riwayat penyakit lain orang serumah',
-                                'Jika ada, penyakit apa saja?': 'daftar penyakit lain orang serumah',
-                                'Berapa luas rumah tempat anak tinggal?': 'luas rumah',
-                                'Berapa jumlah kamar tidur dalam rumah?': 'jumlah kamar tidur',
-                                'Berapa jumlah orang yang tinggal dalam satu rumah?': 'jumlah orang dalam rumah',
-                                'Bagaimana sistem ventilasi di rumah Anda? ': 'sistem ventilasi'})
-
+                              'Apakah anak pernah atau sedang dalam pengobatan tuberkulosis?': 'pernah/sedang TB',
+                              'Apakah anak pernah mengalami penyakit diabetes?': 'riwayat diabetes anak',
+                              'Apakah anak telah menerima imunisasi BCG (Bacillus Calmette-Guérin, imunisasi untuk mencegah penyakit TB)?': 'riwayat vaksin BCG',
+                              'Apakah anak pernah di opname sebelumnya?': 'riwayat opname',
+                              'Jika pernah, anak diopname karena penyakit apa saja?': 'daftar penyakit opname',
+                              'Apakah anak mengkonsumsi ASI secara eksklusif? (ASI Eksklusif adalah pemberian ASI tanpa makanan/minuman (susu formula) tambahan hingga berusia 6 bulan)': 'ASI eksklusif',
+                              'Apakah ada riwayat penyakit tuberkulosis dalam orang serumah?': 'riwayat TB orang serumah',
+                              'Apakah ada riwayat penyakit diabetes dalam keluarga (orang tua)?': 'riwayat diabetes keluarga',
+                              'Apakah ada riwayat penyakit lainnya selain tuberkulosis, diabetes dalam orang  serumah?': 'riwayat penyakit lain orang serumah',
+                              'Jika ada, penyakit apa saja?': 'daftar penyakit lain orang serumah',
+                              'Berapa luas rumah tempat anak tinggal?': 'luas rumah',
+                              'Berapa jumlah kamar tidur dalam rumah?': 'jumlah kamar tidur',
+                              'Berapa jumlah orang yang tinggal dalam satu rumah?': 'jumlah orang dalam rumah',
+                              'Bagaimana sistem ventilasi di rumah Anda? ': 'sistem ventilasi'})
 
     # ADD NEW COLUMN FOR 'TAHUN' AND 'BULAN'
 
@@ -315,7 +312,7 @@ def cluster(db, dataset):
     data_positive['labels'] = model_4.labels_
 
     data_positive['Segment'] = data_positive['labels'].map(
-        {0: '1', 1: '2', 2: '3', 3: '4', 4:'5'})
+        {0: '1', 1: '2', 2: '3', 3: '4', 4: '5'})
     # Order the cluster
     data_positive['Segment'] = data_positive['Segment'].astype('category')
     data_positive['Segment'] = data_positive['Segment'].cat.reorder_categories(['1', '2', '3', '4', '5'])
@@ -353,7 +350,7 @@ def cluster(db, dataset):
             index_2.append(data_percluster.index[i][0] + ' (' + data_percluster.index[i][1] + ')')
 
     data_cluster = pd.DataFrame(np.array(data_percluster), index=index_2,
-                            columns=data_percluster.columns)
+                                columns=data_percluster.columns)
 
     data_perkecamatan = data_positive.groupby('Alamat (Kecamatan)').agg({
 
@@ -371,8 +368,7 @@ def cluster(db, dataset):
             index.append(data_perkecamatan.index[i][0] + ' (' + data_perkecamatan.index[i][1] + ')')
 
     data_kecamatan = pd.DataFrame(np.array(data_perkecamatan), index=index,
-                            columns=data_perkecamatan.columns)
-
+                                  columns=data_perkecamatan.columns)
 
     # Setting the objects to category
 
@@ -396,7 +392,7 @@ def cluster(db, dataset):
 
     # data_coordinate.to_csv(r'gis_web/api/csv/data coordinate.csv', index=False)
 
-    #======  COUNT LOGITUDE AND LATITUDE FOR ALL KECAMATAN =======#
+    # ======  COUNT LOGITUDE AND LATITUDE FOR ALL KECAMATAN =======#
 
     # alamat = ['Alamat (Kelurahan)','Alamat (Kecamatan)','Alamat (Kab/Kota)']
     # data_coordinate = data_positive.loc[:, data_positive.columns.isin(alamat)]

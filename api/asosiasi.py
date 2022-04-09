@@ -204,7 +204,7 @@ def coordinate(df):
     loc = []
     for i in coord:
         keckota.append(','.join(str(x) for x in i))
-        location = geolocator.geocode(i)
+        location = geolocator.geocode(i, timeout=None)
         # print(location)
         if location != None:
             loc.append([location.address, location.latitude, location.longitude])
