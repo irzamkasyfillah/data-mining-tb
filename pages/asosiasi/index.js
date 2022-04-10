@@ -22,26 +22,26 @@ function Asosiasi() {
   const handleGenerateData = () => {
     setLoading(true)
     const dataExist = localStorage.getItem("result")
-     if (dataExist && !router.query?.generate) {
-       const data = JSON.parse(dataExist)
-       const result = data?.dict_kec_rules_location
+     if (!dataExist) {
+      //  const data = JSON.parse(dataExist)
+      //  const result = data?.dict_kec_rules_location
 
-        const markers = Object.keys(result)?.map(kec => {
-          const resultKec = result[kec]
-          return [resultKec?.lat, resultKec?.long]
-        })
-        console.log("markers", markers)
-        setData(data)
-        setMarkers(markers)
-        setLoading(false)
-    } else {
+      //   const markers = Object.keys(result)?.map(kec => {
+      //     const resultKec = result[kec]
+      //     return [resultKec?.lat, resultKec?.long]
+      //   })
+      //   console.log("markers", markers)
+      //   setData(data)
+      //   setMarkers(markers)
+    //     setLoading(false)
+    // } else {
 
-      const req = fetch(`http://127.0.0.1:8080/asosiasi/`, {
+      const req = fetch(`http://127.0.0.1:8080/asosiasi`, {
         method: "GET",
       })
       .then((res) => res.json())
       .then((data) => {
-        localStorage.setItem("result", JSON.stringify(data))
+        // localStorage.setItem("result", JSON.stringify(data))
         setData(data)
         const result = data?.dict_kec_rules_location
 
@@ -105,15 +105,15 @@ function Asosiasi() {
           
         )
       })
-    }
     console.log("listkota", listkota)
     return Object.keys(listkota).map(kota => (
-      <div>
+      <div key={kota}>
         <h2 style={{fontWeight: "bold", fontSize: 20, margin: "4px 0px 0px 8px"}}>{kota}</h2>
         {listkota[kota]}
       </div>
       
     ))
+    }
     
   }
 

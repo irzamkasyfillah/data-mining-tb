@@ -435,6 +435,9 @@ def cluster(db, dataset):
         data_positive[i] = data_positive[i].astype('object')
 
     # print(data_coordinate.head())
+    df.to_json(r'./result/df.json')
+    data_kecamatan.to_json(r'./result/data_kecamatan.json')
+    data_cluster.to_json(r'./result/data_cluster.json')
     return {
         'df': data_positive,
         'data_kecamatan': data_kecamatan,

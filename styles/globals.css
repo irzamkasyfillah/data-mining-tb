@@ -178,13 +178,13 @@
 /* To fix react-data-table-component's styling */
 
 /* Header Cells */
-.eUeqdG {
+.rdt_TableCol div:nth-child(1) {
 	white-space: unset !important;
 	text-overflow: unset !important;
 }
 
 /* Rows Cells Text */
-.bMgaAx div:first-child {
+.rdt_TableCell div:first-child {
 	 white-space: unset !important;
 	 overflow: unset !important;
 	 text-overflow: unset !important;

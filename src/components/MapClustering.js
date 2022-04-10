@@ -28,10 +28,8 @@ function PointMarker(props) {
     const coord = data?.data_kecamatan
 
     console.log(data)
-
     return Object.keys(coord)?.map((kec) => {
         const [showModal, setShowModal] = React.useState(false);
-
         const handleClose = () => setShow(false);
         const handleShow = () => setShow(true);
 
@@ -106,6 +104,7 @@ function PointMarker(props) {
 
         return (
             <CircleMarker
+                key={kec}
                 center={position}
                 pathOptions={redOptions}
                 radius={getRadius(kasus)}

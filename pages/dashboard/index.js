@@ -37,15 +37,28 @@ function Asosiasi() {
     }
   };
 
-  const handleGenerate = () => {
-    Router.push({
-      pathname: "/asosiasi",
-      query: { generate: 1 },
-    });
+  const handleAsosiasi = () => {
+    const req = fetch(`http://127.0.0.1:8080/run_asosiasi/`, {
+      method: "POST",
+    })
+    // Router.push({
+    //   pathname: "/asosiasi",
+    //   query: { generate: 1 },
+    // });
+  };
+
+  const handleCluster = () => {
+    const req = fetch(`http://127.0.0.1:8080/run_cluster/`, {
+      method: "POST",
+    })
+    // Router.push({
+    //   pathname: "/asosiasi",
+    //   query: { generate: 1 },
+    // });
   };
 
   const fetchData = async () => {
-    const req = fetch(`http://127.0.0.1:8080/get_data/`, {
+    const req = await fetch(`http://127.0.0.1:8080/get_data/`, {
       method: "GET",
     })
     .then((res) => res.json())
@@ -61,21 +74,21 @@ function Asosiasi() {
     fetchData();
   }, []);
 
-  const handleGenerateData = async () => {
-    const req = fetch(`http://127.0.0.1:80/asosiasi/`, {
-      method: "GET",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setLoading(false);
-        Router.push({
-          pathname: "/asosiasi",
-          query: { generate: 1 },
-        });
-        // return req.json()
-      });
-  };
+  // const handleGenerateData = () => {
+  //   const req = fetch(`http://127.0.0.1:8080/run_asosiasi/`, {
+  //     method: "POST",
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //       setLoading(false);
+  //       // Router.push({
+  //       //   pathname: "/asosiasi",
+  //       //   query: { generate: 1 },
+  //       // });
+  //       // return req.json()
+  //     });
+  // };
 
   return (
     <div>
@@ -100,16 +113,23 @@ function Asosiasi() {
                   <div className="m-2 grid place-content-center">
                     <button
                       type="submit"
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-1 rounded"
                     >
                       Upload Data
                     </button>
                     <button
                       type="button"
-                      onClick={handleGenerate}
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-2 rounded"
+                      onClick={handleAsosiasi}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-1 rounded"
                     >
-                      Generate Data
+                      Generate Data Asosiasi
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleCluster}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-1 rounded"
+                    >
+                      Generate Data Cluster
                     </button>
                     {loading && <p>Please Wait...</p>}
                   </div>

@@ -76,10 +76,9 @@ function PointsList(props) {
       result && Object.keys(result)?.map((kec, index) => {
         const resultKec = result[kec]
         return (
-          <div>
+          <div key={kec.index}>
             <ul>
                 <li
-                  key={kec.index}
                   onClick={e => {
                     onItemClick(kec);
                   }}

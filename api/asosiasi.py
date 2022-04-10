@@ -3,6 +3,7 @@ import numpy as np
 import itertools
 import collections
 import math
+import json
 
 from scipy.sparse import csr_matrix
 from itertools import combinations
@@ -662,6 +663,13 @@ def asosiasi(db: Session, dataset, min_support=0.4, min_threshold=0.9):
     list_kota = getKota(df)
     rules.to_csv("./rules/rules.csv")
 
+    with open("./rules/location.json", "w") as outfile1:
+        json.dump(keckota, outfile1)
+
+    with open("./rules/data.json", "w") as outfile:
+        json.dump(dict_kec_rules_location, outfile)
+
+
     print(keckota)
     print(frequent_pattern)
     print(rules)
@@ -674,5 +682,5 @@ def asosiasi(db: Session, dataset, min_support=0.4, min_threshold=0.9):
             'fp': frequent_pattern,
             'rules': rules.to_json(),
             'locations': keckota,
-            'dict_kec_rules_location': dict_kec_rules_location
+            'dict_kec_rules_location': dict_kec_rules_location,
     }
