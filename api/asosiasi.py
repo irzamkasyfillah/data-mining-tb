@@ -8,7 +8,7 @@ from scipy.sparse import csr_matrix
 from itertools import combinations
 from geopy.geocoders import Nominatim
 from sqlalchemy.orm import Session
-from api.data import Data
+from data import Data
 
 
 def preprocessing(db, dataset):

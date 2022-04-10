@@ -7,7 +7,7 @@ from geopy.geocoders import Nominatim
 from kmodes.kprototypes import KPrototypes
 from sklearn.preprocessing import StandardScaler
 
-from api.data import Data
+from data import Data
 
 
 def cluster(db, dataset):

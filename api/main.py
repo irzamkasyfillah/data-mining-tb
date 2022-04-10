@@ -7,9 +7,9 @@ from sqlalchemy.orm import Session
 from asosiasi import asosiasi
 from fastapi import FastAPI, UploadFile, File, Depends
 from datetime import datetime
-from api.clustering import cluster
-from api.data import Data
-from api.database import get_db
+from clustering import cluster
+from data import Data
+from database import get_db
 
 app = FastAPI()
 dataset = "./dataset/dataset_TB_anak.csv"
