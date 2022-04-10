@@ -174,3 +174,18 @@
 .table-modal th {
   font-weight: 500;
 }
+
+/* To fix react-data-table-component's styling */
+
+/* Header Cells */
+.eUeqdG {
+	white-space: unset !important;
+	text-overflow: unset !important;
+}
+
+/* Rows Cells Text */
+.bMgaAx div:first-child {
+	 white-space: unset !important;
+	 overflow: unset !important;
+	 text-overflow: unset !important;
+}

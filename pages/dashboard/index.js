@@ -4,6 +4,7 @@ import Uploader from "../../src/components/Uploader";
 import Router from "next/router";
 import { DashboardTable } from "../../src/components/DashboardTable";
 
+
 function Asosiasi() {
   const [files, setFiles] = useState(null);
   const [data, setData] = useState([]);
