@@ -3,6 +3,10 @@ api/__pycache__
 .idea
 api/rules
 api/result
+<<<<<<< HEAD
+=======
+
+>>>>>>> 70686aca2a04477bdfbb2b50c38726f4305422a2
 # dependencies
 /node_modules
 /.pnp
