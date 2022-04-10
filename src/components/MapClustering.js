@@ -1,129 +1,3 @@
-// import {MapContainer, Marker, Polygon, Popup, TileLayer, useMapEvents} from 'react-leaflet'
-// import 'leaflet/dist/leaflet.css'
-// import L from 'leaflet';
-// import {useState, useEffect} from "react";
-// // import Legend from "./Legend";
-//
-// let DefaultIcon = L.icon({
-//     iconUrl: 'icons/marker-icon.png',
-//     shadowUrl: 'icons/marker-shadow.png'
-// });
-//
-// L.Marker.prototype.options.icon = DefaultIcon;
-//
-//
-// const center = [-5.136143, 119.469370];
-//
-// function getColor(d) {
-//     // return d > 1000 ? '#800026' :
-//     //        d > 500  ? '#BD0026' :
-//     //        d > 200  ? '#E31A1C' :
-//     //        d > 100  ? '#FC4E2A' :
-//     //        d > 50   ? '#FD8D3C' :
-//     //        d > 20   ? '#FEB24C' :
-//     //        d > 10   ? '#FED976' :
-//     //                   '#FFEDA0';
-//     return d > 100 ? '#800026' :
-//         d > 50 ? '#BD0026' :
-//             d > 20 ? '#E31A1C' :
-//                 d > 10 ? '#FC4E2A' :
-//                     d > 5 ? '#FD8D3C' :
-//                         d > 2 ? '#FEB24C' :
-//                             d > 1 ? '#FED976' :
-//                                 '#FFEDA0';
-// }
-//
-// function CreateInfo() {
-//     return (
-//         <div className={'info'}>
-//             <h4>US Population Density</h4>
-//         </div>
-//     )
-// }
-//
-// const MapClustering = () => {
-//
-//     function GetLatLong(props) {
-//         const {data} = props;
-//         const result = data?.data_coordinate
-//     }
-//
-//     return (
-//         <MapContainer center={center} zoom={12} scrollWheelZoom={true} className={'mapid'}>
-//             <TileLayer
-//                 attribution='&copy; <a href="https://osm.org/copyright" target="_blank">OpenStreetMap</a> contributors'
-//                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-//             />
-//             {/*<Marker position={[51.505, -0.09]}>*/}
-//             {/*    <Popup>*/}
-//             {/*        A pretty CSS3 popup. <br/> Easily customizable.*/}
-//             {/*    </Popup>*/}
-//             {/*</Marker>*/}
-//             {/*<Legend />*/}
-//
-//
-//             {
-//                 statesData.features.map((state) => {
-//                     let coordinates = [];
-//                     if (state.geometry.type === 'MultiPolygon') {
-//                         const array_polygon = [];
-//
-//                         for (const i in state.geometry.coordinates) {
-//                             const coord = state.geometry.coordinates[i][0].map((item) => [item[1], item[0]]);
-//                             array_polygon.push(coord);
-//                         }
-//                         coordinates = array_polygon;
-//                     } else {
-//                         coordinates = state.geometry.coordinates[0].map((item) => [item[1], item[0]]);
-//                     }
-//
-//                     // eslint-disable-next-line react/jsx-key
-//                     return (<Polygon
-//                             pathOptions={{
-//                                 fillColor: getColor(state.properties.Luas_KM2),
-//                                 fillOpacity: 0.7,
-//                                 weight: 2,
-//                                 opacity: 1,
-//                                 dashArray: 3,
-//                                 color: 'white'
-//                             }}
-//                             positions={coordinates}
-//                             eventHandlers={{
-//                                 mouseover: (e) => {
-//                                     const layer = e.target;
-//                                     layer.setStyle({
-//                                         dashArray: "",
-//                                         fillColor: "#BD0026",
-//                                         fillOpacity: 0.7,
-//                                         weight: 2,
-//                                         opacity: 1,
-//                                         color: "white",
-//                                     })
-//                                 },
-//                                 mouseout: (e) => {
-//                                     const layer = e.target;
-//                                     layer.setStyle({
-//                                         fillOpacity: 0.7,
-//                                         weight: 2,
-//                                         dashArray: "3",
-//                                         color: 'white',
-//                                         fillColor: getColor(state.properties.Luas_KM2)
-//                                     });
-//                                 },
-//                                 click: (e) => {
-//
-//                                 }
-//                             }}
-//                         />
-//
-//                     )
-//                 })
-//             }
-//         </MapContainer>
-//     )
-// }
-//
-// export default MapClustering
 import React from 'react';
 import L from 'leaflet';
 import {CircleMarker, MapContainer, Popup, TileLayer} from 'react-leaflet'
@@ -131,7 +5,6 @@ import 'leaflet/dist/leaflet.css'
 import {Button} from 'react-bootstrap'
 import LoadingOverlay from 'react-loading-overlay';
 import Router from "next/router";
-import Table from 'react-tailwind-table';
 
 let DefaultIcon = L.icon({
     iconUrl: 'icons/marker-icon.png',
@@ -157,16 +30,71 @@ function PointMarker(props) {
     console.log(data)
 
     return Object.keys(coord)?.map((kec) => {
+        const [showModal, setShowModal] = React.useState(false);
+
+        const handleClose = () => setShow(false);
+        const handleShow = () => setShow(true);
+
         const resultKec = coord[kec]
+
+        const keys = Object.keys(resultKec)
+        let daftar_opname = []
+        let daftar_penyakit_lain = []
+
+        for (let i of keys) {
+            if (i.includes("(opname)")) {
+                daftar_opname.push(i)
+            }
+            if (i.includes("(org serumah)")) {
+                daftar_penyakit_lain.push(i)
+            }
+        }
+
+        console.log(daftar_opname, daftar_penyakit_lain)
+
+        let daftar_opname_ya = []
+        let daftar_penyakit_lain_ya = []
+        for (let i of daftar_opname) {
+            for (let j in resultKec) {
+                if (i === j) {
+                    // console.log('resultClust[i]', resultClust[i], i,j)
+                    if (resultKec[i] === "Ya") {
+                        daftar_opname_ya.push(i)
+                    }
+                }
+            }
+        }
+
+        for (let i of daftar_penyakit_lain) {
+            for (let j in resultKec) {
+                if (i === j) {
+                    console.log('resultClust[i]', resultKec[i], i,j)
+                    if (resultKec[i] === "Ya") {
+                        daftar_penyakit_lain_ya.push(i)
+                    }
+                }
+            }
+        }
         // const index = resultKec?.index
         const position = [resultKec?.latitude, resultKec?.longitude]
+
         const kasus = resultKec?.Total
         const cluster = resultKec?.Segment
         const umur = Math.round(resultKec?.['Tahun (mean)'])
         const jenis_kelamin = resultKec?.['Jenis Kelamin']
+        const alamat = 'Kec. ' + resultKec?.['Alamat (Kecamatan)'] + ', Kel. ' + resultKec?.['Alamat (Kelurahan)']
         const pekerjaan = resultKec?.['Pekerjaan Ayah'] + ' & ' + resultKec?.['Pekerjaan Ibu']
         const pendapatan = resultKec?.['Pendapatan Orang Tua']
         const status_gizi = resultKec?.['Status Gizi']
+
+        const diabetes_anak = resultKec?.['riwayat diabetes anak']
+        const opname = resultKec?.['riwayat opname']
+        const asi_eksklusif = resultKec?.['ASI eksklusif']
+
+        const tb_orang_serumah = resultKec?.['riwayat TB orang serumah']
+        const diabetes_keluarga = resultKec?.['riwayat diabetes keluarga']
+        const penyakit_lain = resultKec?.['riwayat penyakit lain orang serumah']
+
         const luas_rumah = resultKec?.['luas rumah']
         const jumlah_kamar = Math.round(resultKec?.['jumlah kamar tidur (mean)'])
         const jumlah_orang = Math.round(resultKec?.['jumlah orang dalam rumah (mean)'])
@@ -201,17 +129,165 @@ function PointMarker(props) {
                     Sistem Ventilasi <pre style={{display: 'inline', marginLeft: '15%'}}> : </pre> {sistem_ventilasi}
                     <br/>
                     Vaksin BCG <pre style={{display: 'inline', marginLeft: '21.8%'}}> : </pre> {bcg} <br/>
+                    <br/>
+
+                    <div className="text-center">
+                        <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            variant="primary" onClick={() => setShowModal(true)}>
+                            Lihat selengkapnya..
+                        </Button>
+                    </div>
+
                 </Popup>
+
+                {showModal ? (
+                    <>
+                        <div
+                            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-[1000] outline-none focus:outline-none"
+                        >
+                            <div className="relative w-auto my-6 mx-auto max-w-6xl">
+                                {/*content*/}
+                                <div
+                                    className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                                    {/*header*/}
+                                    <div
+                                        className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                                        <h3 className="text-3xl font-semibold">
+                                            Kecamatan {kec}
+                                        </h3>
+                                        <button
+                                            className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                                            onClick={() => setShowModal(false)}
+                                        >
+                                            <span
+                                                className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                                              ×
+                                            </span>
+                                        </button>
+                                    </div>
+                                    {/*body*/}
+                                    <div style={{maxHeight:400, overflowY:"auto", overflowX:"auto"}}  className="relative p-6 flex-auto m-2 text-center">
+                                        <h2 className="font-semibold" style={{textAlign:"end"}}>CLUSTER : {cluster}</h2>
+                                        <h3 className="font-semibold" style={{textAlign:"end"}}>TOTAL : {kasus}</h3>
+
+
+                                        <h3 className="font-semibold" style={{textAlign:"start"}}>DATA ANAK</h3>
+                                        <br/><hr/>
+                                        <table style={{border:1}} className="table-auto">
+                                            <thead>
+                                            <tr>
+                                                <th className="px-4 py-2">Umur</th>
+                                                <th className="px-4 py-2">Jenis Kelamin</th>
+                                                <th className="px-4 py-2">Alamat</th>
+                                                <th className="px-4 py-2">Pekerjaan</th>
+                                                <th className="px-4 py-2">Pendapatan</th>
+                                                <th className="px-4 py-2">Status Gizi</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td className="border px-4 py-2">{umur}</td>
+                                                <td className="border px-4 py-2">{jenis_kelamin}</td>
+                                                <td className="border px-4 py-2">{alamat}</td>
+                                                <td className="border px-4 py-2">{pekerjaan}</td>
+                                                <td className="border px-4 py-2">{pendapatan}</td>
+                                                <td className="border px-4 py-2">{status_gizi}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <br/>
+
+                                        <h3 className="font-semibold" style={{textAlign:"start"}}>RIWAYAT KESEHATAN ANAK</h3>
+                                        <br/><hr/>
+                                        <table className="table-auto">
+                                            <thead>
+                                            <tr>
+                                                <th className="w-1/4 px-4 py-2">Riwayat Diabetes</th>
+                                                <th className="w-1/4 px-4 py-2">Riwayat Opname</th>
+                                                <th className="w-1/4 px-4 py-2">Daftar Opname</th>
+                                                <th className="w-1/4 px-4 py-2">Vaksin BCG</th>
+                                                <th className="w-1/4 px-4 py-2">ASI Eksklusif</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td className="border px-4 py-2">{diabetes_anak}</td>
+                                                <td className="border px-4 py-2">{opname}</td>
+                                                <td className="border px-4 py-2">{daftar_opname_ya}</td>
+                                                <td className="border px-4 py-2">{bcg}</td>
+                                                <td className="border px-4 py-2">{asi_eksklusif}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <br/>
+                                        <h3 className="font-semibold" style={{textAlign:"start"}}>RIWAYAT PENYAKIT ORANG SERUMAH</h3>
+                                        <br/><hr/>
+                                        <table className="table-auto">
+                                            <thead>
+                                            <tr>
+                                                <th className="w-1/6 px-4 py-2">Riwayat TB</th>
+                                                <th className="w-1/6 px-4 py-2">Riwayat Diabetes Keluarga</th>
+                                                <th className="w-1/6 px-4 py-2">Riwayat Penyakit Lain</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td className="border px-4 py-2">{tb_orang_serumah}</td>
+                                                <td className="border px-4 py-2">{diabetes_keluarga}</td>
+                                                <td className="border px-4 py-2">{daftar_penyakit_lain_ya}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <br/>
+                                        <h3 className="font-semibold" style={{textAlign:"start"}}>KONDISI RUMAH</h3>
+                                        <br/><hr/>
+                                        <table className="table-auto">
+                                            <thead>
+                                            <tr>
+                                                <th className="w-1/4 px-4 py-2">Luas Rumah</th>
+                                                <th className="w-1/4 px-4 py-2">Jumlah Kamar</th>
+                                                <th className="w-1/4 px-4 py-2">Jumlah Orang</th>
+                                                <th className="w-1/4 px-4 py-2">Sistem Ventilasi</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td className="border px-4 py-2">{luas_rumah}</td>
+                                                <td className="border px-4 py-2">{jumlah_kamar}</td>
+                                                <td className="border px-4 py-2">{jumlah_orang}</td>
+                                                <td className="border px-4 py-2">{sistem_ventilasi}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+
+                                    </div>
+                                    {/*footer*/}
+                                    <div
+                                        className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                                        <button
+                                            className="text-white rounded bg-red-500 background-transparent uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                            type="button"
+                                            onClick={() => setShowModal(false)}
+                                        >
+                                            Tutup
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                    </>
+                ) : null}
+
+
             </CircleMarker>
         )
     });
 }
 
-function ClusterModal() {
-
-}
-
-function Example(props) {
+function ClusterModal(props) {
     const {data, selectedData, center, loading} = props
     console.log("data", data)
     const coord = data?.data_cluster
@@ -327,24 +403,23 @@ function Example(props) {
                                         </button>
                                     </div>
                                     {/*body*/}
-                                    <div style={{maxHeight:400, overflowY:"auto", overflowX:"auto"}}  className="table-modal relative p-6 flex-auto m-2">
+                                    <div style={{maxHeight:400, overflowY:"auto", overflowX:"auto"}}  className="table-modal relative p-6 flex-auto m-2 text-sm">
+                                        <h3 className="font-semibold" style={{textAlign:"end"}}>TOTAL : {kasus}</h3>
                                         <h3 className="font-semibold" style={{textAlign:"start"}}>DATA ANAK</h3>
                                         <br/><hr/>
                                         <table style={{border:1}} className="table-auto">
                                             <thead>
                                             <tr>
-                                                <td className="w-1/2 px-4 py-2">Total</td>
-                                                <td className="w-1/4 px-4 py-2">Umur</td>
-                                                <td className="w-1/4 px-4 py-2">Jenis Kelamin</td>
-                                                <td className="w-1/4 px-4 py-2">Alamat</td>
-                                                <td className="w-1/4 px-4 py-2">Pekerjaan</td>
-                                                <td className="w-1/4 px-4 py-2">Pendapatan</td>
-                                                <td className="w-1/4 px-4 py-2">Status Gizi</td>
+                                                <th className="px-4 py-2">Umur</th>
+                                                <th className="px-4 py-2">Jenis Kelamin</th>
+                                                <th className="px-4 py-2">Alamat</th>
+                                                <th className="px-4 py-2">Pekerjaan</th>
+                                                <th className="px-4 py-2">Pendapatan</th>
+                                                <th className="px-4 py-2">Status Gizi</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr>
-                                                <td className="border px-4 py-2">{kasus}</td>
                                                 <td className="border px-4 py-2">{umur}</td>
                                                 <td className="border px-4 py-2">{jenis_kelamin}</td>
                                                 <td className="border px-4 py-2">{alamat}</td>
@@ -361,7 +436,7 @@ function Example(props) {
                                         <table className="table-auto">
                                             <thead>
                                             <tr>
-                                                <th  className="w-1/2 px-4 py-2">Riwayat Diabetes</th>
+                                                <th className="w-1/4 px-4 py-2">Riwayat Diabetes</th>
                                                 <th className="w-1/4 px-4 py-2">Riwayat Opname</th>
                                                 <th className="w-1/4 px-4 py-2">Daftar Opname</th>
                                                 <th className="w-1/4 px-4 py-2">Vaksin BCG</th>
@@ -384,9 +459,9 @@ function Example(props) {
                                         <table className="table-auto">
                                             <thead>
                                             <tr>
-                                                <th className="w-1/2 px-4 py-2">Riwayat TB</th>
-                                                <th className="w-1/4 px-4 py-2">Riwayat Diabetes Keluarga</th>
-                                                <th className="w-1/4 px-4 py-2">Riwayat Penyakit Lain</th>
+                                                <th className="w-1/6 px-4 py-2">Riwayat TB</th>
+                                                <th className="w-1/6 px-4 py-2">Riwayat Diabetes Keluarga</th>
+                                                <th className="w-1/6 px-4 py-2">Riwayat Penyakit Lain</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -403,10 +478,10 @@ function Example(props) {
                                         <table className="table-auto">
                                             <thead>
                                             <tr>
-                                                <th className="w-1/2 px-4 py-2">Luas Rumah</th>
-                                                <th className="w-1/4 px-4 py-2">Jumlah Kamar</th>
-                                                <th className="w-1/4 px-4 py-2">Jumlah Orang</th>
-                                                <th className="w-1/4 px-4 py-2">Sistem Ventilasi</th>
+                                                <th className="w-1/5 px-4 py-2">Luas Rumah</th>
+                                                <th className="w-1/5 px-4 py-2">Jumlah Kamar</th>
+                                                <th className="w-1/5 px-4 py-2">Jumlah Orang</th>
+                                                <th className="w-1/5 px-4 py-2">Sistem Ventilasi</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -425,11 +500,11 @@ function Example(props) {
                                     <div
                                         className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                                         <button
-                                            className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                            className="text-white rounded bg-red-500 background-transparent uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                                             type="button"
                                             onClick={() => setShowModal(false)}
                                         >
-                                            Close
+                                            Tutup
                                         </button>
                                     </div>
                                 </div>
@@ -463,7 +538,7 @@ const Map = (props) => {
                     active={loading}
                     spinner
                     text='Building cluster, please wait...'>
-                    <MapContainer center={center || [-5.136143, 119.469370]} zoom={12} scrollWheelZoom={true}
+                    <MapContainer center={center || [-5.136143, 119.469370]} zoom={12} scrollWheelZoom={false}
                                   className={'cluster-mapid'}>
                         <TileLayer
                             attribution='&copy; <a href="https://osm.org/copyright" target="_blank">OpenStreetMap</a> contributors'
@@ -482,7 +557,7 @@ const Map = (props) => {
                 {
                     data &&
                     <div className="text-center">
-                        <Example data={data} loading={loading}/>
+                        <ClusterModal data={data} loading={loading}/>
                     </div>
                 }
                 <br/><br/>
