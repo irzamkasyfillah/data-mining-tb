@@ -48,7 +48,7 @@ function PointMarker(props) {
             }
         }
 
-        console.log(daftar_opname, daftar_penyakit_lain)
+        // console.log(daftar_opname, daftar_penyakit_lain)
 
         let daftar_opname_ya = []
         let daftar_penyakit_lain_ya = []
@@ -66,7 +66,7 @@ function PointMarker(props) {
         for (let i of daftar_penyakit_lain) {
             for (let j in resultKec) {
                 if (i === j) {
-                    console.log('resultClust[i]', resultKec[i], i,j)
+                    // console.log('resultClust[i]', resultKec[i], i,j)
                     if (resultKec[i] === "Ya") {
                         daftar_penyakit_lain_ya.push(i)
                     }
@@ -317,7 +317,7 @@ function ClusterModal(props) {
             }
         }
 
-        console.log(daftar_opname, daftar_penyakit_lain)
+        // console.log(daftar_opname, daftar_penyakit_lain)
 
         let daftar_opname_ya = []
         let daftar_penyakit_lain_ya = []
@@ -335,7 +335,7 @@ function ClusterModal(props) {
         for (let i of daftar_penyakit_lain) {
             for (let j in resultClust) {
                 if (i === j) {
-                    console.log('resultClust[i]', resultClust[i], i,j)
+                    // console.log('resultClust[i]', resultClust[i], i,j)
                     if (resultClust[i] === "Ya") {
                         daftar_penyakit_lain_ya.push(i)
                     }

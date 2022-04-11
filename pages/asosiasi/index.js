@@ -42,18 +42,20 @@ function Asosiasi() {
       .then((res) => res.json())
       .then((data) => {
         // localStorage.setItem("result", JSON.stringify(data))
-        setData(data)
-        const result = data?.dict_kec_rules_location
+        if (data) {
+          setData(data)
+          const result = data?.dict_kec_rules_location
 
-        const markers = Object.keys(result)?.map(kec => {
-          const resultKec = result[kec]
-          return [resultKec?.lat, resultKec?.long]
-        })
-        console.log("markers", markers)
+          const markers = Object.keys(result)?.map(kec => {
+            const resultKec = result[kec]
+            return [resultKec?.lat, resultKec?.long]
+          })
+          console.log("markers", markers)
 
-        setMarkers(markers)
-        setLoading(false)
-      // return req.json()
+          setMarkers(markers)
+          setLoading(false)
+        // return req.json()
+        }
       })
     }
 

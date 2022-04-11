@@ -64,16 +64,17 @@ def read_root(db: Session = Depends(get_db)):
 
 @app.get("/asosiasi")
 def read_data():
-    with open('./rules/location.json', 'r') as data1:
-        data_lokasi = json.load(data1)
-
-    with open('./rules/data.json', 'r') as data:
-        data_asosiasi = json.load(data)
-
-    return {
-        'locations': data_lokasi,
-        'dict_kec_rules_location': data_asosiasi
-    }
+    if os.path.exists("./rules/location.json") and os.path.exists("./rules/data.json"):
+        with open('./rules/location.json', 'r') as data1:
+            data_lokasi = json.load(data1)
+        with open('./rules/data.json', 'r') as data:
+            data_asosiasi = json.load(data)
+        return {
+            'locations': data_lokasi,
+            'dict_kec_rules_location': data_asosiasi
+        }
+    else:
+        return False
 
 
 @app.post("/run_asosiasi")
@@ -91,17 +92,20 @@ async def read_root(background_task: BackgroundTasks, db: Session = Depends(get_
 
 @app.get("/cluster")
 async def do_cluster(db: Session = Depends(get_db)):
-    with open("./result/data_cluster.json", "r") as j:
-        cluster = json.load(j)
-    with open("./result/data_kecamatan.json", "r") as k:
-        kecamatan = json.load(k)
-    with open("./result/df.json", "r") as k:
-        df = json.load(k)
-    return {
-        'data_cluster': cluster,
-        'data_kecamatan': kecamatan,
-        'df': df,
-    }
+    if os.path.exists("./result/data_cluster.json") and os.path.exists("./result/data_kecamatan.json") and os.path.exists("./result/df.json"):
+        with open("./result/data_cluster.json", "r") as j:
+            cluster = json.load(j)
+        with open("./result/data_kecamatan.json", "r") as k:
+            kecamatan = json.load(k)
+        with open("./result/df.json", "r") as k:
+            df = json.load(k)
+        return {
+            'data_cluster': cluster,
+            'data_kecamatan': kecamatan,
+            'df': df,
+        }
+    else:
+        return False
 
 
 @app.post("/run_cluster")

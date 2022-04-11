@@ -32,10 +32,13 @@ function Cluster() {
                 .then((res) => res.json())
                 .then((data) => {
                     // localStorage.setItem("result2", JSON.stringify(data))
-                    setData(data)
-                    setLoading(false)
-                    console.log('sudah load')
-                    setReg(false)
+
+                    if (data) {
+                        setData(data)
+                        setLoading(false)
+                        console.log('sudah load', data)
+                        setReg(false)
+                    }
                 })
         }
     }
