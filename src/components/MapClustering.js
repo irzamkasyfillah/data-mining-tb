@@ -132,7 +132,7 @@ function PointMarker(props) {
 
                     <div className="text-center">
                         <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            variant="primary" onClick={() => setShowModal(true)}>
+                                variant="primary" onClick={() => setShowModal(true)}>
                             Lihat selengkapnya..
                         </Button>
                     </div>
@@ -165,14 +165,17 @@ function PointMarker(props) {
                                         </button>
                                     </div>
                                     {/*body*/}
-                                    <div style={{maxHeight:400, overflowY:"auto", overflowX:"auto"}}  className="relative p-6 flex-auto m-2 text-center">
-                                        <h2 className="font-semibold" style={{textAlign:"end"}}>CLUSTER : {cluster}</h2>
-                                        <h3 className="font-semibold" style={{textAlign:"end"}}>TOTAL : {kasus}</h3>
+                                    <div style={{maxHeight: 400, overflowY: "auto", overflowX: "auto"}}
+                                         className="relative p-6 flex-auto m-2 text-center">
+                                        <h2 className="font-semibold" style={{textAlign: "end"}}>CLUSTER
+                                            : {cluster}</h2>
+                                        <h3 className="font-semibold" style={{textAlign: "end"}}>TOTAL : {kasus}</h3>
 
 
-                                        <h3 className="font-semibold" style={{textAlign:"start"}}>DATA ANAK</h3>
-                                        <br/><hr/>
-                                        <table style={{border:1}} className="table-auto">
+                                        <h3 className="font-semibold" style={{textAlign: "start"}}>DATA ANAK</h3>
+                                        <br/>
+                                        <hr/>
+                                        <table style={{border: 1}} className="table-auto">
                                             <thead>
                                             <tr>
                                                 <th className="px-4 py-2">Umur</th>
@@ -196,8 +199,10 @@ function PointMarker(props) {
                                         </table>
                                         <br/>
 
-                                        <h3 className="font-semibold" style={{textAlign:"start"}}>RIWAYAT KESEHATAN ANAK</h3>
-                                        <br/><hr/>
+                                        <h3 className="font-semibold" style={{textAlign: "start"}}>RIWAYAT KESEHATAN
+                                            ANAK</h3>
+                                        <br/>
+                                        <hr/>
                                         <table className="table-auto">
                                             <thead>
                                             <tr>
@@ -220,8 +225,10 @@ function PointMarker(props) {
                                         </table>
 
                                         <br/>
-                                        <h3 className="font-semibold" style={{textAlign:"start"}}>RIWAYAT PENYAKIT ORANG SERUMAH</h3>
-                                        <br/><hr/>
+                                        <h3 className="font-semibold" style={{textAlign: "start"}}>RIWAYAT PENYAKIT
+                                            ORANG SERUMAH</h3>
+                                        <br/>
+                                        <hr/>
                                         <table className="table-auto">
                                             <thead>
                                             <tr>
@@ -239,8 +246,9 @@ function PointMarker(props) {
                                             </tbody>
                                         </table>
                                         <br/>
-                                        <h3 className="font-semibold" style={{textAlign:"start"}}>KONDISI RUMAH</h3>
-                                        <br/><hr/>
+                                        <h3 className="font-semibold" style={{textAlign: "start"}}>KONDISI RUMAH</h3>
+                                        <br/>
+                                        <hr/>
                                         <table className="table-auto">
                                             <thead>
                                             <tr>
@@ -368,7 +376,8 @@ function ClusterModal(props) {
         return (
             <>
                 <div className="inline">
-                    <Button style={{backgroundColor:months[i]}} className="text-white font-bold py-2 px-4 rounded mx-3 d-inline-block"
+                    <Button style={{backgroundColor: months[i]}}
+                            className="text-white font-bold py-2 px-4 rounded mx-3 d-inline-block"
                             variant="primary" onClick={() => setShowModal(true)}>
                         Cluster {resultClust?.Segment}
                     </Button>
@@ -402,11 +411,13 @@ function ClusterModal(props) {
                                         </button>
                                     </div>
                                     {/*body*/}
-                                    <div style={{maxHeight:400, overflowY:"auto", overflowX:"auto"}}  className="table-modal relative p-6 flex-auto m-2 text-sm">
-                                        <h3 className="font-semibold" style={{textAlign:"end"}}>TOTAL : {kasus}</h3>
-                                        <h3 className="font-semibold" style={{textAlign:"start"}}>DATA ANAK</h3>
-                                        <br/><hr/>
-                                        <table style={{border:1}} className="table-auto">
+                                    <div style={{maxHeight: 400, overflowY: "auto", overflowX: "auto"}}
+                                         className="table-modal relative p-6 flex-auto m-2 text-sm">
+                                        <h3 className="font-semibold" style={{textAlign: "end"}}>TOTAL : {kasus}</h3>
+                                        <h3 className="font-semibold" style={{textAlign: "start"}}>DATA ANAK</h3>
+                                        <br/>
+                                        <hr/>
+                                        <table style={{border: 1}} className="table-auto">
                                             <thead>
                                             <tr>
                                                 <th className="px-4 py-2">Umur</th>
@@ -430,8 +441,10 @@ function ClusterModal(props) {
                                         </table>
                                         <br/>
 
-                                        <h3 className="font-semibold" style={{textAlign:"start"}}>RIWAYAT KESEHATAN ANAK</h3>
-                                        <br/><hr/>
+                                        <h3 className="font-semibold" style={{textAlign: "start"}}>RIWAYAT KESEHATAN
+                                            ANAK</h3>
+                                        <br/>
+                                        <hr/>
                                         <table className="table-auto">
                                             <thead>
                                             <tr>
@@ -453,8 +466,10 @@ function ClusterModal(props) {
                                             </tbody>
                                         </table>
                                         <br/>
-                                        <h3 className="font-semibold" style={{textAlign:"start"}}>RIWAYAT PENYAKIT ORANG SERUMAH</h3>
-                                        <br/><hr/>
+                                        <h3 className="font-semibold" style={{textAlign: "start"}}>RIWAYAT PENYAKIT
+                                            ORANG SERUMAH</h3>
+                                        <br/>
+                                        <hr/>
                                         <table className="table-auto">
                                             <thead>
                                             <tr>
@@ -472,8 +487,9 @@ function ClusterModal(props) {
                                             </tbody>
                                         </table>
                                         <br/>
-                                        <h3 className="font-semibold" style={{textAlign:"start"}}>KONDISI RUMAH</h3>
-                                        <br/><hr/>
+                                        <h3 className="font-semibold" style={{textAlign: "start"}}>KONDISI RUMAH</h3>
+                                        <br/>
+                                        <hr/>
                                         <table className="table-auto">
                                             <thead>
                                             <tr>
@@ -521,14 +537,26 @@ const Map = (props) => {
     const {data, selectedData, center, loading, setReg} = props
 
     const kec = data?.data_kecamatan
+
     function reloadData() {
         setReg(true);
         Router.push({
-          pathname: "/cluster",
-          query: {generate: 1}
+            pathname: "/cluster",
+            query: {generate: 1}
         })
         // Router.reload()
     }
+
+    const handleCluster = () => {
+        const req = fetch(`http://127.0.0.1:8080/run_cluster`, {
+            method: "POST",
+        })
+        Router.push({
+            pathname: "/cluster",
+            query: {generate: 1}
+        })
+        Router.reload()
+    };
 
     return (
         <>
@@ -561,8 +589,8 @@ const Map = (props) => {
                 }
                 <br/><br/>
                 <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                        variant="primary" onClick={() => reloadData()}>
-                        REGENERATE DATA
+                        variant="primary" onClick={() => handleCluster()}>
+                    REGENERATE DATA
                 </Button>
             </div>
         </>
