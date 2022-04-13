@@ -2,6 +2,8 @@ import uvicorn
 import shutil
 import json
 import os
+import pandas as pd
+import numpy as np
 
 from fastapi.middleware.cors import CORSMiddleware
 from os import path
@@ -38,10 +40,10 @@ async def root(start_date: datetime = start):
     return {"start_date": start_date}
 
 
-@app.post("/uploadfile/")
-async def create_upload_file(db: Session = Depends(get_db), uploaded_file: UploadFile = File(...)):
-    print(uploaded_file)
-    allowedFiles = {"application/vnd.ms-excel"}
+@app.post("/uploadfile")
+async def create_upload_file(background_task: BackgroundTasks, db: Session = Depends(get_db), uploaded_file: UploadFile = File(...)):
+    print(uploaded_file, "uploaded_file")
+    allowedFiles = {"application/vnd.ms-excel", "text/csv"}
     if uploaded_file.content_type in allowedFiles:
         date_time = start.strftime(format)
         file_location = path.join("./dataset", date_time + uploaded_file.filename)
@@ -50,6 +52,55 @@ async def create_upload_file(db: Session = Depends(get_db), uploaded_file: Uploa
 
         global dataset
         dataset = file_location
+        print(dataset, "dataset")
+
+        df = pd.read_csv(dataset)
+
+        df['Jika pernah, anak diopname karena penyakit apa saja?'] = df[
+            'Jika pernah, anak diopname karena penyakit apa saja?'].replace(np.nan, 'Tidak Pernah')
+        df['Jika ada, penyakit apa saja?'] = df['Jika ada, penyakit apa saja?'].replace(np.nan, 'Tidak Ada')
+
+        for index, df_data in df.iterrows():
+            existing_data = db.query(Data).filter(Data.code == df_data['code']).first()
+            if not existing_data:
+                db_data = Data(
+                    code=df_data['code'],
+                    timestamp=df_data['Timestamp'],
+                    tanggal_lahir=df_data['Tanggal Lahir'],
+                    umur=df_data['Umur'],
+                    tinggi_badan=df_data['Tinggi badan (dalam cm)'],
+                    berat_badan=df_data['Berat badan (dalam kg)'],
+                    jenis_kelamin=df_data['Jenis Kelamin'],
+                    alamat_kelurahan=df_data['Alamat (Kelurahan)'],
+                    alamat_kecamatan=df_data['Alamat (Kecamatan)'],
+                    alamat_kota=df_data['Alamat (Kab/Kota)'],
+                    alamat_lengkap=df_data['Alamat (mohon sertakan nama kelurahan dan kecamatan)'],
+                    pekerjaan_ayah=df_data['Pekerjaan Ayah'],
+                    pekerjaan_ibu=df_data['Pekerjaan Ibu'],
+                    pendapatan=df_data['Pendapatan Orang Tua'],
+                    pernah_sedang_tb=df_data['Apakah anak pernah atau sedang dalam pengobatan tuberkulosis?'],
+                    diabetes_anak=df_data['Apakah anak pernah mengalami penyakit diabetes?'],
+                    vaksin_bcg=df_data[
+                        'Apakah anak telah menerima imunisasi BCG (Bacillus Calmette-Guérin, imunisasi untuk mencegah penyakit TB)?'],
+                    riwayat_opname_anak=df_data['Apakah anak pernah di opname sebelumnya?'],
+                    penyakit_anak=df_data['Jika pernah, anak diopname karena penyakit apa saja?'],
+                    asi_ekslusif=df_data[
+                        'Apakah anak mengkonsumsi ASI secara eksklusif? (ASI Eksklusif adalah pemberian ASI tanpa makanan/minuman (susu formula) tambahan hingga berusia 6 bulan)'],
+                    tb_serumah=df_data['Apakah ada riwayat penyakit tuberkulosis dalam orang serumah?'],
+                    diabetes_serumah=df_data['Apakah ada riwayat penyakit diabetes dalam keluarga (orang tua)?'],
+                    penyakit_lainnya=df_data[
+                        'Apakah ada riwayat penyakit lainnya selain tuberkulosis, diabetes dalam orang  serumah?'],
+                    penyakit_serumah=df_data['Jika ada, penyakit apa saja?'],
+                    konsumsi_obat_tb=df_data[
+                        'Apakah ada yang pernah atau sedang mengkonsumsi obat tuberkulosis dalam orang serumah?'],
+                    luas_rumah=df_data['Berapa luas rumah tempat anak tinggal?'],
+                    jumlah_kamar=df_data['Berapa jumlah kamar tidur dalam rumah?'],
+                    jumlah_orang=df_data['Berapa jumlah orang yang tinggal dalam satu rumah?'],
+                    sistem_ventilasi=df_data['Bagaimana sistem ventilasi di rumah Anda? ']
+                )
+
+                db.add(db_data)
+        db.commit()
 
         return {"info": f"file '{uploaded_file.filename}' saved at '{file_location}'"}
 
@@ -83,15 +134,16 @@ async def read_root(background_task: BackgroundTasks, db: Session = Depends(get_
         os.remove('./rules/location.json')
     if os.path.exists('./rules/data.json'):
         os.remove('./rules/data.json')
-    background_task.add_task(asosiasi, db, dataset, 0.3, 0.9)
+    background_task.add_task(asosiasi, dataset, 0.3, 0.9)
     # asosiasi(db, dataset, 0.3, 0.9)
     return {
-        'message': 'Running association...'
+        'message': 'Running association...',
+        'dataset': dataset
     }
 
 
 @app.get("/cluster")
-async def do_cluster(db: Session = Depends(get_db)):
+async def do_cluster():
     if os.path.exists("./result/data_cluster.json") and os.path.exists("./result/data_kecamatan.json") and os.path.exists("./result/df.json"):
         with open("./result/data_cluster.json", "r") as j:
             cluster = json.load(j)
@@ -109,17 +161,18 @@ async def do_cluster(db: Session = Depends(get_db)):
 
 
 @app.post("/run_cluster")
-async def do_cluster(background_task: BackgroundTasks, db: Session = Depends(get_db)):
+async def do_cluster(background_task: BackgroundTasks):
     if os.path.exists("./result/data_cluster.json"):
         os.remove("./result/data_cluster.json")
     if os.path.exists("./result/data_kecamatan.json"):
         os.remove("./result/data_kecamatan.json")
     if os.path.exists("./result/df.json"):
         os.remove("./result/df.json")
-    background_task.add_task(cluster, db, dataset)
-    # cluster(db, dataset)
+
+    background_task.add_task(cluster, dataset)
     return {
-        'message': 'Running cluster...'
+        'message': 'Running cluster...',
+        'dataset': dataset
     }
 if __name__ == '__main__':
     uvicorn.run("main:app", host='127.0.0.1', port=8080, reload=True)

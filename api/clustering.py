@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 from data import Data
 
 
-def cluster(db, dataset):
+def cluster(dataset):
     df = pd.read_csv(dataset)
     data_status_gizi_laki = pd.read_csv('csv/status_gizi_laki.csv', header=1)
     data_status_gizi_perempuan = pd.read_csv('csv/status_gizi_perempuan.csv', header=1)
@@ -21,48 +21,6 @@ def cluster(db, dataset):
     df['Jika pernah, anak diopname karena penyakit apa saja?'] = df[
         'Jika pernah, anak diopname karena penyakit apa saja?'].replace(np.nan, 'Tidak Pernah')
     df['Jika ada, penyakit apa saja?'] = df['Jika ada, penyakit apa saja?'].replace(np.nan, 'Tidak Ada')
-
-    for index, df_data in df.iterrows():
-        existing_data = db.query(Data).filter(Data.code == df_data['code']).first()
-        if not existing_data:
-            db_data = Data(
-                code=df_data['code'],
-                timestamp=df_data['Timestamp'],
-                tanggal_lahir=df_data['Tanggal Lahir'],
-                umur=df_data['Umur'],
-                tinggi_badan=df_data['Tinggi badan (dalam cm)'],
-                berat_badan=df_data['Berat badan (dalam kg)'],
-                jenis_kelamin=df_data['Jenis Kelamin'],
-                alamat_kelurahan=df_data['Alamat (Kelurahan)'],
-                alamat_kecamatan=df_data['Alamat (Kecamatan)'],
-                alamat_kota=df_data['Alamat (Kab/Kota)'],
-                alamat_lengkap=df_data['Alamat (mohon sertakan nama kelurahan dan kecamatan)'],
-                pekerjaan_ayah=df_data['Pekerjaan Ayah'],
-                pekerjaan_ibu=df_data['Pekerjaan Ibu'],
-                pendapatan=df_data['Pendapatan Orang Tua'],
-                pernah_sedang_tb=df_data['Apakah anak pernah atau sedang dalam pengobatan tuberkulosis?'],
-                diabetes_anak=df_data['Apakah anak pernah mengalami penyakit diabetes?'],
-                vaksin_bcg=df_data[
-                    'Apakah anak telah menerima imunisasi BCG (Bacillus Calmette-Guérin, imunisasi untuk mencegah penyakit TB)?'],
-                riwayat_opname_anak=df_data['Apakah anak pernah di opname sebelumnya?'],
-                penyakit_anak=df_data['Jika pernah, anak diopname karena penyakit apa saja?'],
-                asi_ekslusif=df_data[
-                    'Apakah anak mengkonsumsi ASI secara eksklusif? (ASI Eksklusif adalah pemberian ASI tanpa makanan/minuman (susu formula) tambahan hingga berusia 6 bulan)'],
-                tb_serumah=df_data['Apakah ada riwayat penyakit tuberkulosis dalam orang serumah?'],
-                diabetes_serumah=df_data['Apakah ada riwayat penyakit diabetes dalam keluarga (orang tua)?'],
-                penyakit_lainnya=df_data[
-                    'Apakah ada riwayat penyakit lainnya selain tuberkulosis, diabetes dalam orang  serumah?'],
-                penyakit_serumah=df_data['Jika ada, penyakit apa saja?'],
-                konsumsi_obat_tb=df_data[
-                    'Apakah ada yang pernah atau sedang mengkonsumsi obat tuberkulosis dalam orang serumah?'],
-                luas_rumah=df_data['Berapa luas rumah tempat anak tinggal?'],
-                jumlah_kamar=df_data['Berapa jumlah kamar tidur dalam rumah?'],
-                jumlah_orang=df_data['Berapa jumlah orang yang tinggal dalam satu rumah?'],
-                sistem_ventilasi=df_data['Bagaimana sistem ventilasi di rumah Anda? ']
-            )
-
-            db.add(db_data)
-    db.commit()
 
     data = df.rename(columns={'Alamat (mohon sertakan nama kelurahan dan kecamatan)': 'Alamat lengkap',
                               'Apakah anak pernah atau sedang dalam pengobatan tuberkulosis?': 'pernah/sedang TB',

@@ -19,12 +19,13 @@ function Asosiasi() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+  // const handleSubmit = () => {
     if (!files) setMessage("Pilih dataset terlebih dahulu");
     else {
       setLoading(true);
       const data = new FormData();
       data.append("uploaded_file", files);
-      console.log(data);
+      console.log(data, "data");
       const req = fetch(`http://127.0.0.1:8080/uploadfile`, {
         method: "POST",
         body: data,
@@ -114,6 +115,7 @@ function Asosiasi() {
                     <button
                       type="submit"
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-1 rounded"
+                      onClick={handleSubmit}
                     >
                       Upload Data
                     </button>

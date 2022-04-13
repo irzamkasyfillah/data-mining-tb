@@ -538,14 +538,14 @@ const Map = (props) => {
 
     const kec = data?.data_kecamatan
 
-    function reloadData() {
-        setReg(true);
-        Router.push({
-            pathname: "/cluster",
-            query: {generate: 1}
-        })
-        // Router.reload()
-    }
+    // function reloadData() {
+    //     setReg(true);
+    //     Router.push({
+    //         pathname: "/cluster",
+    //         query: {generate: 1}
+    //     })
+    //     // Router.reload()
+    // }
 
     const handleCluster = () => {
         const req = fetch(`http://127.0.0.1:8080/run_cluster`, {

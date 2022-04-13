@@ -26,7 +26,7 @@ function Cluster() {
         //     setLoading(false)
         // } else {
             setLoading(true);
-            const req = fetch(`http://127.0.0.1:8080/cluster/`, {
+            const req = fetch(`http://127.0.0.1:8080/cluster`, {
                 method: "GET",
             })
                 .then((res) => res.json())
