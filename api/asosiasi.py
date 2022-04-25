@@ -59,13 +59,13 @@ def preprocessing(dataset):
     df['Pekerjaan Ibu'] = 'Ibu ' + df['Pekerjaan Ibu']
     df['jumlah kamar tidur'] = df['jumlah kamar tidur'] + ' Kamar'
     df['jumlah orang dalam rumah'] = df['jumlah orang dalam rumah'] + ' Orang'
-    df['riwayat diabetes anak'] = df['riwayat diabetes anak'] + ' pernah diabetes'
+    df['riwayat diabetes anak'] = df['riwayat diabetes anak'] + ' anak pernah diabetes'
     df['riwayat vaksin BCG'] = df['riwayat vaksin BCG'] + ' Anak Telah BCG'
     df['ASI eksklusif'] = df['ASI eksklusif'] + ' ASI Ekslusif'
-    df['riwayat TB orang serumah'] = df['riwayat TB orang serumah'] + ' ada riwayat TB orang serumah'
+    df['riwayat TB orang serumah'] = df['riwayat TB orang serumah'] + ' ada riwayat Tuberkulosis orang serumah'
     df['riwayat diabetes keluarga'] = df['riwayat diabetes keluarga'] + ' ada riwayat penyakit diabetes (orang tua)'
-    df['daftar penyakit opname'] = df['daftar penyakit opname'] + ' (Anak)'
-    df['daftar penyakit lain orang serumah'] = df['daftar penyakit lain orang serumah'] + ' (orang serumah)'
+    df['daftar penyakit opname'] = df['daftar penyakit opname'] + ' (Penyakit Opname Anak)'
+    df['daftar penyakit lain orang serumah'] = df['daftar penyakit lain orang serumah'] + ' (penyakit lainnya orang serumah)'
 
     tinggi_meter = df['Tinggi badan (dalam cm)'] / 100
     df['IMT'] = df['Berat badan (dalam kg)'] / (pow(tinggi_meter, 2))
@@ -614,7 +614,9 @@ def asosiasi(dataset, min_support=0.4, min_threshold=0.9):
     locations, geolocator, loc, keckota = coordinate(df)
     data_all = transform(data_array)
     frequent_pattern = fpgrowth(data_all, min_support)
-    rules = get_rules(frequent_pattern, 'confidence', min_threshold)
+    rules2 = get_rules(frequent_pattern, 'confidence', min_threshold)
+    # rules = get_rules(frequent_pattern, 'confidence', min_threshold)
+    rules = rules2[rules2.lift > 1]
     list_kec = getKecamatan(df)
     dict_kec = getKecamatandict(list_kec, data_array)
     dict_kec_rules_location = visualisation(dict_kec, rules, locations)
@@ -630,6 +632,7 @@ def asosiasi(dataset, min_support=0.4, min_threshold=0.9):
 
     print(keckota)
     print(frequent_pattern)
+    print(rules2)
     print(rules)
     print(dict_kec_rules_location)
 
