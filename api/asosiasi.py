@@ -4,6 +4,7 @@ import itertools
 import collections
 import math
 import json
+import pprint
 
 from scipy.sparse import csr_matrix
 from itertools import combinations
@@ -59,7 +60,7 @@ def preprocessing(dataset):
     df['Pekerjaan Ibu'] = 'Ibu ' + df['Pekerjaan Ibu']
     df['jumlah kamar tidur'] = df['jumlah kamar tidur'] + ' Kamar'
     df['jumlah orang dalam rumah'] = df['jumlah orang dalam rumah'] + ' Orang'
-    df['riwayat diabetes anak'] = df['riwayat diabetes anak'] + ' anak pernah diabetes'
+    df['riwayat diabetes anak'] = df['riwayat diabetes anak'] + ' pernah diabetes (anak)'
     df['riwayat vaksin BCG'] = df['riwayat vaksin BCG'] + ' Anak Telah BCG'
     df['ASI eksklusif'] = df['ASI eksklusif'] + ' ASI Ekslusif'
     df['riwayat TB orang serumah'] = df['riwayat TB orang serumah'] + ' ada riwayat Tuberkulosis orang serumah'
@@ -136,8 +137,8 @@ def preprocessing(dataset):
     df['Tahun'] = df['Tahun'] + ' Tahun'
     df.drop(['Tinggi badan (dalam cm)', 'Berat badan (dalam kg)',
              'Bulan', 'IMT'], axis='columns', inplace=True)
-    df["variabel"] = df[['Jenis Kelamin', 'Alamat (Kelurahan)', 'Alamat (Kecamatan)',
-                         'Alamat (Kab/Kota)', 'Pekerjaan Ayah', 'Pekerjaan Ibu',
+    df["variabel"] = df[['Jenis Kelamin', 'Kelurahan', 'Kecamatan',
+                         'Kab/Kota', 'Pekerjaan Ayah', 'Pekerjaan Ibu',
                          'Pendapatan Orang Tua', 'riwayat diabetes anak', 'riwayat vaksin BCG',
                          'daftar penyakit opname', 'ASI eksklusif', 'riwayat TB orang serumah',
                          'riwayat diabetes keluarga', 'daftar penyakit lain orang serumah',
@@ -152,8 +153,8 @@ def preprocessing(dataset):
 def coordinate(df):
     df['location'] = df[[
                         # 'Alamat (Kelurahan)',
-                        'Alamat (Kecamatan)',
-                        'Alamat (Kab/Kota)']].agg(','.join, axis=1)
+                        'Kecamatan',
+                        'Kab/Kota']].agg(','.join, axis=1)
     coord = df['location'].apply(lambda x: x.split(','))
 
     geolocator = Nominatim(user_agent="arcgis")
@@ -530,13 +531,13 @@ def get_rules(res_df, metric="confidence", min_threshold=0.8, support_only=False
 
 
 def getKota(df):
-    list_kota = df['Alamat (Kab/Kota)'].unique()
+    list_kota = df['Kab/Kota'].unique()
 
     return list_kota
 
 
 def getKecamatan(df):
-    list_kec = df['Alamat (Kecamatan)'].unique()
+    list_kec = df['Kecamatan'].unique()
 
     return list_kec
 
@@ -573,9 +574,21 @@ def visualisation(dict_kec, rules, locations):
                     dict_rule = {}
                     list_antecedents = [antecedent for antecedent in dict(row[1].items())['antecedents']]
                     list_consequents = [antecedent for antecedent in dict(row[1].items())['consequents']]
+                    antecedent_support = dict(row[1].items())['antecedent support']
+                    consequent_support = dict(row[1].items())['consequent support']
+                    support = dict(row[1].items())['support']
+                    confidence = dict(row[1].items())['confidence']
+                    lift = dict(row[1].items())['lift']
+
                     dict_rule['index'] = i
                     dict_rule['antecedents'] = list_antecedents
                     dict_rule['consequents'] = list_consequents
+                    dict_rule['antecedent support'] = antecedent_support
+                    dict_rule['consequent support'] = consequent_support
+                    dict_rule['support'] = support
+                    dict_rule['confidence'] = confidence
+                    dict_rule['lift'] = lift
+
                     dict_kec_rules[kec] = dict_rule
 
     dict_kec_rules_location = {}
@@ -587,6 +600,11 @@ def visualisation(dict_kec, rules, locations):
                 "index": dict_kec_rules[kec]['index'],
                 "antecedents": dict_kec_rules[kec]['antecedents'],
                 "consequents": dict_kec_rules[kec]['consequents'],
+                "antecedent support": dict_kec_rules[kec]['antecedent support'],
+                "consequent support": dict_kec_rules[kec]['consequent support'],
+                "support": dict_kec_rules[kec]['support'],
+                "confidence": dict_kec_rules[kec]['confidence'],
+                "lift": dict_kec_rules[kec]['lift'],
                 "lat": location['lat'].iloc[0],
                 "long": location['long'].iloc[0]
             }
@@ -609,18 +627,63 @@ def get_result(dict_kec_rules_location):
     return result
 
 
+def count_highest(df):
+    count = df['Kecamatan'].value_counts()
+    count = count.head(n=5)
+    df2 = df[df['Kecamatan'].isin(count.index)]
+
+    df2["variabel2"] = df2[['Jenis Kelamin', 'Kelurahan', 'Kecamatan',
+                         'Kab/Kota', 'Pekerjaan Ayah', 'Pekerjaan Ibu',
+                         'Pendapatan Orang Tua', 'riwayat diabetes anak', 'riwayat vaksin BCG',
+                         'daftar penyakit opname', 'ASI eksklusif', 'riwayat TB orang serumah',
+                         'riwayat diabetes keluarga', 'daftar penyakit lain orang serumah',
+                         'luas rumah', 'jumlah kamar tidur', 'jumlah orang dalam rumah',
+                         'sistem ventilasi', 'Tahun', 'Status Gizi']].astype(str).agg(','.join, axis=1)
+    data_array2 = df2["variabel2"].apply(lambda x: x.split(','))
+    df2.drop(['variabel2'], axis='columns', inplace=True)
+
+    return count.to_json(), data_array2, count.index.tolist()
+
+
+def getKecamatan_highest(dict_kec, highest_kec_name):
+    dict_highest_kec = {}
+
+    for kec in highest_kec_name:
+        dict_highest_kec[kec] = dict_kec[kec]
+
+    return dict_highest_kec
+
+
 def asosiasi(dataset, min_support=0.4, min_threshold=0.9):
     df, data_array = preprocessing(dataset)
     locations, geolocator, loc, keckota = coordinate(df)
     data_all = transform(data_array)
     frequent_pattern = fpgrowth(data_all, min_support)
     rules2 = get_rules(frequent_pattern, 'confidence', min_threshold)
-    # rules = get_rules(frequent_pattern, 'confidence', min_threshold)
     rules = rules2[rules2.lift > 1]
     list_kec = getKecamatan(df)
     dict_kec = getKecamatandict(list_kec, data_array)
     dict_kec_rules_location = visualisation(dict_kec, rules, locations)
-    list_kota = getKota(df)
+
+    #cross asosiasi
+    highest_kec, data_array2, highest_kec_name = count_highest(df)
+    transform2 = transform(data_array2)
+    frequent_pattern2 = fpgrowth(transform2, min_support)
+    cross_rules = get_rules(frequent_pattern2, 'confidence', min_threshold)
+    cross_assosiasi = cross_rules[cross_rules.lift > 1]
+    dict_kec_highest = getKecamatan_highest(dict_kec, highest_kec_name)
+    highest_rules = visualisation(dict_kec_highest, cross_assosiasi, locations)
+
+    list_antecedents = []
+    list_consequents = []
+
+    for kec in highest_kec_name:
+        list_antecedents.extend(highest_rules[kec]['antecedents'])
+        list_consequents.extend(highest_rules[kec]['consequents'])
+
+    list_antecedents_unique = np.unique(np.array(list_antecedents)).tolist()
+    list_consequents_unique = np.unique(np.array(list_consequents)).tolist()
+
     rules.to_csv("./rules/rules.csv")
 
     with open("./rules/location.json", "w") as outfile1:
@@ -629,19 +692,35 @@ def asosiasi(dataset, min_support=0.4, min_threshold=0.9):
     with open("./rules/data.json", "w") as outfile:
         json.dump(dict_kec_rules_location, outfile)
 
+    with open("./rules/data_highest.json", "w") as outfile:
+        json.dump(highest_kec, outfile)
+
+    with open("./rules/list_antecedents_unique.json", "w") as outfile:
+        json.dump(list_antecedents_unique, outfile)
+
+    with open("./rules/list_consequents_unique.json", "w") as outfile:
+        json.dump(list_consequents_unique, outfile)
+
 
     print(keckota)
     print(frequent_pattern)
     print(rules2)
     print(rules)
-    print(dict_kec_rules_location)
+    pprint.pprint(dict_kec_rules_location)
+    print(highest_kec)
+    print(frequent_pattern2)
+    print(cross_assosiasi)
+    print(highest_rules)
 
     return {
-            'df': df,
-            'data_array': data_array,
-            # 'list_kota': list_kota,
-            'fp': frequent_pattern,
-            'rules': rules.to_json(),
-            'locations': keckota,
-            'dict_kec_rules_location': dict_kec_rules_location,
+        'df': df,
+        'data_array': data_array,
+        # 'list_kota': list_kota,
+        'fp': frequent_pattern,
+        'rules': rules.to_json(),
+        'locations': keckota,
+        'dict_kec_rules_location': dict_kec_rules_location,
+        'highest_kec': highest_kec,
+        'list_antecedents_unique': list_antecedents_unique,
+        'list_consequents_unique': list_consequents_unique,
     }

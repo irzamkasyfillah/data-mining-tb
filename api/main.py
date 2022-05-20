@@ -120,9 +120,18 @@ def read_data():
             data_lokasi = json.load(data1)
         with open('./rules/data.json', 'r') as data:
             data_asosiasi = json.load(data)
+        with open('./rules/data_highest.json', 'r') as data:
+            data_highest = json.load(data)
+        with open('./rules/list_antecedents_unique.json', 'r') as data:
+            data_list_antecedents = json.load(data)
+        with open('./rules/list_consequents_unique.json', 'r') as data:
+            data_list_consequents = json.load(data)
         return {
             'locations': data_lokasi,
-            'dict_kec_rules_location': data_asosiasi
+            'dict_kec_rules_location': data_asosiasi,
+            'highest_kec': data_highest,
+            'list_antecedents_unique': data_list_antecedents,
+            'list_consequents_unique': data_list_consequents,
         }
     else:
         return False
