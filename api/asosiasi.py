@@ -654,7 +654,7 @@ def getKecamatan_highest(dict_kec, highest_kec_name):
     return dict_highest_kec
 
 
-def asosiasi(dataset, min_support=0.4, min_threshold=0.9):
+def asosiasi(dataset, min_support=0.35, min_threshold=0.9):
     df, data_array = preprocessing(dataset)
     locations, geolocator, loc, keckota = coordinate(df)
     data_all = transform(data_array)
@@ -683,6 +683,8 @@ def asosiasi(dataset, min_support=0.4, min_threshold=0.9):
 
     list_antecedents_unique = np.unique(np.array(list_antecedents)).tolist()
     list_consequents_unique = np.unique(np.array(list_consequents)).tolist()
+    list_aturan = list_antecedents_unique + list_consequents_unique
+    list_aturan = np.unique(np.array(list_aturan)).tolist()
 
     rules.to_csv("./rules/rules.csv")
 
@@ -701,6 +703,9 @@ def asosiasi(dataset, min_support=0.4, min_threshold=0.9):
     with open("./rules/list_consequents_unique.json", "w") as outfile:
         json.dump(list_consequents_unique, outfile)
 
+    with open("./rules/list_aturan.json", "w") as outfile:
+        json.dump(list_aturan, outfile)
+
 
     print(keckota)
     print(frequent_pattern)
@@ -710,7 +715,7 @@ def asosiasi(dataset, min_support=0.4, min_threshold=0.9):
     print(highest_kec)
     print(frequent_pattern2)
     print(cross_assosiasi)
-    print(highest_rules)
+    pprint.pprint(highest_rules)
 
     return {
         'df': df,
@@ -723,4 +728,5 @@ def asosiasi(dataset, min_support=0.4, min_threshold=0.9):
         'highest_kec': highest_kec,
         'list_antecedents_unique': list_antecedents_unique,
         'list_consequents_unique': list_consequents_unique,
+        'list_aturan': list_aturan
     }
