@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
+import Legend from "./Legend"
 
 let DefaultIcon = L.icon({
     iconUrl: 'icons/marker-icon.png',
@@ -14,6 +15,7 @@ function PointsLayer(props) {
     const { data, selectedIndex } = props;
 
     const result = data?.dict_kec_rules_location
+    
     return Object.keys(result)?.map((kec) => {
         const resultKec = result[kec]
         const index = resultKec?.index
@@ -25,10 +27,11 @@ function PointsLayer(props) {
                 key={index}
                 content={(
                     <>
-                        <p style={{fontWeight: "bold"}}>{kec}</p>
+                        <p style={{fontWeight: "bold", fontSize: "16px"}}>{kec}</p>
                         <div>
-                            <p style={{margin: "10px 0"}}>{antecedent}</p>
-                            <p style={{margin: "10px 0"}}>{consequent}</p>
+                            <p style={{margin: "0px 0", fontSize: "13px"}}>Penyebab Tuberkulosis pada Anak adalah</p>
+                            <p style={{margin: "0px 0", fontSize: "13px"}}>{antecedent}, {consequent}</p>
+                            {/* <p style={{margin: "10px 0"}}>{consequent}</p> */}
                         </div>
                     </>
                 )}
@@ -55,17 +58,23 @@ function PointMarker(props) {
 }
 
 const Map = (props) => {
-    const {data, selectedData, center} = props
+    const {data, selectedData, center} = props;
+    const [map, setMap] = useState(null);
 
     return (
-        <MapContainer center={center || [-5.136143, 119.469370]} zoom={12} scrollWheelZoom={true} className={'mapid'}>
+        <MapContainer center={center || [-5.136143, 119.469370]} zoom={12} scrollWheelZoom={true} className={'mapid'} whenCreated={setMap}>
             <TileLayer
                 attribution='&copy; <a href="https://osm.org/copyright" target="_blank">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            
             {
                 data && <PointsLayer selectedIndex={selectedData?.index} data={data}  />
             }
+            {
+                data && <Legend map={map} data={data} />
+            }
+             
         </MapContainer>
     )
 }
