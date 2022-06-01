@@ -160,7 +160,7 @@ async def do_cluster():
         return False
 
 
-@app.post("/run_cluster")
+@app.get("/run_cluster")
 async def do_cluster(background_task: BackgroundTasks):
     if os.path.exists("./result/data_cluster.json"):
         os.remove("./result/data_cluster.json")

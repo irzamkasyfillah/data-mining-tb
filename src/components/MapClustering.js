@@ -56,48 +56,128 @@ function PointMarker(props) {
             for (let j in resultKec) {
                 if (i === j) {
                     // console.log('resultClust[i]', resultClust[i], i,j)
-                    if (resultKec[i] === "Ya") {
-                        daftar_opname_ya.push(i)
+                    // if (resultKec[i] === "Ya") {
+                    //     daftar_opname_ya.push(i)
+                    // }
+                    if ('Ya'.includes(String(resultKec[i][0][1]))){
+                        var delete_op = i.replace('(opname)', '')
+                        daftar_opname_ya.push(delete_op + '(' + resultKec[i][1]['Ya'] + '), ')
                     }
                 }
             }
+        }
+        if (daftar_opname_ya.length == 0) {
+            daftar_opname_ya = '-'
         }
 
         for (let i of daftar_penyakit_lain) {
             for (let j in resultKec) {
                 if (i === j) {
                     // console.log('resultClust[i]', resultKec[i], i,j)
-                    if (resultKec[i] === "Ya") {
-                        daftar_penyakit_lain_ya.push(i)
+                    // if (resultKec[i] === "Ya") {
+                    //     daftar_penyakit_lain_ya.push(i)
+                    // }
+                    if ('Ya'.includes(String(resultKec[i][0][1]))){
+                        // console.log(i, kec , resultKec[i][1]['Ya'])
+                        var delete_op = i.replace('(org serumah)', '')
+                        daftar_penyakit_lain_ya.push(delete_op + '(' + resultKec[i][1]['Ya'] + '), ')
                     }
                 }
             }
         }
+        if (daftar_penyakit_lain_ya.length == 0) {
+            daftar_penyakit_lain_ya = '-'
+        }
+
         // const index = resultKec?.index
         const position = [resultKec?.latitude, resultKec?.longitude]
 
         const kasus = resultKec?.Total
         const cluster = resultKec?.Segment
         const umur = Math.round(resultKec?.['Tahun (mean)'])
-        const jenis_kelamin = resultKec?.['Jenis Kelamin']
-        const alamat = 'Kec. ' + resultKec?.['Alamat (Kecamatan)'] + ', Kel. ' + resultKec?.['Alamat (Kelurahan)']
+        const tinggi = Math.round(resultKec?.['Tinggi badan (dalam cm) (mean)'])
+        const berat = Math.round(resultKec?.['Berat badan (dalam kg) (mean)'])
+
+        // const jenis_kelamin = resultKec?.['Jenis Kelamin']
+        let jenis_kelamin = []
+        for (let i=0; i<resultKec?.['Jenis Kelamin'][0].length; i++) {
+            let status = resultKec?.['Jenis Kelamin'][0][i]
+            jenis_kelamin.push(status + ' (' + resultKec?.['Jenis Kelamin'][1][status] + '), ')
+        }
+
+        // const alamat = 'Kec. ' + resultKec?.['Alamat (Kecamatan)'] + ', Kel. ' + resultKec?.['Alamat (Kelurahan)']
+        // const alamat = 'Kec. ' + resultKec?.['Alamat (Kecamatan)']
+
         const pekerjaan = resultKec?.['Pekerjaan Ayah'] + ' & ' + resultKec?.['Pekerjaan Ibu']
-        const pendapatan = resultKec?.['Pendapatan Orang Tua']
-        const status_gizi = resultKec?.['Status Gizi']
 
-        const diabetes_anak = resultKec?.['riwayat diabetes anak']
+        // const pendapatan = resultKec?.['Pendapatan Orang Tua']
+        let pendapatan = []
+        for (let i=0; i<resultKec?.['Pendapatan Orang Tua'][0].length; i++) {
+            let status = resultKec?.['Pendapatan Orang Tua'][0][i]
+            pendapatan.push(status + ' (' + resultKec?.['Pendapatan Orang Tua'][1][status] + '), ')
+        }
+
+        let status_gizi = []
+        for (let i=0; i<resultKec?.['Status Gizi'][0].length; i++) {
+            let status = resultKec?.['Status Gizi'][0][i]
+            status_gizi.push(status + ' (' + resultKec?.['Status Gizi'][1][status] + '), ')
+        }
+
+        // const diabetes_anak = resultKec?.['riwayat diabetes anak']
+        let diabetes_anak = []
+        for (let i=0; i<resultKec?.['riwayat diabetes anak'][0].length; i++) {
+            let status = resultKec?.['riwayat diabetes anak'][0][i]
+            diabetes_anak.push(status + ' (' + resultKec?.['riwayat diabetes anak'][1][status] + '), ')
+        }
+
         const opname = resultKec?.['riwayat opname']
-        const asi_eksklusif = resultKec?.['ASI eksklusif']
 
-        const tb_orang_serumah = resultKec?.['riwayat TB orang serumah']
-        const diabetes_keluarga = resultKec?.['riwayat diabetes keluarga']
+        // const asi_eksklusif = resultKec?.['ASI eksklusif']
+        let asi_eksklusif = []
+        for (let i=0; i<resultKec?.['ASI eksklusif'][0].length; i++) {
+            let status = resultKec?.['ASI eksklusif'][0][i]
+            asi_eksklusif.push(status + ' (' + resultKec?.['ASI eksklusif'][1][status] + '), ')
+        }
+
+        // const tb_orang_serumah = resultKec?.['riwayat TB orang serumah']
+        let tb_orang_serumah = []
+        for (let i=0; i<resultKec?.['riwayat TB orang serumah'][0].length; i++) {
+            let status = resultKec?.['riwayat TB orang serumah'][0][i]
+            tb_orang_serumah.push(status + ' (' + resultKec?.['riwayat TB orang serumah'][1][status] + '), ')
+        }
+
+        // const diabetes_keluarga = resultKec?.['riwayat diabetes keluarga']
+        let diabetes_keluarga = []
+        for (let i=0; i<resultKec?.['riwayat diabetes keluarga'][0].length; i++) {
+            let status = resultKec?.['riwayat diabetes keluarga'][0][i]
+            diabetes_keluarga.push(status + ' (' + resultKec?.['riwayat diabetes keluarga'][1][status] + '), ')
+        }
+
         const penyakit_lain = resultKec?.['riwayat penyakit lain orang serumah']
 
-        const luas_rumah = resultKec?.['luas rumah']
+        // const luas_rumah = resultKec?.['luas rumah']
+        let luas_rumah = []
+        for (let i=0; i<resultKec?.['luas rumah'][0].length; i++) {
+            let status = resultKec?.['luas rumah'][0][i]
+            luas_rumah.push(status + ' (' + resultKec?.['luas rumah'][1][status] + '), ')
+        }
+
         const jumlah_kamar = Math.round(resultKec?.['jumlah kamar tidur (mean)'])
         const jumlah_orang = Math.round(resultKec?.['jumlah orang dalam rumah (mean)'])
-        const sistem_ventilasi = resultKec?.['sistem ventilasi']
-        const bcg = resultKec?.['riwayat vaksin BCG']
+
+        // const sistem_ventilasi = resultKec?.['sistem ventilasi']
+        let sistem_ventilasi = []
+        for (let i=0; i<resultKec?.['sistem ventilasi'][0].length; i++) {
+            let status = resultKec?.['sistem ventilasi'][0][i]
+            sistem_ventilasi.push(status + ' (' + resultKec?.['sistem ventilasi'][1][status] + '), ')
+        }
+
+        // const bcg = resultKec?.['riwayat vaksin BCG']
+        let bcg = []
+        for (let i=0; i<resultKec?.['riwayat vaksin BCG'][0].length; i++) {
+            let status = resultKec?.['riwayat vaksin BCG'][0][i]
+            bcg.push(status + ' (' + resultKec?.['riwayat vaksin BCG'][1][status] + '), ')
+        }
 
         // console.log(position)
         const redOptions = {color: 'red'}
@@ -117,17 +197,17 @@ function PointMarker(props) {
                     Cluster <pre style={{display: 'inline', marginLeft: '30%'}}> : </pre> {cluster} <br/>
                     Jumlah Kasus <pre style={{display: 'inline', marginLeft: '17.5%'}}> : </pre> {kasus} <br/>
                     Umur <pre style={{display: 'inline', marginLeft: '33%'}}> : </pre> {umur} <br/>
-                    Jenis Kelamin <pre style={{display: 'inline', marginLeft: '18%'}}> : </pre> {jenis_kelamin}<br/>
+                    Jenis Kelamin <pre style={{display: 'inline', marginLeft: '18%'}}> : </pre> {jenis_kelamin[0]}<br/>
                     Pekerjaan Orang Tua <pre style={{display: 'inline', marginLeft: '5%'}}> : </pre> {pekerjaan} <br/>
-                    Pendapatan Orang Tua <pre style={{display: 'inline', marginLeft: '1.5%'}}> : </pre> {pendapatan}
+                    Pendapatan Orang Tua <pre style={{display: 'inline', marginLeft: '1.5%'}}> : </pre> {pendapatan[0]}
                     <br/>
-                    Status Gizi <pre style={{display: 'inline', marginLeft: '23.8%'}}> : </pre> {status_gizi} <br/>
-                    Luas Rumah <pre style={{display: 'inline', marginLeft: '20.5%'}}> : </pre> {luas_rumah} <br/>
+                    Status Gizi <pre style={{display: 'inline', marginLeft: '23.8%'}}> : </pre> {status_gizi[0]} <br/>
+                    Luas Rumah <pre style={{display: 'inline', marginLeft: '20.5%'}}> : </pre> {luas_rumah[0]} <br/>
                     Jumlah Kamar <pre style={{display: 'inline', marginLeft: '17.5%'}}> : </pre> {jumlah_kamar} <br/>
                     Jumlah Orang <pre style={{display: 'inline', marginLeft: '18%'}}> : </pre> {jumlah_orang} <br/>
-                    Sistem Ventilasi <pre style={{display: 'inline', marginLeft: '15%'}}> : </pre> {sistem_ventilasi}
+                    Sistem Ventilasi <pre style={{display: 'inline', marginLeft: '15%'}}> : </pre> {sistem_ventilasi[0]}
                     <br/>
-                    Vaksin BCG <pre style={{display: 'inline', marginLeft: '21.8%'}}> : </pre> {bcg} <br/>
+                    Vaksin BCG <pre style={{display: 'inline', marginLeft: '21.8%'}}> : </pre> {bcg[0]} <br/>
                     <br/>
 
                     <div className="text-center">
@@ -180,20 +260,20 @@ function PointMarker(props) {
                                             <tr>
                                                 <th className="px-4 py-2">Umur</th>
                                                 <th className="px-4 py-2">Jenis Kelamin</th>
-                                                <th className="px-4 py-2">Alamat</th>
                                                 <th className="px-4 py-2">Pekerjaan</th>
                                                 <th className="px-4 py-2">Pendapatan</th>
-                                                <th className="px-4 py-2">Status Gizi</th>
+                                                <th className="px-4 py-2">Tinggi</th>
+                                                <th className="px-4 py-2">Berat</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr>
                                                 <td className="border px-4 py-2">{umur}</td>
                                                 <td className="border px-4 py-2">{jenis_kelamin}</td>
-                                                <td className="border px-4 py-2">{alamat}</td>
                                                 <td className="border px-4 py-2">{pekerjaan}</td>
                                                 <td className="border px-4 py-2">{pendapatan}</td>
-                                                <td className="border px-4 py-2">{status_gizi}</td>
+                                                <td className="border px-4 py-2">{tinggi}</td>
+                                                <td className="border px-4 py-2">{berat}</td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -206,17 +286,17 @@ function PointMarker(props) {
                                         <table className="table-auto">
                                             <thead>
                                             <tr>
-                                                <th className="w-1/4 px-4 py-2">Riwayat Diabetes</th>
-                                                <th className="w-1/4 px-4 py-2">Riwayat Opname</th>
-                                                <th className="w-1/4 px-4 py-2">Daftar Opname</th>
+                                                <th className="w-1/4 px-4 py-2">Status Gizi</th>
+                                                <th className="w-1/4 px-4 py-2">Diabetes</th>
+                                                <th className="w-1/4 px-4 py-2">Riwayat Penyakit</th>
                                                 <th className="w-1/4 px-4 py-2">Vaksin BCG</th>
                                                 <th className="w-1/4 px-4 py-2">ASI Eksklusif</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr>
+                                                <td className="border px-4 py-2">{status_gizi}</td>
                                                 <td className="border px-4 py-2">{diabetes_anak}</td>
-                                                <td className="border px-4 py-2">{opname}</td>
                                                 <td className="border px-4 py-2">{daftar_opname_ya}</td>
                                                 <td className="border px-4 py-2">{bcg}</td>
                                                 <td className="border px-4 py-2">{asi_eksklusif}</td>
@@ -333,8 +413,13 @@ function ClusterModal(props) {
             for (let j in resultClust) {
                 if (i === j) {
                     // console.log('resultClust[i]', resultClust[i], i,j)
-                    if (resultClust[i] === "Ya") {
-                        daftar_opname_ya.push(i)
+                    // if (resultClust[i] === "Ya") {
+                    //     daftar_opname_ya.push(i)
+                    // }
+                    // console.log(resultClust[i][0][1])
+                    if ('Ya'.includes(String(resultClust[i][0][1]))){
+                        var delete_op = i.replace('(opname)', '')
+                        daftar_opname_ya.push(delete_op + '(' + resultClust[i][1]['Ya'] + '), ')
                     }
                 }
             }
@@ -344,8 +429,13 @@ function ClusterModal(props) {
             for (let j in resultClust) {
                 if (i === j) {
                     // console.log('resultClust[i]', resultClust[i], i,j)
-                    if (resultClust[i] === "Ya") {
-                        daftar_penyakit_lain_ya.push(i)
+                    // if (resultClust[i] === "Ya") {
+                    //     daftar_penyakit_lain_ya.push(i)
+                    // }
+                    if ('Ya'.includes(String(resultClust[i][0][1]))){
+                        // console.log(i, clust , resultClust[i][1]['Ya'])
+                        var delete_op = i.replace('(org serumah)', '')
+                        daftar_penyakit_lain_ya.push(delete_op + '(' + resultClust[i][1]['Ya'] + '), ')
                     }
                 }
             }
@@ -354,25 +444,95 @@ function ClusterModal(props) {
         const kasus = resultClust?.Total
         const cluster = resultClust?.Segment
         const umur = Math.round(resultClust?.['Tahun (mean)'])
-        const jenis_kelamin = resultClust?.['Jenis Kelamin']
-        const alamat = 'Kec. ' + resultClust?.['Alamat (Kecamatan)'] + ', Kel. ' + resultClust?.['Alamat (Kelurahan)']
+        const tinggi = Math.round(resultClust?.['Tinggi badan (dalam cm) (mean)'])
+        const berat = Math.round(resultClust?.['Berat badan (dalam kg) (mean)'])
+
+        // const jenis_kelamin = resultClust?.['Jenis Kelamin']
+        let jenis_kelamin = []
+        for (let i=0; i<resultClust?.['Jenis Kelamin'][0].length; i++) {
+            let status = resultClust?.['Jenis Kelamin'][0][i]
+            jenis_kelamin.push(status + ' (' + resultClust?.['Jenis Kelamin'][1][status] + '), ')
+        }
+
+        // const alamat = 'Kec. ' + resultClust?.['Alamat (Kecamatan)'] + ', Kel. ' + resultClust?.['Alamat (Kelurahan)']
+        // const alamat = 'Kec. ' + resultClust?.['Alamat (Kecamatan)']
+        let alamat = []
+        for (let i=0; i<resultClust?.['Alamat (Kecamatan)'][0].length; i++) {
+            let status = resultClust?.['Alamat (Kecamatan)'][0][i]
+            alamat.push(status + ' (' + resultClust?.['Alamat (Kecamatan)'][1][status] + '), ')
+        }
+
         const pekerjaan = resultClust?.['Pekerjaan Ayah'] + ' & ' + resultClust?.['Pekerjaan Ibu']
-        const pendapatan = resultClust?.['Pendapatan Orang Tua']
-        const status_gizi = resultClust?.['Status Gizi']
 
-        const diabetes_anak = resultClust?.['riwayat diabetes anak']
+        // const pendapatan = resultClust?.['Pendapatan Orang Tua']
+        let pendapatan = []
+        for (let i=0; i<resultClust?.['Pendapatan Orang Tua'][0].length; i++) {
+            let status = resultClust?.['Pendapatan Orang Tua'][0][i]
+            pendapatan.push(status + ' (' + resultClust?.['Pendapatan Orang Tua'][1][status] + '), ')
+        }
+
+        let status_gizi = []
+        for (let i=0; i<resultClust?.['Status Gizi'][0].length; i++) {
+            let status = resultClust?.['Status Gizi'][0][i]
+            status_gizi.push(status + ' (' + resultClust?.['Status Gizi'][1][status] + '), ')
+        }
+
+        // const diabetes_anak = resultClust?.['riwayat diabetes anak']
+        let diabetes_anak = []
+        for (let i=0; i<resultClust?.['riwayat diabetes anak'][0].length; i++) {
+            let status = resultClust?.['riwayat diabetes anak'][0][i]
+            diabetes_anak.push(status + ' (' + resultClust?.['riwayat diabetes anak'][1][status] + '), ')
+        }
+
         const opname = resultClust?.['riwayat opname']
-        const asi_eksklusif = resultClust?.['ASI eksklusif']
 
-        const tb_orang_serumah = resultClust?.['riwayat TB orang serumah']
-        const diabetes_keluarga = resultClust?.['riwayat diabetes keluarga']
+        // const asi_eksklusif = resultClust?.['ASI eksklusif']
+        let asi_eksklusif = []
+        for (let i=0; i<resultClust?.['ASI eksklusif'][0].length; i++) {
+            let status = resultClust?.['ASI eksklusif'][0][i]
+            asi_eksklusif.push(status + ' (' + resultClust?.['ASI eksklusif'][1][status] + '), ')
+        }
+
+        // const tb_orang_serumah = resultClust?.['riwayat TB orang serumah']
+        let tb_orang_serumah = []
+        for (let i=0; i<resultClust?.['riwayat TB orang serumah'][0].length; i++) {
+            let status = resultClust?.['riwayat TB orang serumah'][0][i]
+            tb_orang_serumah.push(status + ' (' + resultClust?.['riwayat TB orang serumah'][1][status] + '), ')
+        }
+
+        // const diabetes_keluarga = resultClust?.['riwayat diabetes keluarga']
+        let diabetes_keluarga = []
+        for (let i=0; i<resultClust?.['riwayat diabetes keluarga'][0].length; i++) {
+            let status = resultClust?.['riwayat diabetes keluarga'][0][i]
+            diabetes_keluarga.push(status + ' (' + resultClust?.['riwayat diabetes keluarga'][1][status] + '), ')
+        }
+
         const penyakit_lain = resultClust?.['riwayat penyakit lain orang serumah']
 
-        const luas_rumah = resultClust?.['luas rumah']
+        // const luas_rumah = resultClust?.['luas rumah']
+        let luas_rumah = []
+        for (let i=0; i<resultClust?.['luas rumah'][0].length; i++) {
+            let status = resultClust?.['luas rumah'][0][i]
+            luas_rumah.push(status + ' (' + resultClust?.['luas rumah'][1][status] + '), ')
+        }
+
         const jumlah_kamar = Math.round(resultClust?.['jumlah kamar tidur (mean)'])
         const jumlah_orang = Math.round(resultClust?.['jumlah orang dalam rumah (mean)'])
-        const sistem_ventilasi = resultClust?.['sistem ventilasi']
-        const bcg = resultClust?.['riwayat vaksin BCG']
+
+        // const sistem_ventilasi = resultClust?.['sistem ventilasi']
+        let sistem_ventilasi = []
+        for (let i=0; i<resultClust?.['sistem ventilasi'][0].length; i++) {
+            let status = resultClust?.['sistem ventilasi'][0][i]
+            sistem_ventilasi.push(status + ' (' + resultClust?.['sistem ventilasi'][1][status] + '), ')
+        }
+
+        // const bcg = resultClust?.['riwayat vaksin BCG']
+        let bcg = []
+        for (let i=0; i<resultClust?.['riwayat vaksin BCG'][0].length; i++) {
+            let status = resultClust?.['riwayat vaksin BCG'][0][i]
+            bcg.push(status + ' (' + resultClust?.['riwayat vaksin BCG'][1][status] + '), ')
+        }
+
         return (
             <>
                 <div className="inline">
@@ -425,7 +585,8 @@ function ClusterModal(props) {
                                                 <th className="px-4 py-2">Alamat</th>
                                                 <th className="px-4 py-2">Pekerjaan</th>
                                                 <th className="px-4 py-2">Pendapatan</th>
-                                                <th className="px-4 py-2">Status Gizi</th>
+                                                <th className="px-4 py-2">Tinggi</th>
+                                                <th className="px-4 py-2">Berat</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -435,7 +596,8 @@ function ClusterModal(props) {
                                                 <td className="border px-4 py-2">{alamat}</td>
                                                 <td className="border px-4 py-2">{pekerjaan}</td>
                                                 <td className="border px-4 py-2">{pendapatan}</td>
-                                                <td className="border px-4 py-2">{status_gizi}</td>
+                                                <td className="border px-4 py-2">{tinggi}</td>
+                                                <td className="border px-4 py-2">{berat}</td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -448,17 +610,17 @@ function ClusterModal(props) {
                                         <table className="table-auto">
                                             <thead>
                                             <tr>
-                                                <th className="w-1/4 px-4 py-2">Riwayat Diabetes</th>
-                                                <th className="w-1/4 px-4 py-2">Riwayat Opname</th>
-                                                <th className="w-1/4 px-4 py-2">Daftar Opname</th>
+                                                <th className="w-1/4 px-4 py-2">Status Gizi</th>
+                                                <th className="w-1/4 px-4 py-2">Diabetes</th>
+                                                <th className="w-1/4 px-4 py-2">Riwayat Penyakit</th>
                                                 <th className="w-1/4 px-4 py-2">Vaksin BCG</th>
                                                 <th className="w-1/4 px-4 py-2">ASI Eksklusif</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr>
+                                                <td className="border px-4 py-2">{status_gizi}</td>
                                                 <td className="border px-4 py-2">{diabetes_anak}</td>
-                                                <td className="border px-4 py-2">{opname}</td>
                                                 <td className="border px-4 py-2">{daftar_opname_ya}</td>
                                                 <td className="border px-4 py-2">{bcg}</td>
                                                 <td className="border px-4 py-2">{asi_eksklusif}</td>
