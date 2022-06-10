@@ -156,17 +156,38 @@ async def read_root(background_task: BackgroundTasks, db: Session = Depends(get_
 
 @app.get("/cluster")
 async def do_cluster():
-    if os.path.exists("./result/data_cluster.json") and os.path.exists("./result/data_kecamatan.json") and os.path.exists("./result/df.json"):
-        with open("./result/data_cluster.json", "r") as j:
-            cluster = json.load(j)
-        with open("./result/data_kecamatan.json", "r") as k:
-            kecamatan = json.load(k)
-        with open("./result/df.json", "r") as k:
-            df = json.load(k)
+    if os.path.exists("./result/cluster1_result.json") and os.path.exists("./result/cluster1_df.json"):
+        with open("./result/cluster1_result.json", "r") as j:
+            cluster1_result = json.load(j)
+        with open("./result/cluster1_df.json", "r") as k:
+            cluster1_df = json.load(k)
+        with open("./result/cluster2_result.json", "r") as j:
+            cluster2_result = json.load(j)
+        with open("./result/cluster2_df.json", "r") as k:
+            cluster2_df = json.load(k)
+        with open("./result/cluster3_result.json", "r") as j:
+            cluster3_result = json.load(j)
+        with open("./result/cluster3_df.json", "r") as k:
+            cluster3_df = json.load(k)
+        with open("./result/cluster4_result.json", "r") as j:
+            cluster4_result = json.load(j)
+        with open("./result/cluster4_df.json", "r") as k:
+            cluster4_df = json.load(k)
+        with open("./result/cluster5_result.json", "r") as j:
+            cluster5_result = json.load(j)
+        with open("./result/cluster5_df.json", "r") as k:
+            cluster5_df = json.load(k)
         return {
-            'data_cluster': cluster,
-            'data_kecamatan': kecamatan,
-            'df': df,
+            'cluster1_result': cluster1_result,
+            'cluster1_df': cluster1_df,
+            'cluster2_result': cluster2_result,
+            'cluster2_df': cluster2_df,
+            'cluster3_result': cluster3_result,
+            'cluster3_df': cluster3_df,
+            'cluster4_result': cluster4_result,
+            'cluster4_df': cluster4_df,
+            'cluster5_result': cluster5_result,
+            'cluster5_df': cluster5_df,
         }
     else:
         return False
@@ -174,17 +195,31 @@ async def do_cluster():
 
 @app.post("/run_cluster")
 async def do_cluster(background_task: BackgroundTasks):
-    if os.path.exists("./result/data_cluster.json"):
-        os.remove("./result/data_cluster.json")
-    if os.path.exists("./result/data_kecamatan.json"):
-        os.remove("./result/data_kecamatan.json")
-    if os.path.exists("./result/df.json"):
-        os.remove("./result/df.json")
+    if os.path.exists("./result/cluster1_result.json"):
+        os.remove("./result/cluster1_result.json")
+    if os.path.exists("./result/cluster1_df.json"):
+        os.remove("./result/cluster1_df.json")
+    if os.path.exists("./result/cluster2_result.json"):
+        os.remove("./result/cluster2_result.json")
+    if os.path.exists("./result/cluster2_df.json"):
+        os.remove("./result/cluster2_df.json")
+    if os.path.exists("./result/cluster3_result.json"):
+        os.remove("./result/cluster3_result.json")
+    if os.path.exists("./result/cluster3_df.json"):
+        os.remove("./result/cluster3_df.json")
+    if os.path.exists("./result/cluster4_result.json"):
+        os.remove("./result/cluster4_result.json")
+    if os.path.exists("./result/cluster4_df.json"):
+        os.remove("./result/cluster4_df.json")
+    if os.path.exists("./result/cluster5_result.json"):
+        os.remove("./result/cluster5_result.json")
+    if os.path.exists("./result/cluster5_df.json"):
+        os.remove("./result/cluster5_df.json")
 
     background_task.add_task(cluster, dataset)
     return {
-        'message': 'Running cluster...',
-        'dataset': dataset
+        'message': 'Running cluster...'
     }
+
 if __name__ == '__main__':
     uvicorn.run("main:app", host='127.0.0.1', port=8080, reload=True)

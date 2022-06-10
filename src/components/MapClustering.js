@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import L from 'leaflet';
 import {CircleMarker, MapContainer, Popup, TileLayer} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -24,520 +24,740 @@ function getRadius(d) {
 }
 
 function PointMarker(props) {
-    const {data, selectedData, center} = props
-    const coord = data?.data_kecamatan
+    const {data, selectedData, selectedColor, center} = props
+
+    const coord1 = data?.cluster1_df
+    const coord2 = data?.cluster2_df
+    const coord3 = data?.cluster3_df
+    const coord4 = data?.cluster4_df
+    const coord5 = data?.cluster5_df
 
     console.log(data)
-    return Object.keys(coord)?.map((kec) => {
+    return Object.keys(coord1)?.map((kec) => {
         const [showModal, setShowModal] = React.useState(false);
         const handleClose = () => setShow(false);
         const handleShow = () => setShow(true);
 
-        const resultKec = coord[kec]
+        const resultKec1 = coord1[kec]
+        const resultKec2 = coord2[kec]
+        const resultKec3 = coord3[kec]
+        const resultKec4 = coord4[kec]
+        const resultKec5 = coord5[kec]
 
-        const keys = Object.keys(resultKec)
-        let daftar_opname = []
-        let daftar_penyakit_lain = []
-
-        for (let i of keys) {
-            if (i.includes("(opname)")) {
-                daftar_opname.push(i)
-            }
-            if (i.includes("(org serumah)")) {
-                daftar_penyakit_lain.push(i)
-            }
+        let color_cluster1 = ''
+        const all_color_cluster1 = ['#a70000', '#ff7400', '#ff7b7b']
+        switch (resultKec1['Total']) {
+            case 0:
+                color_cluster1 = all_color_cluster1[0];
+                break
+            case 1:
+                color_cluster1 = all_color_cluster1[1];
+                break
+            case 2:
+                color_cluster1 = all_color_cluster1[2];
+                break
+            default :
+                color_cluster1 = all_color_cluster1[0];
+                break
         }
 
-        // console.log(daftar_opname, daftar_penyakit_lain)
-
-        let daftar_opname_ya = []
-        let daftar_penyakit_lain_ya = []
-        for (let i of daftar_opname) {
-            for (let j in resultKec) {
-                if (i === j) {
-                    // console.log('resultClust[i]', resultClust[i], i,j)
-                    if (resultKec[i] === "Ya") {
-                        daftar_opname_ya.push(i)
-                    }
-                }
-            }
+        let color_cluster2 = ''
+        const all_color_cluster2 = ['#0f5e9c', '#9D5C0D']
+        switch (resultKec2['Total']) {
+            case 0:
+                color_cluster2 = all_color_cluster2[0];
+                break
+            case 1:
+                color_cluster2 = all_color_cluster2[1];
+                break
+            default :
+                color_cluster2 = all_color_cluster2[0];
+                break
         }
 
-        for (let i of daftar_penyakit_lain) {
-            for (let j in resultKec) {
-                if (i === j) {
-                    // console.log('resultClust[i]', resultKec[i], i,j)
-                    if (resultKec[i] === "Ya") {
-                        daftar_penyakit_lain_ya.push(i)
-                    }
-                }
-            }
-        }
-        // const index = resultKec?.index
-        const position = [resultKec?.latitude, resultKec?.longitude]
-
-        const kasus = resultKec?.Total
-        const cluster = resultKec?.Segment
-        const umur = Math.round(resultKec?.['Tahun (mean)'])
-        const jenis_kelamin = resultKec?.['Jenis Kelamin']
-        const alamat = 'Kec. ' + resultKec?.['Alamat (Kecamatan)'] + ', Kel. ' + resultKec?.['Alamat (Kelurahan)']
-        const pekerjaan = resultKec?.['Pekerjaan Ayah'] + ' & ' + resultKec?.['Pekerjaan Ibu']
-        const pendapatan = resultKec?.['Pendapatan Orang Tua']
-        const status_gizi = resultKec?.['Status Gizi']
-
-        const diabetes_anak = resultKec?.['riwayat diabetes anak']
-        const opname = resultKec?.['riwayat opname']
-        const asi_eksklusif = resultKec?.['ASI eksklusif']
-
-        const tb_orang_serumah = resultKec?.['riwayat TB orang serumah']
-        const diabetes_keluarga = resultKec?.['riwayat diabetes keluarga']
-        const penyakit_lain = resultKec?.['riwayat penyakit lain orang serumah']
-
-        const luas_rumah = resultKec?.['luas rumah']
-        const jumlah_kamar = Math.round(resultKec?.['jumlah kamar tidur (mean)'])
-        const jumlah_orang = Math.round(resultKec?.['jumlah orang dalam rumah (mean)'])
-        const sistem_ventilasi = resultKec?.['sistem ventilasi']
-        const bcg = resultKec?.['riwayat vaksin BCG']
-
-        // console.log(position)
-        const redOptions = {color: 'red'}
-
-        return (
-            <CircleMarker
-                key={kec}
-                center={position}
-                pathOptions={redOptions}
-                radius={getRadius(kasus)}
-            >
-                <Popup>
-                    <h3 style={{textAlign: 'center'}}>
-                        <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
-                    </h3>
-                    <br/>
-                    Cluster <pre style={{display: 'inline', marginLeft: '30%'}}> : </pre> {cluster} <br/>
-                    Jumlah Kasus <pre style={{display: 'inline', marginLeft: '17.5%'}}> : </pre> {kasus} <br/>
-                    Umur <pre style={{display: 'inline', marginLeft: '33%'}}> : </pre> {umur} <br/>
-                    Jenis Kelamin <pre style={{display: 'inline', marginLeft: '18%'}}> : </pre> {jenis_kelamin}<br/>
-                    Pekerjaan Orang Tua <pre style={{display: 'inline', marginLeft: '5%'}}> : </pre> {pekerjaan} <br/>
-                    Pendapatan Orang Tua <pre style={{display: 'inline', marginLeft: '1.5%'}}> : </pre> {pendapatan}
-                    <br/>
-                    Status Gizi <pre style={{display: 'inline', marginLeft: '23.8%'}}> : </pre> {status_gizi} <br/>
-                    Luas Rumah <pre style={{display: 'inline', marginLeft: '20.5%'}}> : </pre> {luas_rumah} <br/>
-                    Jumlah Kamar <pre style={{display: 'inline', marginLeft: '17.5%'}}> : </pre> {jumlah_kamar} <br/>
-                    Jumlah Orang <pre style={{display: 'inline', marginLeft: '18%'}}> : </pre> {jumlah_orang} <br/>
-                    Sistem Ventilasi <pre style={{display: 'inline', marginLeft: '15%'}}> : </pre> {sistem_ventilasi}
-                    <br/>
-                    Vaksin BCG <pre style={{display: 'inline', marginLeft: '21.8%'}}> : </pre> {bcg} <br/>
-                    <br/>
-
-                    <div className="text-center">
-                        <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                variant="primary" onClick={() => setShowModal(true)}>
-                            Lihat selengkapnya..
-                        </Button>
-                    </div>
-
-                </Popup>
-
-                {showModal ? (
-                    <>
-                        <div
-                            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-[1000] outline-none focus:outline-none"
-                        >
-                            <div className="relative w-auto my-6 mx-auto max-w-6xl">
-                                {/*content*/}
-                                <div
-                                    className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                    {/*header*/}
-                                    <div
-                                        className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                                        <h3 className="text-3xl font-semibold">
-                                            Kecamatan {kec}
-                                        </h3>
-                                        <button
-                                            className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                            onClick={() => setShowModal(false)}
-                                        >
-                                            <span
-                                                className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                                              ×
-                                            </span>
-                                        </button>
-                                    </div>
-                                    {/*body*/}
-                                    <div style={{maxHeight: 400, overflowY: "auto", overflowX: "auto"}}
-                                         className="relative p-6 flex-auto m-2 text-center">
-                                        <h2 className="font-semibold" style={{textAlign: "end"}}>CLUSTER
-                                            : {cluster}</h2>
-                                        <h3 className="font-semibold" style={{textAlign: "end"}}>TOTAL : {kasus}</h3>
-
-
-                                        <h3 className="font-semibold" style={{textAlign: "start"}}>DATA ANAK</h3>
-                                        <br/>
-                                        <hr/>
-                                        <table style={{border: 1}} className="table-auto">
-                                            <thead>
-                                            <tr>
-                                                <th className="px-4 py-2">Umur</th>
-                                                <th className="px-4 py-2">Jenis Kelamin</th>
-                                                <th className="px-4 py-2">Alamat</th>
-                                                <th className="px-4 py-2">Pekerjaan</th>
-                                                <th className="px-4 py-2">Pendapatan</th>
-                                                <th className="px-4 py-2">Status Gizi</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td className="border px-4 py-2">{umur}</td>
-                                                <td className="border px-4 py-2">{jenis_kelamin}</td>
-                                                <td className="border px-4 py-2">{alamat}</td>
-                                                <td className="border px-4 py-2">{pekerjaan}</td>
-                                                <td className="border px-4 py-2">{pendapatan}</td>
-                                                <td className="border px-4 py-2">{status_gizi}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <br/>
-
-                                        <h3 className="font-semibold" style={{textAlign: "start"}}>RIWAYAT KESEHATAN
-                                            ANAK</h3>
-                                        <br/>
-                                        <hr/>
-                                        <table className="table-auto">
-                                            <thead>
-                                            <tr>
-                                                <th className="w-1/4 px-4 py-2">Riwayat Diabetes</th>
-                                                <th className="w-1/4 px-4 py-2">Riwayat Opname</th>
-                                                <th className="w-1/4 px-4 py-2">Daftar Opname</th>
-                                                <th className="w-1/4 px-4 py-2">Vaksin BCG</th>
-                                                <th className="w-1/4 px-4 py-2">ASI Eksklusif</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td className="border px-4 py-2">{diabetes_anak}</td>
-                                                <td className="border px-4 py-2">{opname}</td>
-                                                <td className="border px-4 py-2">{daftar_opname_ya}</td>
-                                                <td className="border px-4 py-2">{bcg}</td>
-                                                <td className="border px-4 py-2">{asi_eksklusif}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-
-                                        <br/>
-                                        <h3 className="font-semibold" style={{textAlign: "start"}}>RIWAYAT PENYAKIT
-                                            ORANG SERUMAH</h3>
-                                        <br/>
-                                        <hr/>
-                                        <table className="table-auto">
-                                            <thead>
-                                            <tr>
-                                                <th className="w-1/6 px-4 py-2">Riwayat TB</th>
-                                                <th className="w-1/6 px-4 py-2">Riwayat Diabetes Keluarga</th>
-                                                <th className="w-1/6 px-4 py-2">Riwayat Penyakit Lain</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td className="border px-4 py-2">{tb_orang_serumah}</td>
-                                                <td className="border px-4 py-2">{diabetes_keluarga}</td>
-                                                <td className="border px-4 py-2">{daftar_penyakit_lain_ya}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <br/>
-                                        <h3 className="font-semibold" style={{textAlign: "start"}}>KONDISI RUMAH</h3>
-                                        <br/>
-                                        <hr/>
-                                        <table className="table-auto">
-                                            <thead>
-                                            <tr>
-                                                <th className="w-1/4 px-4 py-2">Luas Rumah</th>
-                                                <th className="w-1/4 px-4 py-2">Jumlah Kamar</th>
-                                                <th className="w-1/4 px-4 py-2">Jumlah Orang</th>
-                                                <th className="w-1/4 px-4 py-2">Sistem Ventilasi</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td className="border px-4 py-2">{luas_rumah}</td>
-                                                <td className="border px-4 py-2">{jumlah_kamar}</td>
-                                                <td className="border px-4 py-2">{jumlah_orang}</td>
-                                                <td className="border px-4 py-2">{sistem_ventilasi}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-
-
-                                    </div>
-                                    {/*footer*/}
-                                    <div
-                                        className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-                                        <button
-                                            className="text-white rounded bg-red-500 background-transparent uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                            type="button"
-                                            onClick={() => setShowModal(false)}
-                                        >
-                                            Tutup
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-                    </>
-                ) : null}
-
-
-            </CircleMarker>
-        )
-    });
-}
-
-function ClusterModal(props) {
-    const {data, selectedData, center, loading} = props
-    console.log("data", data)
-    const coord = data?.data_cluster
-    let i = 0;
-
-    return Object.keys(coord)?.map((clust) => {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const [showModal, setShowModal] = React.useState(false);
-
-        const handleClose = () => setShow(false);
-        const handleShow = () => setShow(true);
-
-        const months = ["#800026", "#0C7C59", "#FC4E2A", "#28536B", "#C2948A", "#F6F0ED", "#D36135"];
-        // let random = Math.floor(Math.random() * months.length);
-        // console.log(random, months[random]);
-
-        const resultClust = coord[clust]
-        const keys = Object.keys(resultClust)
-        let daftar_opname = []
-        let daftar_penyakit_lain = []
-
-        for (let i of keys) {
-            if (i.includes("(opname)")) {
-                daftar_opname.push(i)
-            }
-            if (i.includes("(org serumah)")) {
-                daftar_penyakit_lain.push(i)
-            }
+        let color_cluster3 = ''
+        const all_color_cluster3 = ['#063b00', '#854442', '#089000', '#be9b7b', '#0eff00']
+        switch (resultKec3['Total']) {
+            case 0:
+                color_cluster3 = all_color_cluster3[0];
+                break
+            case 1:
+                color_cluster3 = all_color_cluster3[1];
+                break
+            case 2:
+                color_cluster3 = all_color_cluster3[2];
+                break
+            case 3:
+                color_cluster3 = all_color_cluster3[3];
+                break
+            case 4:
+                color_cluster3 = all_color_cluster3[4];
+                break
+            default :
+                color_cluster3 = all_color_cluster3[0];
+                break
         }
 
-        // console.log(daftar_opname, daftar_penyakit_lain)
-
-        let daftar_opname_ya = []
-        let daftar_penyakit_lain_ya = []
-        for (let i of daftar_opname) {
-            for (let j in resultClust) {
-                if (i === j) {
-                    // console.log('resultClust[i]', resultClust[i], i,j)
-                    if (resultClust[i] === "Ya") {
-                        daftar_opname_ya.push(i)
-                    }
-                }
-            }
+        let color_cluster4 = ''
+        const all_color_cluster4 = ['#a98600', '#535353', '#e9d700', '#f8ed62', '#fff9ae']
+        switch (resultKec4['Total']) {
+            case 0:
+                color_cluster4 = all_color_cluster4[0];
+                break
+            case 1:
+                color_cluster4 = all_color_cluster4[1];
+                break
+            case 2:
+                color_cluster4 = all_color_cluster4[2];
+                break
+            case 3:
+                color_cluster4 = all_color_cluster4[3];
+                break
+            case 4:
+                color_cluster4 = all_color_cluster4[4];
+                break
+            default :
+                color_cluster4 = all_color_cluster4[0];
+                break
         }
 
-        for (let i of daftar_penyakit_lain) {
-            for (let j in resultClust) {
-                if (i === j) {
-                    // console.log('resultClust[i]', resultClust[i], i,j)
-                    if (resultClust[i] === "Ya") {
-                        daftar_penyakit_lain_ya.push(i)
-                    }
-                }
-            }
+        let color_cluster5 = ''
+        const all_color_cluster5 = ['#660066', '#ee1515', '#8E3200', '#ff0074']
+        switch (resultKec5['Total']) {
+            case 0:
+                color_cluster5 = all_color_cluster5[0];
+                break
+            case 1:
+                color_cluster5 = all_color_cluster5[1];
+                break
+            case 2:
+                color_cluster5 = all_color_cluster5[2];
+                break
+            case 3:
+                color_cluster5 = all_color_cluster5[3];
+                break
+            default :
+                color_cluster5 = all_color_cluster5[0];
+                break
         }
 
-        const kasus = resultClust?.Total
-        const cluster = resultClust?.Segment
-        const umur = Math.round(resultClust?.['Tahun (mean)'])
-        const jenis_kelamin = resultClust?.['Jenis Kelamin']
-        const alamat = 'Kec. ' + resultClust?.['Alamat (Kecamatan)'] + ', Kel. ' + resultClust?.['Alamat (Kelurahan)']
-        const pekerjaan = resultClust?.['Pekerjaan Ayah'] + ' & ' + resultClust?.['Pekerjaan Ibu']
-        const pendapatan = resultClust?.['Pendapatan Orang Tua']
-        const status_gizi = resultClust?.['Status Gizi']
+        const position1 = resultKec1?.coord
+        const position2 = resultKec2?.coord
+        const position3 = resultKec3?.coord
+        const position4 = resultKec4?.coord
+        const position5 = resultKec5?.coord
 
-        const diabetes_anak = resultClust?.['riwayat diabetes anak']
-        const opname = resultClust?.['riwayat opname']
-        const asi_eksklusif = resultClust?.['ASI eksklusif']
+        const ket_cluster1 = {
+            0: 'Rata-rata jumlah TB = 3, Usia = 3.51 tahun',
+            1: 'Rata-rata jumlah TB = 22, Usia = 5.29 tahun',
+            2: 'Rata-rata jumlah TB = 5, Usia = 8.04 tahun'
+        }
 
-        const tb_orang_serumah = resultClust?.['riwayat TB orang serumah']
-        const diabetes_keluarga = resultClust?.['riwayat diabetes keluarga']
-        const penyakit_lain = resultClust?.['riwayat penyakit lain orang serumah']
+        const ket_cluster2 = {
+            0: 'Rata-rata gizi baik = 68.26%, gizi lebih = 27.01%',
+            1: 'Rata-rata gizi kurang = 66.67%, gizi baik = 25%',
+        }
 
-        const luas_rumah = resultClust?.['luas rumah']
-        const jumlah_kamar = Math.round(resultClust?.['jumlah kamar tidur (mean)'])
-        const jumlah_orang = Math.round(resultClust?.['jumlah orang dalam rumah (mean)'])
-        const sistem_ventilasi = resultClust?.['sistem ventilasi']
-        const bcg = resultClust?.['riwayat vaksin BCG']
+        const ket_cluster3 = {
+            0: 'Rata-rata pendapatan 5 - 10 juta = 88.75%',
+            1: 'Rata-rata pendapatan 2.5 - 5 juta = 54.06%',
+            2: 'Rata-rata pendapatan > 10 juta = 36.24%, 5 - 10 juta = 35.45%',
+            3: 'Rata-rata pendapatan < 2.5 juta = 18.06%, 5 - 10 juta = 56.94%',
+            4: 'Rata-rata pendapatan 2.5 - 5 juta = 100%',
+        }
+
+        const ket_cluster4 = {
+            0: 'Rata-rata luas rumah < 36 m^2 = 15.8%, 54 - 120 m^2 = 47.61%',
+            1: 'Rata-rata luas rumah 54 - 120 m^2 = 57.97%',
+            2: 'Rata - rata luas rumah 36 - 54 m^2 = 100%',
+            3: 'Rata-rata luas rumah 54 - 120 m^2 = 100%',
+            4: 'Rata-rata luas rumah > 120 m^2 = 100%',
+        }
+
+        const ket_cluster5 = {
+            0: 'Rata-rata telah BCG = 81.63%, keluarga diabetes = 20.64%, TB serumah = 29.69%, ASI eks = 78.87%, anak diabetes = 4.13%',
+            1: 'Rata-rata telah BCG = 17.5%, ASI eks = 35%, TB serumah = 17.5%',
+            2: 'Rata-rata anak diabetes = 50%, TB serumah = 50%, telah BCG = 50%',
+            3: 'Rata-rata telah BCG = 87.5%, ASI Eks = 100%, keluarga diabetes = 87.5%',
+        }
+
         return (
             <>
-                <div className="inline">
-                    <Button style={{backgroundColor: months[i]}}
-                            className="text-white font-bold py-2 px-4 rounded mx-3 d-inline-block"
-                            variant="primary" onClick={() => setShowModal(true)}>
-                        Cluster {resultClust?.Segment}
-                    </Button>
-                </div>
-                <script>
-                    {i++}
-                </script>
-                {showModal ? (
-                    <>
-                        <div
-                            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-[1000] outline-none focus:outline-none"
-                        >
-                            <div className="relative w-auto my-6 mx-auto max-w-6xl">
-                                {/*content*/}
-                                <div
-                                    className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                    {/*header*/}
+
+                <CircleMarker
+                    key={kec}
+                    center={position1}
+                    className={`circle-marker visible ${color_cluster1}`}
+                    pathOptions={{color: color_cluster1}}
+                    radius={8}
+                    fillOpacity={1.0}
+                >
+                    <Popup>
+                        <h3 style={{textAlign: 'center'}}>
+                            <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
+                        </h3>
+                        <br/>
+
+                        <div className="text-center">
+                            {ket_cluster1[resultKec1.Total]}
+                            <br/><br/>
+                            Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
+                        </div>
+
+                    </Popup>
+
+                    {showModal ? (
+                        <>
+                            <div
+                                className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-[1000] outline-none focus:outline-none"
+                            >
+                                <div className="relative w-auto my-6 mx-auto max-w-6xl">
+                                    {/*content*/}
                                     <div
-                                        className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                                        <h3 className="text-3xl font-semibold">
-                                            CLUSTER {resultClust?.Segment}
-                                        </h3>
-                                        <button
-                                            className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                            onClick={() => setShowModal(false)}
-                                        >
-                                            <span
-                                                className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                                              ×
-                                            </span>
-                                        </button>
-                                    </div>
-                                    {/*body*/}
-                                    <div style={{maxHeight: 400, overflowY: "auto", overflowX: "auto"}}
-                                         className="table-modal relative p-6 flex-auto m-2 text-sm">
-                                        <h3 className="font-semibold" style={{textAlign: "end"}}>TOTAL : {kasus}</h3>
-                                        <h3 className="font-semibold" style={{textAlign: "start"}}>DATA ANAK</h3>
-                                        <br/>
-                                        <hr/>
-                                        <table style={{border: 1}} className="table-auto">
-                                            <thead>
-                                            <tr>
-                                                <th className="px-4 py-2">Umur</th>
-                                                <th className="px-4 py-2">Jenis Kelamin</th>
-                                                <th className="px-4 py-2">Alamat</th>
-                                                <th className="px-4 py-2">Pekerjaan</th>
-                                                <th className="px-4 py-2">Pendapatan</th>
-                                                <th className="px-4 py-2">Status Gizi</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td className="border px-4 py-2">{umur}</td>
-                                                <td className="border px-4 py-2">{jenis_kelamin}</td>
-                                                <td className="border px-4 py-2">{alamat}</td>
-                                                <td className="border px-4 py-2">{pekerjaan}</td>
-                                                <td className="border px-4 py-2">{pendapatan}</td>
-                                                <td className="border px-4 py-2">{status_gizi}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <br/>
+                                        className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                                        {/*header*/}
+                                        <div
+                                            className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                                            <h3 className="text-3xl font-semibold">
+                                                Kecamatan {kec}
+                                            </h3>
+                                            <button
+                                                className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                                                onClick={() => setShowModal(false)}
+                                            >
+                                                        <span
+                                                            className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                                                          ×
+                                                        </span>
+                                            </button>
+                                        </div>
 
-                                        <h3 className="font-semibold" style={{textAlign: "start"}}>RIWAYAT KESEHATAN
-                                            ANAK</h3>
-                                        <br/>
-                                        <hr/>
-                                        <table className="table-auto">
-                                            <thead>
-                                            <tr>
-                                                <th className="w-1/4 px-4 py-2">Riwayat Diabetes</th>
-                                                <th className="w-1/4 px-4 py-2">Riwayat Opname</th>
-                                                <th className="w-1/4 px-4 py-2">Daftar Opname</th>
-                                                <th className="w-1/4 px-4 py-2">Vaksin BCG</th>
-                                                <th className="w-1/4 px-4 py-2">ASI Eksklusif</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td className="border px-4 py-2">{diabetes_anak}</td>
-                                                <td className="border px-4 py-2">{opname}</td>
-                                                <td className="border px-4 py-2">{daftar_opname_ya}</td>
-                                                <td className="border px-4 py-2">{bcg}</td>
-                                                <td className="border px-4 py-2">{asi_eksklusif}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <br/>
-                                        <h3 className="font-semibold" style={{textAlign: "start"}}>RIWAYAT PENYAKIT
-                                            ORANG SERUMAH</h3>
-                                        <br/>
-                                        <hr/>
-                                        <table className="table-auto">
-                                            <thead>
-                                            <tr>
-                                                <th className="w-1/6 px-4 py-2">Riwayat TB</th>
-                                                <th className="w-1/6 px-4 py-2">Riwayat Diabetes Keluarga</th>
-                                                <th className="w-1/6 px-4 py-2">Riwayat Penyakit Lain</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td className="border px-4 py-2">{tb_orang_serumah}</td>
-                                                <td className="border px-4 py-2">{diabetes_keluarga}</td>
-                                                <td className="border px-4 py-2">{daftar_penyakit_lain_ya}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <br/>
-                                        <h3 className="font-semibold" style={{textAlign: "start"}}>KONDISI RUMAH</h3>
-                                        <br/>
-                                        <hr/>
-                                        <table className="table-auto">
-                                            <thead>
-                                            <tr>
-                                                <th className="w-1/5 px-4 py-2">Luas Rumah</th>
-                                                <th className="w-1/5 px-4 py-2">Jumlah Kamar</th>
-                                                <th className="w-1/5 px-4 py-2">Jumlah Orang</th>
-                                                <th className="w-1/5 px-4 py-2">Sistem Ventilasi</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td className="border px-4 py-2">{luas_rumah}</td>
-                                                <td className="border px-4 py-2">{jumlah_kamar}</td>
-                                                <td className="border px-4 py-2">{jumlah_orang}</td>
-                                                <td className="border px-4 py-2">{sistem_ventilasi}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-
-
-                                    </div>
-                                    {/*footer*/}
-                                    <div
-                                        className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-                                        <button
-                                            className="text-white rounded bg-red-500 background-transparent uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                            type="button"
-                                            onClick={() => setShowModal(false)}
-                                        >
-                                            Tutup
-                                        </button>
+                                        <div
+                                            className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                                            <button
+                                                className="text-white rounded bg-red-500 background-transparent uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                                type="button"
+                                                onClick={() => setShowModal(false)}
+                                            >
+                                                Tutup
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                        </>
+                    ) : null}
+
+
+                </CircleMarker>,
+
+
+                <CircleMarker
+                    key={kec}
+                    center={position2}
+                    pathOptions={{color: color_cluster2}}
+                    className={`circle-marker visible ${color_cluster2}`}
+                    radius={8}
+                    fillOpacity={1.0}
+                >
+                    <Popup>
+                        <h3 style={{textAlign: 'center'}}>
+                            <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
+                        </h3>
+                        <br/>
+
+                        <div className="text-center">
+                            {ket_cluster2[resultKec2.Total]}
+                            <br/><br/>
+                            Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
                         </div>
-                        <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-                    </>
-                ) : null}
+
+                    </Popup>
+                </CircleMarker>
+                <CircleMarker
+                    key={kec}
+                    center={position3}
+                    pathOptions={{color: color_cluster3}}
+                    className={`circle-marker visible ${color_cluster3}`}
+                    radius={8}
+                    fillOpacity={1.0}
+                >
+                    <Popup>
+                        <h3 style={{textAlign: 'center'}}>
+                            <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
+                        </h3>
+                        <br/>
+
+                        <div className="text-center">
+                            {ket_cluster3[resultKec3.Total]}
+                            <br/><br/>
+                            Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
+                        </div>
+
+                    </Popup>
+                </CircleMarker>
+                <CircleMarker
+                    key={kec}
+                    center={position4}
+                    pathOptions={{color: color_cluster4}}
+                    className={`circle-marker visible ${color_cluster4}`}
+                    radius={8}
+                    fillOpacity={1.0}
+                >
+                    <Popup>
+                        <h3 style={{textAlign: 'center'}}>
+                            <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
+                        </h3>
+                        <br/>
+
+                        <div className="text-center">
+                            {ket_cluster4[resultKec4.Total]}
+                            <br/><br/>
+                            Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
+                        </div>
+
+                    </Popup>
+                </CircleMarker>
+                <CircleMarker
+                    key={kec}
+                    center={position5}
+                    pathOptions={{color: color_cluster5}}
+                    className={`circle-marker visible ${color_cluster5}`}
+                    radius={8}
+                    fillOpacity={1.0}
+                >
+                    <Popup>
+                        <h3 style={{textAlign: 'center'}}>
+                            <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
+                        </h3>
+                        <br/>
+
+                        <div className="text-center">
+                            {ket_cluster5[resultKec5.Total]}
+                            <br/><br/>
+                            Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
+                        </div>
+
+                    </Popup>
+                </CircleMarker>
             </>
         )
     });
 }
 
+{/*function ClusterModal(props) {*/
+}
+{/*    const {data, selectedData, center, loading} = props*/
+}
+{/*    console.log("data", data)*/
+}
+{/*    const coord = data?.data_cluster*/
+}
+{/*    let i = 0;*/
+}
+
+{/*    return Object.keys(coord)?.map((clust) => {*/
+}
+{/*        // eslint-disable-next-line react-hooks/rules-of-hooks*/
+}
+//         const [showModal, setShowModal] = React.useState(false);
+//
+//         const handleClose = () => setShow(false);
+//         const handleShow = () => setShow(true);
+//
+{/*        const months = ["#800026", "#0C7C59", "#FC4E2A", "#28536B", "#C2948A", "#F6F0ED", "#D36135"];*/
+}
+//         // let random = Math.floor(Math.random() * months.length);
+//         // console.log(random, months[random]);
+//
+//         const resultClust = coord[clust]
+//         const keys = Object.keys(resultClust)
+{/*        let daftar_opname = []*/
+}
+{/*        let daftar_penyakit_lain = []*/
+}
+
+{/*        for (let i of keys) {*/
+}
+{/*            if (i.includes("(opname)")) {*/
+}
+{/*                daftar_opname.push(i)*/
+}
+//             }
+//             if (i.includes("(org serumah)")) {
+//                 daftar_penyakit_lain.push(i)
+//             }
+//         }
+//
+//         // console.log(daftar_opname, daftar_penyakit_lain)
+//
+//         let daftar_opname_ya = []
+//         let daftar_penyakit_lain_ya = []
+//         for (let i of daftar_opname) {
+//             for (let j in resultClust) {
+//                 if (i === j) {
+//                     // console.log('resultClust[i]', resultClust[i], i,j)
+//                     // if (resultClust[i] === "Ya") {
+//                     //     daftar_opname_ya.push(i)
+//                     // }
+//                     // console.log(resultClust[i][0][1])
+//                     if ('Ya'.includes(String(resultClust[i][0][1]))){
+//                         var delete_op = i.replace('(opname)', '')
+//                         daftar_opname_ya.push(delete_op + '(' + resultClust[i][1]['Ya'] + '), ')
+//                     }
+{/*                }*/
+}
+//             }
+{/*        }*/
+}
+
+{/*        for (let i of daftar_penyakit_lain) {*/
+}
+{/*            for (let j in resultClust) {*/
+}
+{/*                if (i === j) {*/
+}
+{/*                    // console.log('resultClust[i]', resultClust[i], i,j)*/
+}
+{/*                    // if (resultClust[i] === "Ya") {*/
+}
+{/*                    //     daftar_penyakit_lain_ya.push(i)*/
+}
+{/*                    // }*/
+}
+{/*                    if ('Ya'.includes(String(resultClust[i][0][1]))){*/
+}
+{/*                        // console.log(i, clust , resultClust[i][1]['Ya'])*/
+}
+{/*                        var delete_op = i.replace('(org serumah)', '')*/
+}
+{/*                        daftar_penyakit_lain_ya.push(delete_op + '(' + resultClust[i][1]['Ya'] + '), ')*/
+}
+//                     }
+//                 }
+//             }
+{/*        }*/
+}
+
+{/*        const kasus = resultClust?.Total*/
+}
+{/*        const cluster = resultClust?.Segment*/
+}
+//         const umur = Math.round(resultClust?.['Tahun (mean)'])
+//         const tinggi = Math.round(resultClust?.['Tinggi badan (dalam cm) (mean)'])
+//         const berat = Math.round(resultClust?.['Berat badan (dalam kg) (mean)'])
+//
+{/*        // const jenis_kelamin = resultClust?.['Jenis Kelamin']*/
+}
+{/*        let jenis_kelamin = []*/
+}
+{/*        for (let i=0; i<resultClust?.['Jenis Kelamin'][0].length; i++) {*/
+}
+//             let status = resultClust?.['Jenis Kelamin'][0][i]
+{/*            jenis_kelamin.push(status + ' (' + resultClust?.['Jenis Kelamin'][1][status] + '), ')*/
+}
+//         }
+//
+//         // const alamat = 'Kec. ' + resultClust?.['Alamat (Kecamatan)'] + ', Kel. ' + resultClust?.['Alamat (Kelurahan)']
+//         // const alamat = 'Kec. ' + resultClust?.['Alamat (Kecamatan)']
+{/*        let alamat = []*/
+}
+{/*        for (let i=0; i<resultClust?.['Alamat (Kecamatan)'][0].length; i++) {*/
+}
+{/*            let status = resultClust?.['Alamat (Kecamatan)'][0][i]*/
+}
+{/*            alamat.push(status + ' (' + resultClust?.['Alamat (Kecamatan)'][1][status] + '), ')*/
+}
+{/*        }*/
+}
+
+{/*        const pekerjaan = resultClust?.['Pekerjaan Ayah'] + ' & ' + resultClust?.['Pekerjaan Ibu']*/
+}
+
+{/*        // const pendapatan = resultClust?.['Pendapatan Orang Tua']*/
+}
+{/*        let pendapatan = []*/
+}
+{/*        for (let i=0; i<resultClust?.['Pendapatan Orang Tua'][0].length; i++) {*/
+}
+{/*            let status = resultClust?.['Pendapatan Orang Tua'][0][i]*/
+}
+{/*            pendapatan.push(status + ' (' + resultClust?.['Pendapatan Orang Tua'][1][status] + '), ')*/
+}
+{/*        }*/
+}
+//
+//         let status_gizi = []
+//         for (let i=0; i<resultClust?.['Status Gizi'][0].length; i++) {
+//             let status = resultClust?.['Status Gizi'][0][i]
+{/*            status_gizi.push(status + ' (' + resultClust?.['Status Gizi'][1][status] + '), ')*/
+}
+{/*        }*/
+}
+
+{/*        // const diabetes_anak = resultClust?.['riwayat diabetes anak']*/
+}
+//         let diabetes_anak = []
+//         for (let i=0; i<resultClust?.['riwayat diabetes anak'][0].length; i++) {
+//             let status = resultClust?.['riwayat diabetes anak'][0][i]
+//             diabetes_anak.push(status + ' (' + resultClust?.['riwayat diabetes anak'][1][status] + '), ')
+//         }
+//
+//         const opname = resultClust?.['riwayat opname']
+//
+//         // const asi_eksklusif = resultClust?.['ASI eksklusif']
+//         let asi_eksklusif = []
+//         for (let i=0; i<resultClust?.['ASI eksklusif'][0].length; i++) {
+//             let status = resultClust?.['ASI eksklusif'][0][i]
+//             asi_eksklusif.push(status + ' (' + resultClust?.['ASI eksklusif'][1][status] + '), ')
+//         }
+//
+//         // const tb_orang_serumah = resultClust?.['riwayat TB orang serumah']
+//         let tb_orang_serumah = []
+//         for (let i=0; i<resultClust?.['riwayat TB orang serumah'][0].length; i++) {
+//             let status = resultClust?.['riwayat TB orang serumah'][0][i]
+//             tb_orang_serumah.push(status + ' (' + resultClust?.['riwayat TB orang serumah'][1][status] + '), ')
+//         }
+//
+//         // const diabetes_keluarga = resultClust?.['riwayat diabetes keluarga']
+//         let diabetes_keluarga = []
+//         for (let i=0; i<resultClust?.['riwayat diabetes keluarga'][0].length; i++) {
+//             let status = resultClust?.['riwayat diabetes keluarga'][0][i]
+//             diabetes_keluarga.push(status + ' (' + resultClust?.['riwayat diabetes keluarga'][1][status] + '), ')
+//         }
+//
+//         const penyakit_lain = resultClust?.['riwayat penyakit lain orang serumah']
+//
+//         // const luas_rumah = resultClust?.['luas rumah']
+//         let luas_rumah = []
+//         for (let i=0; i<resultClust?.['luas rumah'][0].length; i++) {
+//             let status = resultClust?.['luas rumah'][0][i]
+//             luas_rumah.push(status + ' (' + resultClust?.['luas rumah'][1][status] + '), ')
+//         }
+//
+//         const jumlah_kamar = Math.round(resultClust?.['jumlah kamar tidur (mean)'])
+//         const jumlah_orang = Math.round(resultClust?.['jumlah orang dalam rumah (mean)'])
+//
+//         // const sistem_ventilasi = resultClust?.['sistem ventilasi']
+//         let sistem_ventilasi = []
+//         for (let i=0; i<resultClust?.['sistem ventilasi'][0].length; i++) {
+//             let status = resultClust?.['sistem ventilasi'][0][i]
+//             sistem_ventilasi.push(status + ' (' + resultClust?.['sistem ventilasi'][1][status] + '), ')
+//         }
+//
+//         // const bcg = resultClust?.['riwayat vaksin BCG']
+//         let bcg = []
+//         for (let i=0; i<resultClust?.['riwayat vaksin BCG'][0].length; i++) {
+//             let status = resultClust?.['riwayat vaksin BCG'][0][i]
+//             bcg.push(status + ' (' + resultClust?.['riwayat vaksin BCG'][1][status] + '), ')
+//         }
+//
+//         return (
+//             <>
+//                 <div className="col-span-1">
+//                     <Button style={{backgroundColor: months[i]}}
+//                             className="text-white font-bold py-2 px-4 rounded mx-3 d-col-span-1-block"
+//                             variant="primary" onClick={() => setShowModal(true)}>
+//                         Cluster {resultClust?.Segment}
+//                     </Button>
+//                 </div>
+//                 <script>
+//                     {i++}
+//                 </script>
+//                 {showModal ? (
+//                     <>
+//                         <div
+//                             className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-[1000] outline-none focus:outline-none"
+//                         >
+//                             <div className="relative w-auto my-6 mx-auto max-w-6xl">
+//                                 {/*content*/}
+//                                 <div
+//                                     className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+//                                     {/*header*/}
+//                                     <div
+//                                         className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+//                                         <h3 className="text-3xl font-semibold">
+//                                             CLUSTER {resultClust?.Segment}
+//                                         </h3>
+//                                         <button
+//                                             className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+//                                             onClick={() => setShowModal(false)}
+//                                         >
+//                                             <span
+//                                                 className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+//                                               ×
+//                                             </span>
+//                                         </button>
+//                                     </div>
+//                                     {/*body*/}
+//                                     <div style={{maxHeight: 400, overflowY: "auto", overflowX: "auto"}}
+//                                          className="table-modal relative p-6 flex-auto m-2 text-sm">
+//                                         <h3 className="font-semibold" style={{textAlign: "end"}}>TOTAL : {kasus}</h3>
+//                                         <h3 className="font-semibold" style={{textAlign: "start"}}>DATA ANAK</h3>
+//                                         <br/>
+//                                         <hr/>
+//                                         <table style={{border: 1}} className="table-auto">
+//                                             <thead>
+//                                             <tr>
+//                                                 <th className="px-4 py-2">Umur</th>
+//                                                 <th className="px-4 py-2">Jenis Kelamin</th>
+//                                                 <th className="px-4 py-2">Alamat</th>
+//                                                 <th className="px-4 py-2">Pekerjaan</th>
+//                                                 <th className="px-4 py-2">Pendapatan</th>
+//                                                 <th className="px-4 py-2">Tinggi</th>
+//                                                 <th className="px-4 py-2">Berat</th>
+//                                             </tr>
+//                                             </thead>
+//                                             <tbody>
+//                                             <tr>
+//                                                 <td className="border px-4 py-2">{umur}</td>
+//                                                 <td className="border px-4 py-2">{jenis_kelamin}</td>
+//                                                 <td className="border px-4 py-2">{alamat}</td>
+//                                                 <td className="border px-4 py-2">{pekerjaan}</td>
+//                                                 <td className="border px-4 py-2">{pendapatan}</td>
+//                                                 <td className="border px-4 py-2">{tinggi}</td>
+//                                                 <td className="border px-4 py-2">{berat}</td>
+//                                             </tr>
+//                                             </tbody>
+//                                         </table>
+//                                         <br/>
+//
+//                                         <h3 className="font-semibold" style={{textAlign: "start"}}>RIWAYAT KESEHATAN
+//                                             ANAK</h3>
+//                                         <br/>
+//                                         <hr/>
+//                                         <table className="table-auto">
+//                                             <thead>
+//                                             <tr>
+//                                                 <th className="w-1/4 px-4 py-2">Status Gizi</th>
+//                                                 <th className="w-1/4 px-4 py-2">Diabetes</th>
+//                                                 <th className="w-1/4 px-4 py-2">Riwayat Penyakit</th>
+//                                                 <th className="w-1/4 px-4 py-2">Vaksin BCG</th>
+//                                                 <th className="w-1/4 px-4 py-2">ASI Eksklusif</th>
+//                                             </tr>
+//                                             </thead>
+//                                             <tbody>
+//                                             <tr>
+//                                                 <td className="border px-4 py-2">{status_gizi}</td>
+//                                                 <td className="border px-4 py-2">{diabetes_anak}</td>
+//                                                 <td className="border px-4 py-2">{daftar_opname_ya}</td>
+//                                                 <td className="border px-4 py-2">{bcg}</td>
+//                                                 <td className="border px-4 py-2">{asi_eksklusif}</td>
+//                                             </tr>
+//                                             </tbody>
+//                                         </table>
+//                                         <br/>
+//                                         <h3 className="font-semibold" style={{textAlign: "start"}}>RIWAYAT PENYAKIT
+//                                             ORANG SERUMAH</h3>
+//                                         <br/>
+//                                         <hr/>
+//                                         <table className="table-auto">
+//                                             <thead>
+//                                             <tr>
+//                                                 <th className="w-1/6 px-4 py-2">Riwayat TB</th>
+//                                                 <th className="w-1/6 px-4 py-2">Riwayat Diabetes Keluarga</th>
+//                                                 <th className="w-1/6 px-4 py-2">Riwayat Penyakit Lain</th>
+//                                             </tr>
+//                                             </thead>
+//                                             <tbody>
+//                                             <tr>
+//                                                 <td className="border px-4 py-2">{tb_orang_serumah}</td>
+//                                                 <td className="border px-4 py-2">{diabetes_keluarga}</td>
+//                                                 <td className="border px-4 py-2">{daftar_penyakit_lain_ya}</td>
+//                                             </tr>
+//                                             </tbody>
+//                                         </table>
+//                                         <br/>
+//                                         <h3 className="font-semibold" style={{textAlign: "start"}}>KONDISI RUMAH</h3>
+//                                         <br/>
+//                                         <hr/>
+//                                         <table className="table-auto">
+//                                             <thead>
+//                                             <tr>
+//                                                 <th className="w-1/5 px-4 py-2">Luas Rumah</th>
+//                                                 <th className="w-1/5 px-4 py-2">Jumlah Kamar</th>
+//                                                 <th className="w-1/5 px-4 py-2">Jumlah Orang</th>
+//                                                 <th className="w-1/5 px-4 py-2">Sistem Ventilasi</th>
+//                                             </tr>
+//                                             </thead>
+//                                             <tbody>
+//                                             <tr>
+//                                                 <td className="border px-4 py-2">{luas_rumah}</td>
+//                                                 <td className="border px-4 py-2">{jumlah_kamar}</td>
+//                                                 <td className="border px-4 py-2">{jumlah_orang}</td>
+//                                                 <td className="border px-4 py-2">{sistem_ventilasi}</td>
+//                                             </tr>
+//                                             </tbody>
+//                                         </table>
+//
+//
+//                                     </div>
+//                                     {/*footer*/}
+//                                     <div
+//                                         className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+//                                         <button
+//                                             className="text-white rounded bg-red-500 background-transparent uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+//                                             type="button"
+//                                             onClick={() => setShowModal(false)}
+//                                         >
+//                                             Tutup
+//                                         </button>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         </div>
+//                         <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+//                     </>
+//                 ) : null}
+//             </>
+//         )
+//     });
+// }
+
 const Map = (props) => {
     const {data, selectedData, center, loading, setReg} = props
 
-    const kec = data?.data_kecamatan
+    const [selectedColor, setSelectedColor] = useState('')
+    const onClickColor = (color) => {
+        let pink = document.querySelectorAll('.circle-marker')
+        for (let i = 0; i < pink.length; i++) {
+            if (color !== '' && !pink[i].classList.contains(color)) {
+                pink[i].classList.remove('visible')
+                pink[i].classList.add('hidden')
+            } else if (color === '' && pink[i].classList.contains('hidden')) {
+                pink[i].classList.remove('hidden')
+                pink[i].classList.add('visible')
+            } else {
+                pink[i].classList.remove('hidden')
+                pink[i].classList.add('visible')
+            }
+        }
+        setSelectedColor(color)
+    }
+    const kec = data?.cluster1_df
 
+    const warna = {
+        0: '#a70000',
+        1: '#ff7400',
+        2: '#ff7b7b',
+        3: '#0f5e9c',
+        4: '#9D5C0D',
+        5: '#063b00',
+        6: '#854442',
+        7: '#089000',
+        8: '#be9b7b',
+        9: '#0eff00',
+        10: '#a98600',
+        11: '#535353',
+        12: '#e9d700',
+        13: '#f8ed62',
+        14: '#fff9ae',
+        15: '#660066',
+        16: '#ee1515',
+        17: '#8E3200',
+        18: '#ff0074'
+    }
     // function reloadData() {
     //     setReg(true);
     //     Router.push({
@@ -560,12 +780,12 @@ const Map = (props) => {
 
     return (
         <>
-            <div className="bg-[#343A40] h-screen">
+            <div className="bg-[#343A40] h-full pb-2">
                 <LoadingOverlay
                     active={loading}
                     spinner
                     text='Building cluster, please wait...'>
-                    <MapContainer center={center || [-5.136143, 119.469370]} zoom={12} scrollWheelZoom={false}
+                    <MapContainer center={center || [-5.136143, 119.469370]} zoom={13} scrollWheelZoom={true}
                                   className={'cluster-mapid'}>
                         <TileLayer
                             attribution='&copy; <a href="https://osm.org/copyright" target="_blank">OpenStreetMap</a> contributors'
@@ -573,26 +793,287 @@ const Map = (props) => {
                         />
 
                         {
-                            data && <PointMarker data={data}/>
+                            data && <PointMarker data={data} selectedColor={selectedColor}/>
                         }
                     </MapContainer>
                 </LoadingOverlay>
-
                 <br/>
 
+                {/*{*/}
+                {/*    data &&*/}
+                {/*    <div className="text-center">*/}
+                {/*        <ClusterModal data={data} loading={loading}/>*/}
+                {/*    </div>*/}
+                {/*}*/}
 
-                {
-                    data &&
-                    <div className="text-center">
-                        <ClusterModal data={data} loading={loading}/>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1">
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[0])}>
+                        <div className="col-span-1" style={{
+                            color: '#a70000',
+                            backgroundColor: '#a70000',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}> Jumlah TB terendah, Usia termuda</div>
+
                     </div>
-                }
-                <br/><br/>
-                <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                        variant="primary" onClick={() => handleCluster()}>
-                    REGENERATE DATA
-                </Button>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[1])}>
+                        <div className="col-span-1" style={{
+                            color: '#ff7400',
+                            backgroundColor: '#ff7400',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+
+                        <div className="col-span-9" style={{color: 'white'}}> Jumlah TB tertinggi</div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[2])}>
+                        <div className="col-span-1" style={{
+                            color: '#ff7b7b',
+                            backgroundColor: '#ff7b7b',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}>Jumlah TB kedua tertinggi, Usia tertua</div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[3])}>
+                        <div className="col-span-1" style={{
+                            color: '#0f5e9c',
+                            backgroundColor: '#0f5e9c',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}>Persentase gizi baik, dan gizi lebih tertinggi</div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[4])}>
+                        <div className="col-span-1" style={{
+                            color: '#9D5C0D',
+                            backgroundColor: '#9D5C0D',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}>Persentase gizi kurang tertinggi</div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[5])}>
+                        <div className="col-span-1" style={{
+                            color: '#063b00',
+                            backgroundColor: '#063b00',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}>Pendapatan 5 - 10 juta tertinggi</div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[6])}>
+                        <div className="col-span-1" style={{
+                            color: '#854442',
+                            backgroundColor: '#854442',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}>Pendapatan 2.5 - 5 juta kedua tertinggi
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[7])}>
+                        <div className="col-span-1" style={{
+                            color: '#089000',
+                            backgroundColor: '#089000',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}> Pendapatan > 10 juta tertinggi</div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[8])}>
+                        <div className="col-span-1" style={{
+                            color: '#be9b7b',
+                            backgroundColor: '#be9b7b',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}> {'Pendapatan < 2.5 juta tertinggi'}
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[9])}>
+                        <div className="col-span-1" style={{
+                            color: '#0eff00',
+                            backgroundColor: '#0eff00',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}> Pendapatan 2.5 - 5 juta tertinggi</div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[10])}>
+                        <div className="col-span-1" style={{
+                            color: '#a98600',
+                            backgroundColor: '#a98600',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}> {'Luas rumah < 36 m^2 tertinggi'}</div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[11])}>
+                        <div className="col-span-1" style={{
+                            color: '#535353',
+                            backgroundColor: '#535353',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}> Luas rumah 54 - 120 m^2 kedua tertinggi
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[12])}>
+                        <div className="col-span-1" style={{
+                            color: '#e9d700',
+                            backgroundColor: '#e9d700',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}> Luas rumah 36 - 54 m^2 tertinggi</div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[13])}>
+                        <div className="col-span-1" style={{
+                            color: '#f8ed62',
+                            backgroundColor: '#f8ed62',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}> Luas rumah 54 - 120 m^2 tertinggi</div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[14])}>
+                        <div className="col-span-1" style={{
+                            color: '#fff9ae',
+                            backgroundColor: '#fff9ae',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}> Luas rumah > 120 m^2 tertinggi</div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[15])}>
+                        <div className="col-span-1" style={{
+                            color: '#660066',
+                            backgroundColor: '#660066',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}> Persentase telah BCG, keluarga diabetes, TB serumah
+                            kedua tertinggi
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[16])}>
+                        <div className="col-span-1" style={{
+                            color: '#ee1515',
+                            backgroundColor: '#ee1515',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}> Persentase telah BCG terendah</div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[17])}>
+                        <div className="col-span-1" style={{
+                            color: '#8E3200',
+                            backgroundColor: '#8E3200',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}> Persentase anak diabetes dan TB serumah tertinggi</div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[18])}>
+                        <div className="col-span-1" style={{
+                            color: '#ff0074',
+                            backgroundColor: '#ff0074',
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+                            
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}> Persentase telah BCG, ASI eksklusif dan
+                            keluarga menderita diabetes tertinggi
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div className="flex items-center justify-center">
+                    <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5 mb-5"
+                            onClick={() => onClickColor('')}>
+                        Show All
+                    </Button>
+                </div>
             </div>
+
         </>
     )
 }
