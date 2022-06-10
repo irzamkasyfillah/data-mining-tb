@@ -44,7 +44,9 @@ def preprocessing(dataset):
              'pernah/sedang TB',
              'riwayat opname',
              'riwayat penyakit lain orang serumah',
-             'Apakah ada yang pernah atau sedang mengkonsumsi obat tuberkulosis dalam orang serumah?'],
+             'Apakah ada yang pernah atau sedang mengkonsumsi obat tuberkulosis dalam orang serumah?',
+             'sistem ventilasi'
+    ],
             axis='columns', inplace=True)
 
     new = df['Umur'].str.split(r'(\d+)', expand=True)
@@ -143,7 +145,7 @@ def preprocessing(dataset):
                          'daftar penyakit opname', 'ASI eksklusif', 'riwayat TB orang serumah',
                          'riwayat diabetes keluarga', 'daftar penyakit lain orang serumah',
                          'luas rumah', 'jumlah kamar tidur', 'jumlah orang dalam rumah',
-                         'sistem ventilasi', 'Tahun', 'Status Gizi']].astype(str).agg(','.join, axis=1)
+                         'Tahun', 'Status Gizi']].astype(str).agg(','.join, axis=1)
     data_array = df["variabel"].apply(lambda x: x.split(','))
     df.drop(['variabel'], axis='columns', inplace=True)
 
@@ -638,7 +640,7 @@ def count_highest(df):
                          'daftar penyakit opname', 'ASI eksklusif', 'riwayat TB orang serumah',
                          'riwayat diabetes keluarga', 'daftar penyakit lain orang serumah',
                          'luas rumah', 'jumlah kamar tidur', 'jumlah orang dalam rumah',
-                         'sistem ventilasi', 'Tahun', 'Status Gizi']].astype(str).agg(','.join, axis=1)
+                         'Tahun', 'Status Gizi']].astype(str).agg(','.join, axis=1)
     data_array2 = df2["variabel2"].apply(lambda x: x.split(','))
     df2.drop(['variabel2'], axis='columns', inplace=True)
 
@@ -687,6 +689,7 @@ def asosiasi(dataset, min_support=0.35, min_threshold=0.9):
     list_aturan = np.unique(np.array(list_aturan)).tolist()
 
     rules.to_csv("./rules/rules.csv")
+    frequent_pattern.to_csv("./rules/frequent_pattern.csv")
 
     with open("./rules/location.json", "w") as outfile1:
         json.dump(keckota, outfile1)

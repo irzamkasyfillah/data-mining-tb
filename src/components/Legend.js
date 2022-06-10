@@ -13,7 +13,7 @@ function Legend({ map, data}) {
       console.log("highest_kec",highest_kec);
       console.log("list_aturan", list_aturan);
       let content = ""
-      content += "<p>" + "Data tertinggi" + "</p>"
+      content += "<p>" + "Kecamatan dengan kasus terbanyak" + "</p>"
       Object.keys(highest_kec).map(kec => {
         content += "<p>" + kec + ": " + highest_kec[kec] + "</p>"
       })
