@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import L from 'leaflet';
 import {CircleMarker, MapContainer, Popup, TileLayer} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -34,7 +34,9 @@ function PointMarker(props) {
 
     console.log(data)
     return Object.keys(coord1)?.map((kec) => {
-        const [showModal, setShowModal] = React.useState(false);
+        console.log("selectedData", selectedData, selectedData == kec.split(' (')[0])
+        if (!selectedData || (selectedData && selectedData == kec.split(' (')[0])) {
+            const [showModal, setShowModal] = React.useState(false);
         const handleClose = () => setShow(false);
         const handleShow = () => setShow(true);
 
@@ -148,9 +150,9 @@ function PointMarker(props) {
         const position5 = resultKec5?.coord
 
         const ket_cluster1 = {
-            0: 'Rata-rata jumlah TB = 3, Usia = 3.51 tahun',
-            1: 'Rata-rata jumlah TB = 22, Usia = 5.29 tahun',
-            2: 'Rata-rata jumlah TB = 5, Usia = 8.04 tahun'
+            0: 'Rata-rata jumlah TB = 3, \nUsia = 3.51 tahun',
+            1: 'Rata-rata jumlah TB = 22,\nUsia = 5.29 tahun',
+            2: 'Rata-rata jumlah TB = 5, \nUsia = 8.04 tahun'
         }
 
         const ket_cluster2 = {
@@ -169,25 +171,24 @@ function PointMarker(props) {
         const ket_cluster4 = {
             0: 'Rata-rata luas rumah < 36 m^2 = 15.8%, 54 - 120 m^2 = 47.61%',
             1: 'Rata-rata luas rumah 54 - 120 m^2 = 57.97%',
-            2: 'Rata - rata luas rumah 36 - 54 m^2 = 100%',
+            2: 'Rata-rata luas rumah 36 - 54 m^2 = 100%',
             3: 'Rata-rata luas rumah 54 - 120 m^2 = 100%',
             4: 'Rata-rata luas rumah > 120 m^2 = 100%',
         }
 
         const ket_cluster5 = {
-            0: 'Rata-rata telah BCG = 81.63%, keluarga diabetes = 20.64%, TB serumah = 29.69%, ASI eks = 78.87%, anak diabetes = 4.13%',
-            1: 'Rata-rata telah BCG = 17.5%, ASI eks = 35%, TB serumah = 17.5%',
-            2: 'Rata-rata anak diabetes = 50%, TB serumah = 50%, telah BCG = 50%',
-            3: 'Rata-rata telah BCG = 87.5%, ASI Eks = 100%, keluarga diabetes = 87.5%',
+            0: 'Rata-rata telah BCG = 81.63%, \nkeluarga diabetes = 20.64%, \nTB serumah = 29.69%, \nASI eks = 78.87%, \nanak diabetes = 4.13%',
+            1: 'Rata-rata telah BCG = 17.5%, \nASI eks = 35%, \nTB serumah = 17.5%',
+            2: 'Rata-rata anak diabetes = 50%, \nTB serumah = 50%, \ntelah BCG = 50%',
+            3: 'Rata-rata telah BCG = 87.5%, \nASI Eks = 100%, \nkeluarga diabetes = 87.5%',
         }
 
         return (
             <>
-
                 <CircleMarker
                     key={kec}
                     center={position1}
-                    className={`circle-marker visible ${color_cluster1}`}
+                    className={`circle-marker visible ${color_cluster1} ${kec.split(' (')[0].replace(' ', '-')}`}
                     pathOptions={{color: color_cluster1}}
                     radius={8}
                     fillOpacity={1.0}
@@ -257,7 +258,7 @@ function PointMarker(props) {
                     key={kec}
                     center={position2}
                     pathOptions={{color: color_cluster2}}
-                    className={`circle-marker visible ${color_cluster2}`}
+                    className={`circle-marker visible ${color_cluster2} ${kec.split(' (')[0].replace(' ', '-')}`}
                     radius={8}
                     fillOpacity={1.0}
                 >
@@ -279,7 +280,7 @@ function PointMarker(props) {
                     key={kec}
                     center={position3}
                     pathOptions={{color: color_cluster3}}
-                    className={`circle-marker visible ${color_cluster3}`}
+                    className={`circle-marker visible ${color_cluster3} ${kec.split(' (')[0].replace(' ', '-')}`}
                     radius={8}
                     fillOpacity={1.0}
                 >
@@ -301,7 +302,7 @@ function PointMarker(props) {
                     key={kec}
                     center={position4}
                     pathOptions={{color: color_cluster4}}
-                    className={`circle-marker visible ${color_cluster4}`}
+                    className={`circle-marker visible ${color_cluster4} ${kec.split(' (')[0].replace(' ', '-')}`}
                     radius={8}
                     fillOpacity={1.0}
                 >
@@ -323,7 +324,7 @@ function PointMarker(props) {
                     key={kec}
                     center={position5}
                     pathOptions={{color: color_cluster5}}
-                    className={`circle-marker visible ${color_cluster5}`}
+                    className={`circle-marker visible ${color_cluster5} ${kec.split(' (')[0].replace(' ', '-')}`}
                     radius={8}
                     fillOpacity={1.0}
                 >
@@ -343,6 +344,7 @@ function PointMarker(props) {
                 </CircleMarker>
             </>
         )
+        }
     });
 }
 
@@ -719,6 +721,7 @@ const Map = (props) => {
     const {data, selectedData, center, loading, setReg} = props
 
     const [selectedColor, setSelectedColor] = useState('')
+
     const onClickColor = (color) => {
         let pink = document.querySelectorAll('.circle-marker')
         for (let i = 0; i < pink.length; i++) {
@@ -785,7 +788,7 @@ const Map = (props) => {
                     active={loading}
                     spinner
                     text='Building cluster, please wait...'>
-                    <MapContainer center={center || [-5.136143, 119.469370]} zoom={13} scrollWheelZoom={true}
+                    <MapContainer center={center || [-5.136143, 119.469370]} zoom={13} scrollWheelZoom={false}
                                   className={'cluster-mapid'}>
                         <TileLayer
                             attribution='&copy; <a href="https://osm.org/copyright" target="_blank">OpenStreetMap</a> contributors'
@@ -793,7 +796,7 @@ const Map = (props) => {
                         />
 
                         {
-                            data && <PointMarker data={data} selectedColor={selectedColor}/>
+                            data && <PointMarker data={data} selectedData={selectedData} selectedColor={selectedColor}/>
                         }
                     </MapContainer>
                 </LoadingOverlay>
@@ -806,7 +809,7 @@ const Map = (props) => {
                 {/*    </div>*/}
                 {/*}*/}
 
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1">
+                <div className="ml-2 grid grid-cols-1 gap-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1">
                     <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[0])}>
                         <div className="col-span-1" style={{
                             color: '#a70000',
