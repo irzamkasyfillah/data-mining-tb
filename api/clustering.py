@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 from geopy.geocoders import Nominatim
 from sklearn.metrics import silhouette_score
-# from kmodes.kprototypes import KPrototypes
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
@@ -13,11 +12,394 @@ from data import Data
 
 
 def cluster(dataset):
+    # df_original = pd.read_csv('csv/Dataset TB anak.csv')
+    df_original = pd.read_csv(dataset)
+
+    data_status_gizi_laki = pd.read_csv('./csv/status_gizi_laki.csv',header=1)
+    data_status_gizi_perempuan = pd.read_csv('./csv/status_gizi_perempuan.csv',header=1)
+
+    data = df_original.copy()
+    data = data.rename(columns={'Alamat (mohon sertakan nama kelurahan dan kecamatan)': 'Alamat lengkap',
+                                'Apakah anak pernah atau sedang dalam pengobatan tuberkulosis?': 'pernah/sedang TB',
+                                'Apakah anak pernah mengalami penyakit diabetes?': 'riwayat diabetes anak',
+                                'Apakah anak telah menerima imunisasi BCG (Bacillus Calmette-Guérin, imunisasi untuk mencegah penyakit TB)?': 'riwayat vaksin BCG',
+                                'Apakah anak pernah di opname sebelumnya?': 'riwayat opname',
+                                'Jika pernah, anak diopname karena penyakit apa saja?': 'daftar penyakit opname',
+                                'Apakah anak mengkonsumsi ASI secara eksklusif? (ASI Eksklusif adalah pemberian ASI tanpa makanan/minuman (susu formula) tambahan hingga berusia 6 bulan)': 'ASI eksklusif',
+                                'Apakah ada riwayat penyakit tuberkulosis dalam orang serumah?': 'riwayat TB orang serumah',
+                                'Apakah ada riwayat penyakit diabetes dalam keluarga (orang tua)?': 'riwayat diabetes keluarga',
+                                'Apakah ada riwayat penyakit lainnya selain tuberkulosis, diabetes dalam orang  serumah?': 'riwayat penyakit lain orang serumah',
+                                'Jika ada, penyakit apa saja?': 'daftar penyakit lain orang serumah',
+                                'Berapa luas rumah tempat anak tinggal?': 'luas rumah',
+                                'Berapa jumlah kamar tidur dalam rumah?': 'jumlah kamar tidur',
+                                'Berapa jumlah orang yang tinggal dalam satu rumah?': 'jumlah orang dalam rumah',
+                                'Bagaimana sistem ventilasi di rumah Anda? ': 'sistem ventilasi'})
+
+    # =========================  PRE PROCESSING  ========================== #
+    # DATA CLEANING, INTEGRATION, TRANSFORMATION, REDUCTION
+
+    # HANDLE NAN VALUES
+
+    data['daftar penyakit opname'] = data['daftar penyakit opname'].replace(np.nan, 'Tidak Pernah')
+    data['daftar penyakit lain orang serumah'] = data['daftar penyakit lain orang serumah'].replace(np.nan, 'Tidak Ada')
+    data_status_gizi_laki['Tahun'] = data_status_gizi_laki['Tahun'].replace(np.nan, 0)
+    data_status_gizi_perempuan['Tahun'] = data_status_gizi_perempuan['Tahun'].replace(np.nan, 0)
+
+    # ADD NEW COLUMN FOR 'TAHUN' AND 'BULAN'
+
+    age = data['Umur'].str.split(r'(\d+)', expand=True)
+    age = age.replace([None], '0')
+
+    data['Tahun'] = age[1]
+    data['Bulan'] = age[3]
+
+    data = data.astype({"Tahun": float, "Bulan": float})
+
+    # CALCULATE THE IMT FOR STATUS GIZI
+
+    data['IMT'] = np.round(
+        data['Berat badan (dalam kg)'] / (data['Tinggi badan (dalam cm)'] * data['Tinggi badan (dalam cm)'] / 10000), 2)
+
+    # ===== DATA DAFTAR OPNAME DAN DAFTAR PENYAKIT LAIN ORANG SERUMAH ========#
+
+    daftar_opname = []
+    for i in data['daftar penyakit opname']:
+        to_list = re.split(', ', i.upper())
+        daftar_opname.append(to_list)
+
+    data['daftar opname'] = daftar_opname
+
+    daftar_penyakit = []
+    for i in data['daftar penyakit lain orang serumah']:
+        to_list = re.split(', ', i.upper())
+        daftar_penyakit.append(to_list)
+
+    data['daftar penyakit lain'] = daftar_penyakit
+
+    # ============== DETERMINE THE STATUS GIZI OF EACH DATA ==================#
+
+    def count_z_score(jenis_kelamin, tahun, bulan, imt):
+        def count_z(idx):
+            if (imt > status_gender['Median'][idx[0]]):
+                z = (imt - status_gender['Median'][idx[0]]) / (
+                            status_gender['+1 SD'][idx[0]] - status_gender['Median'][idx[0]])
+            else:
+                z = (imt - status_gender['Median'][idx[0]]) / (
+                            status_gender['Median'][idx[0]] - status_gender['-1 SD'][idx[0]])
+            return z
+
+        if jenis_kelamin == 'Laki - laki':
+            status_gender = data_status_gizi_laki.copy()
+        else:
+            status_gender = data_status_gizi_perempuan.copy()
+
+        if (tahun < 5):
+            tahun = tahun * 12
+            bulan = tahun + bulan
+            index = status_gender.index[status_gender['Bulan'] == bulan].tolist()
+            z_score = count_z(index)
+        else:
+            index = status_gender.index[(status_gender['Tahun'] == tahun) & (status_gender['Bulan'] == bulan)].tolist()
+            if ((tahun == 5) & (bulan == 0)):
+                index = status_gender.index[(status_gender['Tahun'] == 5) & (status_gender['Bulan'] == 1)].tolist()
+                index[0] = index[0] - 1
+            z_score = count_z(index)
+        return z_score
+
+    # z_score = np.round(count_z_score('Perempuan', 10, 0, 19.6), 2)
+    # print(z_score)
+    status_gizi = []
+    i = 0
+    for imt in data['IMT']:
+        z_score = np.round(
+            count_z_score(data['Jenis Kelamin'][i], int(data['Tahun'][i]), int(data['Bulan'][i]), data['IMT'][i]), 2)
+
+        if (int(data['Tahun'][i]) < 5):
+            if (z_score < -3):
+                status = "Gizi buruk"
+            elif ((z_score > -3) & (z_score < -2)):
+                status = "Gizi kurang"
+            elif ((z_score >= -2) & (z_score < 1)):
+                status = "Gizi baik"
+            elif ((z_score >= 1) & (z_score < 2)):
+                status = "Berisiko gizi lebih"
+            elif ((z_score >= 2) & (z_score < 3)):
+                status = "Gizi lebih"
+            elif ((z_score) >= 3):
+                status = "Obesitas"
+        else:
+            if ((z_score >= -3) & (z_score < -2)):
+                status = "Gizi kurang"
+            elif ((z_score >= -2) & (z_score < 1)):
+                status = "Gizi baik"
+            elif ((z_score >= 1) & (z_score < 2)):
+                status = "Gizi lebih"
+            elif ((z_score) >= 2):
+                status = "Obesitas"
+
+        status_gizi.append(status)
+        i += 1
+
+    data['Status Gizi'] = status_gizi
+
+    # ============== DATA SELECTION =============== #
+
+    data = data.drop(['Timestamp', 'Umur', 'Tanggal Lahir', 'Alamat lengkap',
+                      'Apakah ada yang pernah atau sedang mengkonsumsi obat tuberkulosis dalam orang serumah?', 'Bulan',
+                      'IMT'], axis=1)
+    data_positive = data.loc[data['pernah/sedang TB'] == 'Ya'].copy()
+    # data_positive = data.copy()
+
+    # ============= DATA TRANSFORMATION ============== #
+    # preprocessing numerical
+
+    # scaler = StandardScaler()
+    # Num_features = data_positive.select_dtypes(include=['int64','float64']).columns
+    # scaler.fit(data_positive[Num_features])
+    # data_positive[Num_features] = scaler.transform(data_positive[Num_features])
+
+    # Num_features = data_positive.select_dtypes(include=['int64','float64']).columns
+    # data_positive[Num_features] = StandardScaler().fit_transform(data_positive[Num_features])
+
+    # ========== EXPAND COLUMN FOR EACH DAFTAR OPNAME DAN PENYAKIT LAIN ============ #
+
+    opname = data_positive["daftar opname"].explode().unique()
+    penyakit_lain = data_positive["daftar penyakit lain"].explode().unique()
+
+    for op in opname:
+        if op == 'TIDAK PERNAH':
+            continue
+        new_col = []
+        for row in data_positive['daftar opname']:
+            if op in row:
+                new_col.append('Ya')
+            else:
+                new_col.append('Tidak')
+        data_positive[op + ' (opname)'] = new_col
+        # data_positive[op + ' (opname)'] = data_positive[op + ' (opname)'].astype('object')
+
+    for peny in penyakit_lain:
+        if peny == 'TIDAK ADA':
+            continue
+        new_col = []
+        for row in data_positive['daftar penyakit lain']:
+            if peny in row:
+                new_col.append('Ya')
+            else:
+                new_col.append('Tidak')
+        data_positive[peny + ' (org serumah)'] = new_col
+        # data_positive[peny + ' (org serumah)'] = data_positive[peny + ' (org serumah)'].astype('object')
+
+    data_positive['Tahun'] = data_positive['Tahun'].astype('float')
+
+    ## Lowercase values of perkerjaan ayah and ibu columns
+    data_positive['Pekerjaan Ayah'] = data_positive['Pekerjaan Ayah'].str.lower()
+    data_positive['Pekerjaan Ibu'] = data_positive['Pekerjaan Ibu'].str.lower()
+
+    data_positive = data_positive.drop(['daftar opname', 'riwayat opname', 'pernah/sedang TB', 'daftar penyakit lain',
+                                        'daftar penyakit lain orang serumah', 'daftar penyakit opname',
+                                        'riwayat penyakit lain orang serumah'], axis=1)
+
+    data_positive = data_positive.loc[data_positive['Kab/Kota'].isin(['Makassar', 'Gowa'])]
+    data_positive['Total'] = data_positive['Tahun']
+
+    l = data_positive.columns
+
+    for i in l:
+        res = data_positive[i].value_counts(normalize=True) * 100
+        if res.iloc[0] >= 96:
+            del data_positive[i]
+        # print(res)
+
+    # =============== CREATE DICTIONARY FOR OBJECT AND NUMERICAL COLUMNS ================#
+    dict_cat = {}
+    dict_num = {}
+
+    for cat in data_positive.select_dtypes(['object', 'category']):
+        if (cat == 'Kecamatan'):
+            continue
+        dict_cat[cat] = lambda x: x.value_counts().index[0]
+
+    for num in data_positive.select_dtypes(['int64', 'float64']):
+        if (num == 'Total'):
+            continue
+        dict_num[num] = ['mean']
+
+    # ============ CREATE TABLE FOR EACH KECAMATAN ============#
+
+    data_perkecamatan = data_positive.groupby('Kecamatan').agg({
+
+        'Total': 'count',
+        **dict_num,
+        **dict_cat
+
+    })
+
+    riwayat_col = ['riwayat diabetes anak', 'riwayat vaksin BCG', 'ASI eksklusif', 'riwayat TB orang serumah',
+                   'riwayat diabetes keluarga', 'TIPOID (opname)', 'DEMAM (opname)', 'SESAK (opname)',
+                   'HIPERTENSI (org serumah)', 'ASMA (org serumah)', 'ASAM URAT (org serumah)']
+
+    for k in riwayat_col:
+        new_col = []
+        for i in data_perkecamatan.index:
+            total = 0
+            for j in data_positive.index:
+                if (i == data_positive['Kecamatan'][j] and data_positive[k][j] == 'Ya'):
+                    total = total + 1
+            new_col.append(total)
+
+        data_perkecamatan[k] = new_col
+
+    riwayat_col = ['Status Gizi']
+    for k in riwayat_col:
+        new_col = []
+        for i in data_perkecamatan.index:
+            total = 0
+            for j in data_positive.index:
+                if (i == data_positive['Kecamatan'][j] and data_positive[k][j] == 'Gizi baik'):
+                    total = total + 1
+            new_col.append(total)
+
+        data_perkecamatan['Status Gizi baik'] = new_col
+
+    for k in riwayat_col:
+        new_col = []
+        for i in data_perkecamatan.index:
+            total = 0
+            for j in data_positive.index:
+                if (i == data_positive['Kecamatan'][j] and (
+                        data_positive[k][j] == 'Berisiko gizi lebih' or data_positive[k][j] == 'Gizi lebih' or
+                        data_positive[k][j] == 'Obesitas')):
+                    total = total + 1
+            new_col.append(total)
+
+        data_perkecamatan['Status Gizi lebih'] = new_col
+
+    for k in riwayat_col:
+        new_col = []
+        for i in data_perkecamatan.index:
+            total = 0
+            for j in data_positive.index:
+                if (i == data_positive['Kecamatan'][j] and (
+                        data_positive[k][j] == 'Gizi kurang' or data_positive[k][j] == 'Gizi buruk')):
+                    total = total + 1
+            new_col.append(total)
+
+        data_perkecamatan['Status Gizi kurang'] = new_col
+
+    riwayat_col = ['sistem ventilasi']
+    for k in riwayat_col:
+        new_col = []
+        for i in data_perkecamatan.index:
+            total = 0
+            for j in data_positive.index:
+                if (i == data_positive['Kecamatan'][j] and data_positive[k][j] == 'Setiap ruangan terdapat ventilasi'):
+                    total = total + 1
+            new_col.append(total)
+
+        data_perkecamatan['Jumlah rumah dgn ventilasi di setiap ruangan'] = new_col
+
+    riwayat_col = ['Pendapatan Orang Tua']
+    for k in riwayat_col:
+        new_col = []
+        for i in data_perkecamatan.index:
+            total = 0
+            for j in data_positive.index:
+                if (i == data_positive['Kecamatan'][j] and data_positive[k][j] == '< 2.500.000'):
+                    total = total + 1
+            new_col.append(total)
+
+        data_perkecamatan['Pendapatan ( < 2.500.000 )'] = new_col
+
+    for k in riwayat_col:
+        new_col = []
+        for i in data_perkecamatan.index:
+            total = 0
+            for j in data_positive.index:
+                if (i == data_positive['Kecamatan'][j] and data_positive[k][j] == '2.500.000 - 5.000.000'):
+                    total = total + 1
+            new_col.append(total)
+
+        data_perkecamatan['Pendapatan ( 2.500.000 - 5.000.000 )'] = new_col
+
+    for k in riwayat_col:
+        new_col = []
+        for i in data_perkecamatan.index:
+            total = 0
+            for j in data_positive.index:
+                if (i == data_positive['Kecamatan'][j] and data_positive[k][j] == '5.000.001 - 10.000.000'):
+                    total = total + 1
+            new_col.append(total)
+
+        data_perkecamatan['Pendapatan ( 5.000.001 - 10.000.000 )'] = new_col
+
+    for k in riwayat_col:
+        new_col = []
+        for i in data_perkecamatan.index:
+            total = 0
+            for j in data_positive.index:
+                if (i == data_positive['Kecamatan'][j] and data_positive[k][j] == '> 10.000.000'):
+                    total = total + 1
+            new_col.append(total)
+
+        data_perkecamatan['Pendapatan ( > 10.000.000 )'] = new_col
+
+    riwayat_col = ['luas rumah']
+    for k in riwayat_col:
+        new_col = []
+        for i in data_perkecamatan.index:
+            total = 0
+            for j in data_positive.index:
+                if (i == data_positive['Kecamatan'][j] and data_positive[k][j] == '< 36 m^2'):
+                    total = total + 1
+            new_col.append(total)
+
+        data_perkecamatan['Luas rumah ( < 36 m^2 )'] = new_col
+
+    riwayat_col = ['luas rumah']
+    for k in riwayat_col:
+        new_col = []
+        for i in data_perkecamatan.index:
+            total = 0
+            for j in data_positive.index:
+                if (i == data_positive['Kecamatan'][j] and data_positive[k][j] == '36 - 54 m^2'):
+                    total = total + 1
+            new_col.append(total)
+
+        data_perkecamatan['Luas rumah ( 36 - 54 m^2 )'] = new_col
+
+    riwayat_col = ['luas rumah']
+    for k in riwayat_col:
+        new_col = []
+        for i in data_perkecamatan.index:
+            total = 0
+            for j in data_positive.index:
+                if (i == data_positive['Kecamatan'][j] and data_positive[k][j] == '54 - 120 m^2'):
+                    total = total + 1
+            new_col.append(total)
+
+        data_perkecamatan['Luas rumah ( 54 - 120 m^2 )'] = new_col
+
+    riwayat_col = ['luas rumah']
+    for k in riwayat_col:
+        new_col = []
+        for i in data_perkecamatan.index:
+            total = 0
+            for j in data_positive.index:
+                if (i == data_positive['Kecamatan'][j] and data_positive[k][j] == '> 120 m^2'):
+                    total = total + 1
+            new_col.append(total)
+
+        data_perkecamatan['Luas rumah ( > 120 m^2 )'] = new_col
+
+    data_perkecamatan = data_perkecamatan.droplevel(1, axis=1)
+    data_perkecamatan = data_perkecamatan.rename(columns={'Total': 'Jumlah TB'})
+
     # ============= READ ALL REQUIRED DATA ============== #
 
-    data_original = pd.read_csv('csv/perkecamatan.csv', index_col=0)
+    # data_original = pd.read_csv('csv/perkecamatan.csv', index_col=0)
 
-    data = data_original.copy()
+    data = data_perkecamatan.copy()
     data = data.rename(
         columns={'Status Gizi lebih': 'Persentase anak gizi lebih', 'Status Gizi kurang': 'Persentase anak gizi kurang',
                  'Status Gizi baik': 'Persentase anak gizi baik', 'Total': 'Jumlah TB',
@@ -29,7 +411,7 @@ def cluster(dataset):
                  'ASI eksklusif': 'Persentase anak dengan ASI eksklusif',
                  'riwayat TB orang serumah': 'Persentase kasus dengan riwayat TB serumah',
                  'riwayat diabetes keluarga': 'Persentase kasus dengan keluarga menderita diabetes'})
-    data.index = data.index + ' (' + data['Alamat (Kab/Kota)'] + ')'
+    data.index = data.index + ' (' + data['Kab/Kota'] + ')'
 
     # =========== CHANGE TO PERCENTAGE FORMAT =========== #
 

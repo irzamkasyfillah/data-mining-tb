@@ -218,7 +218,8 @@ async def do_cluster(background_task: BackgroundTasks):
 
     background_task.add_task(cluster, dataset)
     return {
-        'message': 'Running cluster...'
+        'message': 'Running cluster...',
+        'dataset': dataset
     }
 
 if __name__ == '__main__':
