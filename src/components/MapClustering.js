@@ -150,7 +150,7 @@ function PointMarker(props) {
         const position5 = resultKec5?.coord
 
         const ket_cluster1 = {
-            0: 'Rata-rata jumlah TB = 3, \nUsia = 3.51 tahun',
+            0: 'Rata-rata jumlah TB = 4, \nUsia = 3.51 tahun',
             1: 'Rata-rata jumlah TB = 22,\nUsia = 5.29 tahun',
             2: 'Rata-rata jumlah TB = 5, \nUsia = 8.04 tahun'
         }
@@ -848,7 +848,7 @@ const Map = (props) => {
                         }}>
 
                         </div>
-                        <div className="col-span-9" style={{color: 'white'}}>Jumlah TB kedua tertinggi, Usia tertua</div>
+                        <div className="col-span-9" style={{color: 'white'}}>Jumlah TB kedua terendah, Usia tertua</div>
                     </div>
                     <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[3])}>
                         <div className="col-span-1" style={{

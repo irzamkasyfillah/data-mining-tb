@@ -132,7 +132,7 @@ function Cluster() {
                                 Show All
                             </Button>
                         </div>
-                        <h2 className="ml-6 mt-1" style={{fontWeight: "bold", fontSize: 25}}> Daftar Kecamatan</h2>
+                        <h2 className="ml-2 mt-1" style={{fontWeight: "bold", fontSize: 25}}> Daftar Kecamatan</h2>
                         {generateKec()}
                     </div>
                 )}
