@@ -111,7 +111,7 @@ function Asosiasi() {
 
   useEffect(() => {
     handleGenListKota(inputText)
-  }, [inputText])
+  }, [inputText, data])
 
   const handleClick = (data, kec) => {
     setSelectedData(data)
