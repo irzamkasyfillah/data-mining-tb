@@ -17,7 +17,7 @@ export function AturanAsosiasi({modalData}) {
         return (
             <DataTable
                 columns={columns}
-                data={modalData.resultKec || []}
+                data={modalData || []}
             />
         );
 
