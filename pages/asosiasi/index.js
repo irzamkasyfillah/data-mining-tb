@@ -138,6 +138,8 @@ function Asosiasi() {
         }
       })
 
+      console.log("_TST",listKota);
+
     return Object.keys(listKota, filteredData).map(kota => (
       <div key={kota}>
         <h2 style={{fontWeight: "bold", fontSize: 20, margin: "4px 0px 0px 8px"}}>{kota}</h2>
