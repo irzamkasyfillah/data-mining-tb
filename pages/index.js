@@ -26,7 +26,6 @@ class Home extends React.Component {
     event.preventDefault()
     const data = new FormData()
     data.append("uploaded_file", files)
-    console.log(data)
     const req = fetch(`http://127.0.0.1:80/uploadfile/`, {
       method: "POST",
       body: data,
@@ -45,7 +44,6 @@ class Home extends React.Component {
       method: "GET",
     })
     .then((req) => {
-    console.log(req, req.json())
     return req.json()
     })
   }

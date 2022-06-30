@@ -227,3 +227,6 @@
 .hidden {
   visibility: hidden;
 }
+
+.leaflet-pane { z-index: 0 !important; }
+.leaflet-container {  z-index: 0 !important;  }

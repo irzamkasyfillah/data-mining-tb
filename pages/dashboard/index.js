@@ -25,7 +25,6 @@ function Asosiasi() {
       setLoading(true);
       const data = new FormData();
       data.append("uploaded_file", files);
-      console.log(data, "data");
       const req = fetch(`http://127.0.0.1:8080/uploadfile`, {
         method: "POST",
         body: data,
@@ -64,7 +63,6 @@ function Asosiasi() {
     })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data)
       setData(data)
       setLoading(false)
     // return req.json()
@@ -81,7 +79,6 @@ function Asosiasi() {
   //   })
   //     .then((res) => res.json())
   //     .then((data) => {
-  //       console.log(data);
   //       setLoading(false);
   //       // Router.push({
   //       //   pathname: "/asosiasi",
