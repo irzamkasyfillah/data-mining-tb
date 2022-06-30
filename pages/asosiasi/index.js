@@ -17,6 +17,7 @@ function Asosiasi() {
   const [center, setCenter] = useState(null);
   const [inputText, setInputText] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState({antecedent: "", consequent:"", resultKec: []})
 
   const Map = dynamic(
     () => import('../../src/components/MapAsosiasi'), // replace '@components/map' with your component's location
@@ -65,7 +66,7 @@ function Asosiasi() {
   }
 
   useEffect(() => {
-    handleGenerateData() 
+    handleGenerateData()
   }, [])
 
   const handleClick = (data, kec) => {
@@ -91,6 +92,10 @@ function Asosiasi() {
           const kota = getKota(kec, locations)
           const antecedent = resultKec?.antecedents?.join(', ')
           const consequent = resultKec?.consequents?.join(', ')
+
+          // Pass data to modal
+          setModalData({antecedent, consequent, resultKec})
+
           if (listkota[kota] === undefined) listkota[kota] = []
           listkota[kota].push(
             <div key={resultKec?.index} onClick={() => handleClick(resultKec, kec)}>
@@ -102,10 +107,10 @@ function Asosiasi() {
                 </div>
               )}/>
             </div>
-            
+
           )
         }
-        
+
       })
 
     const filteredData = Object.keys(listkota).filter((el) => {
@@ -124,10 +129,10 @@ function Asosiasi() {
         <h2 style={{fontWeight: "bold", fontSize: 20, margin: "4px 0px 0px 8px"}}>{kota}</h2>
         {listkota[kota]}
       </div>
-      
+
     ))
     }
-    
+
   }
 
   let inputHandler = (e) => {
@@ -145,7 +150,7 @@ function Asosiasi() {
     >
       <div className="grid grid-cols-4 gap-4">
         <div>
-          
+
             {data && (
             <div style={{height: '93vh', overflowY: 'auto'}}>
               <div className="justify-center items-center flex px-8 py-4">
@@ -170,12 +175,12 @@ function Asosiasi() {
               {generateKec(inputText)}
             </div>
           )}
-          
+
         </div>
         <div className='col-span-3'>
-          <Map 
-            data={data} 
-            selectedData={selectedData} 
+          <Map
+            data={data}
+            selectedData={selectedData}
             center={center || [-5.136143, 119.469370]}
             />
         </div>
@@ -202,7 +207,7 @@ function Asosiasi() {
               </div>
               {/*body*/}
               <div className="relative p-6 flex-auto">
-                <AturanAsosiasi data={data}/>
+                <AturanAsosiasi modalData={modalData}/>
               </div>
               {/*footer*/}
               <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
@@ -228,7 +233,7 @@ function Asosiasi() {
       </>
     ) : null}
   </>
-    
+
   )
 }
 

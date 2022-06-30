@@ -13,7 +13,8 @@ const data = [
     },
 ]
 
-export function AturanAsosiasi() {
+export function AturanAsosiasi({modalData}) {
+  console.log("_TST", modalData);
 
         const columns = [
             {
@@ -29,8 +30,8 @@ export function AturanAsosiasi() {
         return (
             <DataTable
                 columns={columns}
-                data={data}
+                data={modalData.resultKec || []}
             />
         );
-    
+
 };
