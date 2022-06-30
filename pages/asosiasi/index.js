@@ -18,6 +18,7 @@ function Asosiasi() {
   const [inputText, setInputText] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState([])
+  const [listKota, setListKota] = useState({})
 
   const Map = dynamic(
     () => import('../../src/components/MapAsosiasi'), // replace '@components/map' with your component's location
@@ -65,9 +66,52 @@ function Asosiasi() {
 
   }
 
+  const handleGenListKota = () => {
+    const result = data?.dict_kec_rules_location
+    if(result){
+    const sortedResult = Object.keys(result).sort()
+    const listkota = {}
+    const processedModalData = [];
+    sortedResult?.map(kec => {
+      if (!keyword || kec.toLowerCase().includes(keyword)) {
+        const resultKec = result[kec]
+        const kota = getKota(kec, locations)
+        const antecedent = resultKec?.antecedents?.join(', ')
+        const consequent = resultKec?.consequents?.join(', ')
+
+        processedModalData.push({antecedent, consequent, resultKec})
+
+        if (listkota[kota] === undefined) listkota[kota] = []
+        listkota[kota].push(
+          <div key={resultKec?.index} onClick={() => handleClick(resultKec, kec)}>
+            <Accordion title={kec} content={(
+              <div>
+                <p>Aturan Asosiasi yang terbentuk:</p>
+                <p>antecedent : {antecedent}</p>
+                <p>consequent : {consequent}</p>
+              </div>
+            )}/>
+          </div>
+
+        )
+      }
+
+    })
+
+    // Pass data to modal
+    setModalData(processedModalData)
+
+    setListKota(listkota)
+    }
+  }
+
   useEffect(() => {
     handleGenerateData()
   }, [])
+
+  useEffect(() => {
+    handleGenListKota(inputText)
+  }, [inputText])
 
   const handleClick = (data, kec) => {
     setSelectedData(data)
@@ -80,43 +124,10 @@ function Asosiasi() {
     return kota.split(',')[1]
   }
 
-  const generateKec = (keyword) => {
-    const locations = data?.locations
+  const generateKec = () => {
     const result = data?.dict_kec_rules_location
     if (result) {
-      const sortedResult = Object.keys(result).sort()
-      const listkota = {}
-      const processedModalData = [];
-      sortedResult?.map(kec => {
-        if (!keyword || kec.toLowerCase().includes(keyword)) {
-          const resultKec = result[kec]
-          const kota = getKota(kec, locations)
-          const antecedent = resultKec?.antecedents?.join(', ')
-          const consequent = resultKec?.consequents?.join(', ')
-
-          processedModalData.push({antecedent, consequent, resultKec})
-
-          if (listkota[kota] === undefined) listkota[kota] = []
-          listkota[kota].push(
-            <div key={resultKec?.index} onClick={() => handleClick(resultKec, kec)}>
-              <Accordion title={kec} content={(
-                <div>
-                  <p>Aturan Asosiasi yang terbentuk:</p>
-                  <p>antecedent : {antecedent}</p>
-                  <p>consequent : {consequent}</p>
-                </div>
-              )}/>
-            </div>
-
-          )
-        }
-
-      })
-
-      // Pass data to modal
-      setModalData(processedModalData)
-
-      const filteredData = Object.keys(listkota).filter((el) => {
+      const filteredData = Object.keys(listKota).filter((el) => {
         //if no input the return the original
         if (inputText === '') {
           return el;
@@ -127,10 +138,10 @@ function Asosiasi() {
         }
       })
 
-    return Object.keys(listkota, filteredData).map(kota => (
+    return Object.keys(listKota, filteredData).map(kota => (
       <div key={kota}>
         <h2 style={{fontWeight: "bold", fontSize: 20, margin: "4px 0px 0px 8px"}}>{kota}</h2>
-        {listkota[kota]}
+        {listKota[kota]}
       </div>
 
     ))
@@ -175,7 +186,7 @@ function Asosiasi() {
                   label="Search"
                 />
               </div>
-              {generateKec(inputText)}
+              {generateKec()}
             </div>
           )}
 
