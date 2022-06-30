@@ -66,7 +66,7 @@ function Asosiasi() {
 
   }
 
-  const handleGenListKota = () => {
+  const handleGenListKota = (keyword) => {
     const result = data?.dict_kec_rules_location
     if(result){
     const sortedResult = Object.keys(result).sort()
