@@ -92,11 +92,11 @@ function Asosiasi() {
               </div>
             )}/>
           </div>
-
         )
       }
-
     })
+
+    console.log("_TST genListKota",listkota, processedModalData);
 
     // Pass data to modal
     setModalData(processedModalData)
