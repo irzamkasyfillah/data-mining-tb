@@ -80,7 +80,7 @@ function Asosiasi() {
         const antecedent = resultKec?.antecedents?.join(', ')
         const consequent = resultKec?.consequents?.join(', ')
 
-        processedModalData.push({antecedent, consequent, resultKec})
+        processedModalData.push({ kec, aturan: antecedent + " berhubungan dengan " + consequent})
 
         if (listkota[kota] === undefined) listkota[kota] = []
         listkota[kota].push(
@@ -96,8 +96,6 @@ function Asosiasi() {
         )
       }
     })
-
-    console.log("_TST genListKota",listkota, processedModalData);
 
     // Pass data to modal
     setModalData(processedModalData)
@@ -138,8 +136,6 @@ function Asosiasi() {
           // return el.toLowerCase().includes(inputText)
         }
       })
-
-      console.log("_TST",listKota);
 
     return Object.keys(listKota, filteredData).map(kota => (
       <div key={kota}>
