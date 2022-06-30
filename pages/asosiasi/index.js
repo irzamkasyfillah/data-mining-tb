@@ -17,7 +17,7 @@ function Asosiasi() {
   const [center, setCenter] = useState(null);
   const [inputText, setInputText] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [modalData, setModalData] = useState({antecedent: "", consequent:"", resultKec: []})
+  const [modalData, setModalData] = useState([])
 
   const Map = dynamic(
     () => import('../../src/components/MapAsosiasi'), // replace '@components/map' with your component's location
@@ -86,6 +86,7 @@ function Asosiasi() {
     if (result) {
       const sortedResult = Object.keys(result).sort()
       const listkota = {}
+      const processedModalData = [];
       sortedResult?.map(kec => {
         if (!keyword || kec.toLowerCase().includes(keyword)) {
           const resultKec = result[kec]
@@ -93,8 +94,7 @@ function Asosiasi() {
           const antecedent = resultKec?.antecedents?.join(', ')
           const consequent = resultKec?.consequents?.join(', ')
 
-          // Pass data to modal
-          setModalData({antecedent, consequent, resultKec})
+          processedModalData.push({antecedent, consequent, resultKec})
 
           if (listkota[kota] === undefined) listkota[kota] = []
           listkota[kota].push(
@@ -113,16 +113,19 @@ function Asosiasi() {
 
       })
 
-    const filteredData = Object.keys(listkota).filter((el) => {
-      //if no input the return the original
-      if (inputText === '') {
+      // Pass data to modal
+      setModalData(processedModalData)
+
+      const filteredData = Object.keys(listkota).filter((el) => {
+        //if no input the return the original
+        if (inputText === '') {
           return el;
-      }
-      //return the item which contains the user input
-      else {
+        }
+        //return the item which contains the user input
+        else {
           // return el.toLowerCase().includes(inputText)
-      }
-    })
+        }
+      })
 
     return Object.keys(listkota, filteredData).map(kota => (
       <div key={kota}>
