@@ -3,6 +3,7 @@ import L from 'leaflet';
 import {MapContainer, Marker, Polygon, Popup, TileLayer} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import Legend from "./Legend"
+import Legend2 from "./Legend2"
 
 let DefaultIcon = L.icon({
     iconUrl: 'icons/marker-icon.png',
@@ -18,7 +19,7 @@ function PointsLayer(props) {
     const highest_kec = JSON.parse(highest_kec_json)
     const opacities = [0.9, 0.75, 0.6, 0.45, 0.3, 0.15]
     let current_opacities_index = 0
-    
+
     return Object.keys(result)?.map((kec) => {
         const resultKec = result[kec]
         const index = resultKec?.index
@@ -50,16 +51,10 @@ function PointsLayer(props) {
         let fillOpacity = 0.1
         if (Object.keys(fillOpacities).includes(kec)) {
             fillOpacity = fillOpacities[kec]
-        }
-        // const list_highest_kec = highest_kec.keys()
-        // if (list_highest_kec.includes(kec)) {
-        //     fillOpacity = opacities[current_opacities_index]
-        //     current_opacities_index = highest_kec[kec]
-        // }    
+        }   
         const pathOptions = { fillColor: 'red', fillOpacity: fillOpacity }
 
         return (
-            // resultKec?.polygons?.type === "Polygon" ?
             <PolygonMarker className={`polygon-marker ${index} hidden`} pathOptions={pathOptions} positions={polygon} 
                 content={(
                     <>
@@ -67,34 +62,15 @@ function PointsLayer(props) {
                         <div>
                             <p style={{margin: "0px 0", fontSize: "13px"}}>Aturan Asosiasi yang terbentuk:</p>
                             <p style={{margin: "0px 0", fontSize: "13px"}}>{antecedent}, berhubungan dengan {consequent}</p>
-                            {/* <p style={{margin: "10px 0"}}>{consequent}</p> */}
                         </div>
                     </>
                 )}
                 openPopup={selectedIndex === index}
                 selectedItem={selectedIndex}
             />
-
-
-            // <PointMarker
-            //     key={index}
-            //     content={(
-            //         <>
-            //             <p style={{fontWeight: "bold", fontSize: "16px"}}>{kec}</p>
-            //             <div>
-            //                 <p style={{margin: "0px 0", fontSize: "13px"}}>Penyebab Tuberkulosis pada Anak adalah</p>
-            //                 <p style={{margin: "0px 0", fontSize: "13px"}}>{antecedent}, berhubungan dengan {consequent}</p>
-            //                 {/* <p style={{margin: "10px 0"}}>{consequent}</p> */}
-            //             </div>
-            //         </>
-            //     )}
-            //     position={position}
-            //     openPopup={selectedIndex === index}
-            // />
         )
     });
 }
-
 
 
 function PolygonMarker(props) {
@@ -162,6 +138,9 @@ const Map = (props) => {
             }
             {
                 data && <Legend map={map} data={data} />
+            }
+            {
+                data && <Legend2 map={map} data={data} />
             }
              
         </MapContainer>

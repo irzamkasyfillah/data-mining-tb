@@ -27,7 +27,6 @@ function Legend({ map, data}) {
         div.innerHTML = content;
         return div;
       };
-
       legend.addTo(map);
     }
   }, [map]);

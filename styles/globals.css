@@ -204,6 +204,7 @@
 .info h4 {
   margin: 0 0 5px;
   color: #777;
+  margin-bottom: 10px;
 }
 
 .legend {
@@ -218,6 +219,12 @@
   float: left;
   margin-right: 8px;
   opacity: 0.7;
+}
+
+.info.legend.color {
+  width: 280px;
+  font-size: 15px;
+  margin-bottom: 25px;
 }
 
 .visible {

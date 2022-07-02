@@ -29,18 +29,6 @@ function Asosiasi() {
     setLoading(true)
     const dataExist = localStorage.getItem("result")
      if (!dataExist) {
-      //  const data = JSON.parse(dataExist)
-      //  const result = data?.dict_kec_rules_location
-
-      //   const markers = Object.keys(result)?.map(kec => {
-      //     const resultKec = result[kec]
-      //     return [resultKec?.lat, resultKec?.long]
-      //   })
-      //   setData(data)
-      //   setMarkers(markers)
-    //     setLoading(false)
-    // } else {
-
       const req = fetch(`http://127.0.0.1:8080/asosiasi`, {
         method: "GET",
       })
@@ -54,12 +42,10 @@ function Asosiasi() {
           const markers = Object.keys(result)?.map(kec => {
             const resultKec = result[kec]
             return [resultKec?.lat, resultKec?.long]
-            // return resultKec?.polygons?.coordinates
           })
 
           setMarkers(markers)
           setLoading(false)
-        // return req.json()
         }
       })
     }
