@@ -6,7 +6,8 @@ class Data(Base):
     __tablename__ = "data"
 
     id = Column(Integer, primary_key=True, index=True)
-    code = Column(String(255), unique=True, index=True)
+    # code = Column(String(255), unique=True, index=True)
+    code = Column(String(255))
     timestamp = Column(String(255))
     tanggal_lahir = Column(String(255))
     umur = Column(String(255))

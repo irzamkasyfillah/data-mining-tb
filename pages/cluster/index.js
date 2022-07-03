@@ -18,7 +18,7 @@ function Cluster() {
         {ssr: false} // This line is important. It's what prevents server-side render
     )
 
-    const handleGenerateData = () => {
+    const handleGenerateData = async () => {
         const dataExist = localStorage.getItem("result2")
         // console.log("tes")
         // console.log(router?.query, reg)
@@ -28,13 +28,12 @@ function Cluster() {
             //     setLoading(false)
             // } else {
             setLoading(true);
-            const req = fetch(`http://127.0.0.1:8080/cluster`, {
+            const req = await fetch(`http://127.0.0.1:8080/cluster`, {
                 method: "GET",
             })
                 .then((res) => res.json())
                 .then((data) => {
                     // localStorage.setItem("result2", JSON.stringify(data))
-
                     if (data) {
                         setData(data)
                         setLoading(false)
@@ -42,6 +41,7 @@ function Cluster() {
                         setReg(false)
                     }
                 })
+            // router.reload(window.location.pathname)
         }
     }
 
