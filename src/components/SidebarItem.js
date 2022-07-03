@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 const SidebarItem = ({ icon, label, hide, item, href, setOpen = () => {} }) => {
   const router = useRouter();
-  const active = router.asPath === href;
+  const active = router.asPath.includes(href);
   if (item && item.length > 0) {
     return (
       <SidebarDropdown

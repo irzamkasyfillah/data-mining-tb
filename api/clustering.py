@@ -1,22 +1,20 @@
-import re
-
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from geopy.geocoders import Nominatim
-from sklearn.metrics import silhouette_score
-from sklearn.cluster import KMeans
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import StandardScaler
-
+import re
 from data import Data
+from geopy.geocoders import Nominatim
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+from sklearn.preprocessing import StandardScaler
 
 
 def cluster(dataset):
     # df_original = pd.read_csv('csv/Dataset TB anak.csv')
     df_original = pd.read_csv(dataset)
 
-    data_status_gizi_laki = pd.read_csv('./csv/status_gizi_laki.csv',header=1)
-    data_status_gizi_perempuan = pd.read_csv('./csv/status_gizi_perempuan.csv',header=1)
+    data_status_gizi_laki = pd.read_csv('./csv/status_gizi_laki.csv', header=1)
+    data_status_gizi_perempuan = pd.read_csv('./csv/status_gizi_perempuan.csv', header=1)
 
     data = df_original.copy()
     data = data.rename(columns={'Alamat (mohon sertakan nama kelurahan dan kecamatan)': 'Alamat lengkap',
@@ -82,10 +80,10 @@ def cluster(dataset):
         def count_z(idx):
             if (imt > status_gender['Median'][idx[0]]):
                 z = (imt - status_gender['Median'][idx[0]]) / (
-                            status_gender['+1 SD'][idx[0]] - status_gender['Median'][idx[0]])
+                        status_gender['+1 SD'][idx[0]] - status_gender['Median'][idx[0]])
             else:
                 z = (imt - status_gender['Median'][idx[0]]) / (
-                            status_gender['Median'][idx[0]] - status_gender['-1 SD'][idx[0]])
+                        status_gender['Median'][idx[0]] - status_gender['-1 SD'][idx[0]])
             return z
 
         if jenis_kelamin == 'Laki - laki':
@@ -496,6 +494,25 @@ def cluster(dataset):
 
     # ======  COUNT LOGITUDE AND LATITUDE FOR ALL KECAMATAN =======#
 
+    # alamat = []
+    # for i in cluster1.index:
+    #     splitted = i.split(' (')
+    #     alamat.append(splitted[0] + ' ' + splitted[1][:-1])
+    #
+    # geolocator = Nominatim(user_agent="tes")
+    # coord = []
+    #
+    # for i in range(0, len(alamat)):
+    #     loc = alamat[i]
+    #     location = geolocator.geocode(loc, timeout=None)
+    #     if location != None:
+    #         m = 0.0025
+    #         coord.append([[location.latitude, location.longitude], [location.latitude + m, location.longitude + m],
+    #                       [location.latitude + m, location.longitude - m],
+    #                       [location.latitude - m, location.longitude + m],
+    #                       [location.latitude - m, location.longitude - m]])
+    #         print(loc)
+
     alamat = []
     for i in cluster1.index:
         splitted = i.split(' (')
@@ -507,7 +524,7 @@ def cluster(dataset):
     for i in range(0, len(alamat)):
         loc = alamat[i]
         location = geolocator.geocode(loc, timeout=None)
-        if location != None:
+        if location is not None:
             m = 0.0025
             coord.append([[location.latitude, location.longitude], [location.latitude + m, location.longitude + m],
                           [location.latitude + m, location.longitude - m],
