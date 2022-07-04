@@ -10,7 +10,8 @@ data = Table(
     "data",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("code", String(255), unique=True, index=True),
+    # Column("code", String(255), unique=True, index=True),
+    Column("code", String(255)),
     Column("timestamp", String(255)),
     Column("tanggal_lahir", String(255)),
     Column("umur", String(255)),
@@ -42,12 +43,10 @@ data = Table(
 
 )
 
-
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL
 )
 metadata.create_all(engine)
-
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
