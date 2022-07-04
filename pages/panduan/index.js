@@ -27,6 +27,7 @@ function Panduan() {
             // headers: {'Content-type': 'application/json'},
             body: JSON.stringify(data),
         })
+
         // Router.push("/dashboard")
         // }
     };
