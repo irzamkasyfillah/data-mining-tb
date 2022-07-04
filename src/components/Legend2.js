@@ -16,7 +16,7 @@ function Legend({ map, data}) {
           ? "#ff4c4c"
           : d > 5
           ? "#ff6666"
-          : "#ffb2b2";
+          : "#ffb2b2";                          
       };
 
       // test

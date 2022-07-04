@@ -25,12 +25,20 @@ const navitem = [
         href: "/cluster",
         main: true,
     },
+    // {
+    //     icon: "/icons/event-icon",
+    //     label: "Panduan",
+    //
+    //     href: "/panduan",
+    //     main: true,
+    // },
 ];
 
 const MainLayout = ({children}) => {
     const [open, setOpen] = useState(false);
     return (
         <>
+
             <div
                 style={{zIndex: 9999}}
                 className={`fixed md:flex ${
@@ -74,7 +82,7 @@ const MainLayout = ({children}) => {
                 </div>
             </div>
             <nav
-                style={{zIndex:99999}}
+                style={{zIndex: 99999}}
                 className={`bg-[#343A40] w-full ${
                     open
                         ? "h-screen  md:fixed md:w-72"
@@ -106,18 +114,18 @@ const MainLayout = ({children}) => {
                     </div>
                 </div>
 
-                    {navitem.map(({icon, label, item, main, href}) => (
-                        <SidebarItem
-                            icon={icon}
-                            label={label}
-                            key={label}
-                            hide={!open}
-                            item={item}
-                            main={main}
-                            href={href}
-                            setOpen={setOpen}
-                        />
-                    ))}
+                {navitem.map(({icon, label, item, main, href}) => (
+                    <SidebarItem
+                        icon={icon}
+                        label={label}
+                        key={label}
+                        hide={!open}
+                        item={item}
+                        main={main}
+                        href={href}
+                        setOpen={setOpen}
+                    />
+                ))}
 
             </nav>
 
@@ -129,7 +137,8 @@ const MainLayout = ({children}) => {
                 {children}
             </main>
         </>
-    );
+    )
+        ;
 };
 
 export function withMainLayout(Component) {
