@@ -748,16 +748,16 @@ const Map = (props) => {
         Router.reload()
     };
 
-    function getColor(d) {
-        return (
-            // d > 20 ? '#800026' :
-            d > 20 ? '#BD0026' :
+    const getColor = d => {
+        return  d > 25 ? '#800026' :
+                d > 20 ? '#BD0026' :
                 d > 15 ? '#E31A1C' :
-                    d > 10 ? '#FC4E2A' :
-                        d > 5 ? '#FD8D3C' :
-                            // d > 1 ? '#FEB24C' :
-                            d > 1 ? '#FED976' :
-                                '#FFEDA0');
+                d > 10 ? '#FC4E2A' :
+                d > 5 ? '#FD8D3C' :
+                '#FED976';
+            // d > 1 ? '#FEB24C' :
+            // d > 1 ? '#FED976' :
+            // '#FFEDA0');
     }
 
     return (
@@ -777,8 +777,11 @@ const Map = (props) => {
                         {
                             Object.keys(statesData).map((state) => {
                                 let jumlah_kasus = 0
+                                let split_state = state.split(' ')
+                                split_state.splice(-1)
+                                let no_kota = split_state.join(' ')
                                 for (let k in kec) {
-                                    if (state.includes(k.split(' (')[0])) {
+                                    if (no_kota == k.split(' (')[0]) {
                                         jumlah_kasus = kec[k]['Jumlah TB']
                                         continue
                                     }

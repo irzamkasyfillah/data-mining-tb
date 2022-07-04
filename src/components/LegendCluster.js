@@ -5,24 +5,37 @@ function Legend({map}) {
     console.log(map);
     useEffect(() => {
         if (map) {
-            let content = (`
-                    <div className="col-span-1" style={{
-                            color: '#ff0074',
-                            backgroundColor: '#ff0074',
-                            padding: 5,
-                            borderRadius: 50,
-                            width: '25px',
-                            height: '25px'
-                        }}>
-                    </div>
-                    Ini map legend
-            `)
-
+            const getColor = d => {
+                return  d > 25 ? '#800026' :
+                        d > 20 ? '#BD0026' :
+                        d > 15 ? '#E31A1C' :
+                        d > 10 ? '#FC4E2A' :
+                        d > 5 ? '#FD8D3C' :
+                        '#FED976';
+            };
             const legend = L.control({position: "bottomright"});
 
             legend.onAdd = () => {
-                const div = L.DomUtil.create("div", "info2 legend");
-                div.innerHTML = content;
+                const div = L.DomUtil.create("div", "info legend color");
+
+                const grades = [1, 5, 10, 15, 20, 25];
+                let labels = [];
+                let from;
+                let to;
+                for (let i = 0; i < grades.length; i++) {
+                    from = i == 0 ? grades[i] : grades[i]+1;
+                    to = grades[i + 1];
+
+                    labels.push(
+                        '<i style="background:' +
+                        getColor(from + 1) +
+                        '"></i> ' +
+                        from +
+                        (to ? "&ndash;" + to : "+")
+                    );
+                }
+
+                div.innerHTML = labels.join("<br>");
                 return div;
             };
 
