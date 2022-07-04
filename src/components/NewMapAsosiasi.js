@@ -13,6 +13,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
 // function GenerateMarkers(data) {
 //     const result = data?.dict_kec_rules_location
 
+//     console.log("data", data)
 //     return Object.keys(result)?.map(kec => {
 //         const resultKec = result[kec]
 //         const index = resultKec?.index
@@ -43,10 +44,12 @@ L.Marker.prototype.options.icon = DefaultIcon;
 //     useEffect(() => {
 //         const center = [selectedData?.lat, selectedData?.long]
 //         markerRef.current = markerRef.current.slice(0, data?.length);
+//         console.log("center", center, markerRef.current)
 //         setCenter(center)
 //     }, [data])
 
 //     const bindMarker = (ref, id) => {
+//         console.log("ref", markerRef, id)
 //         markerRefs[id] = ref
 //     }
 
@@ -128,6 +131,7 @@ function PointsList(props) {
     function handleItemClick(index) {
       setSelected(index);
     }
+    console.log(data)
   
     return (
       <div>

@@ -154,6 +154,7 @@ def preprocessing(dataset):
 
 def coordinate(df):
     df['location'] = df[[
+                        # 'Alamat (Kelurahan)',
                         'Kecamatan',
                         'Kab/Kota']].agg(','.join, axis=1)
     coord = df['location'].apply(lambda x: x.split(','))
@@ -162,24 +163,18 @@ def coordinate(df):
     # print(geolocator)
 
     keckota = []
-    polygons = {}
     loc = []
-    for i, j in enumerate(coord):
-        keckota_item = ','.join(str(x) for x in j)
-        keckota.append(keckota_item)
-        location = geolocator.geocode(keckota_item, geometry='geojson', timeout=None)
+    for i in coord:
+        keckota.append(','.join(str(x) for x in i))
+        location = geolocator.geocode(i, timeout=None)
         # print(location)
         if location != None:
             loc.append([location.address, location.latitude, location.longitude])
-            geometry = location.raw['geojson']
-            # geometry = geometry if len(geometry['type']) > 1 else geometry[0]
-            kec_name = [str(x) for x in j][0]
-            polygons[kec_name] = geometry
             # print(location.latitude, location.longitude)
 
     locations = pd.DataFrame(loc, columns=['address', 'lat', 'long'])
 
-    return locations, geolocator, polygons, keckota
+    return locations, geolocator, loc, keckota
 
 
 def transform(data_array, sparse=False):
@@ -562,7 +557,7 @@ def getKecamatandict(list_kec, data_array):
     return dict_kec
 
 
-def visualisation(dict_kec, rules, locations, polygons):
+def visualisation(dict_kec, rules, locations):
     dict_kec_rules = {}
 
     for i, kec in enumerate(dict_kec):
@@ -601,7 +596,6 @@ def visualisation(dict_kec, rules, locations, polygons):
     dict_kec_rules_location = {}
     for kec in dict_kec_rules:
         location = locations[locations['address'].str.contains(kec)]
-        polygon = polygons.get(kec)
 
         if not location.empty:
             dict_kec_rules_location[kec] = {
@@ -614,8 +608,7 @@ def visualisation(dict_kec, rules, locations, polygons):
                 "confidence": dict_kec_rules[kec]['confidence'],
                 "lift": dict_kec_rules[kec]['lift'],
                 "lat": location['lat'].iloc[0],
-                "long": location['long'].iloc[0],
-                "polygons": polygon
+                "long": location['long'].iloc[0]
             }
 
     return dict_kec_rules_location
@@ -665,14 +658,14 @@ def getKecamatan_highest(dict_kec, highest_kec_name):
 
 def asosiasi(dataset, min_support=0.35, min_threshold=0.9):
     df, data_array = preprocessing(dataset)
-    locations, geolocator, polygons, keckota = coordinate(df)
+    locations, geolocator, loc, keckota = coordinate(df)
     data_all = transform(data_array)
     frequent_pattern = fpgrowth(data_all, min_support)
     rules2 = get_rules(frequent_pattern, 'confidence', min_threshold)
     rules = rules2[rules2.lift > 1]
     list_kec = getKecamatan(df)
     dict_kec = getKecamatandict(list_kec, data_array)
-    dict_kec_rules_location = visualisation(dict_kec, rules, locations, polygons)
+    dict_kec_rules_location = visualisation(dict_kec, rules, locations)
 
     #cross asosiasi
     highest_kec, data_array2, highest_kec_name = count_highest(df)
@@ -681,7 +674,7 @@ def asosiasi(dataset, min_support=0.35, min_threshold=0.9):
     cross_rules = get_rules(frequent_pattern2, 'confidence', min_threshold)
     cross_assosiasi = cross_rules[cross_rules.lift > 1]
     dict_kec_highest = getKecamatan_highest(dict_kec, highest_kec_name)
-    highest_rules = visualisation(dict_kec_highest, cross_assosiasi, locations, polygons)
+    highest_rules = visualisation(dict_kec_highest, cross_assosiasi, locations)
 
     list_antecedents = []
     list_consequents = []
