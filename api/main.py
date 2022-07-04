@@ -370,7 +370,7 @@ async def do_cluster():
 
 
 @app.post("/run_cluster")
-async def do_cluster(background_task: BackgroundTasks):
+async def do_cluster(background_task: BackgroundTasks, db: Session = Depends(get_db)):
     if os.path.exists("./result/cluster1_result.json"):
         os.remove("./result/cluster1_result.json")
     if os.path.exists("./result/cluster1_df.json"):
@@ -392,10 +392,12 @@ async def do_cluster(background_task: BackgroundTasks):
     if os.path.exists("./result/cluster5_df.json"):
         os.remove("./result/cluster5_df.json")
 
-    background_task.add_task(cluster, dataset)
+    data = db.query(Data).all()
+    # background_task.add_task(cluster, dataset)
+    background_task.add_task(cluster, data)
     return {
         'message': 'Running cluster...',
-        'dataset': dataset
+        'data': data
     }
 
 

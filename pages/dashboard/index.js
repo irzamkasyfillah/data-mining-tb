@@ -10,6 +10,8 @@ function Asosiasi() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+
 
     // Callback~
     const getFiles = (file) => {
@@ -66,6 +68,7 @@ function Asosiasi() {
             method: "DELETE"
         })
         fetchData()
+        setShowModal(false)
     };
 
     const fetchData = async () => {
@@ -138,7 +141,7 @@ function Asosiasi() {
                         <div
                             className="bg-white rounded-md shadow-lg max-w-full dasboardTable overflow-x-auto overflow-y-hidden">
                             <div className="text-center justify-items-center items w-full font-semibold mt-3 mb-2">
-                              DATASET TUBERKULOSIS PADA ANAK
+                                DATASET TUBERKULOSIS PADA ANAK
                             </div>
                             <hr/>
                             <button
@@ -150,11 +153,59 @@ function Asosiasi() {
                             </button>
                             <button
                                 type="button"
-                                onClick={handleDeleteAllData}
+                                onClick={() => setShowModal(true)}
                                 className="mt-2 mr-4 mb-4 bg-red-500 hover:bg-red-700 text-white font-bold text-sm py-2 px-4 my-1 rounded float-right"
                             >
                                 Delete All Data
                             </button>
+                            {showModal ? (
+                                <>
+                                    <div
+                                        className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-[1000] outline-none focus:outline-none"
+                                    >
+                                        <div className="relative w-auto my-6 mx-auto max-w-6xl">
+                                            {/*content*/}
+                                            <div
+                                                className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                                                {/*header*/}
+                                                <div
+                                                    className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                                                    <p className="text-lg font-semibold">
+                                                        Konfirmasi Hapus Data
+                                                    </p>
+                                                </div>
+                                                {/*body*/}
+                                                <div style={{maxHeight: 400, overflowY: "auto", overflowX: "auto"}}
+                                                     className="table-modal relative p-6 flex-auto m-2 text-sm">
+                                                    <p>
+                                                        Apakah Anda yakin ingin menghapus semua data?
+                                                    </p>
+
+                                                </div>
+                                                {/*footer*/}
+                                                <div
+                                                    className="flex items-center justify-center p-6 border-t border-solid border-slate-200 rounded-b">
+                                                    <button
+                                                        className="mr-4 text-white rounded bg-blue-500 hover:bg-blue-700 background-transparent uppercase px-6 py-2 text-xsm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                                        type="button"
+                                                        onClick={() => setShowModal(false)}
+                                                    >
+                                                        Tutup
+                                                    </button>
+                                                    <button
+                                                        className="text-white rounded bg-red-500 hover:bg-red-700 background-transparent uppercase px-6 py-2 text-xsm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                                        type="button"
+                                                        onClick={handleDeleteAllData}
+                                                    >
+                                                        Hapus
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                                </>
+                            ) : null}
                             <DashboardTable data={data}/>
                         </div>
                     </div>
