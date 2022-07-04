@@ -19,6 +19,7 @@ function Legend({ map, data}) {
           : "#ffb2b2";                          
       };
 
+      // test
       const legend = L.control({ position: "bottomleft" });
 
       legend.onAdd = () => {
