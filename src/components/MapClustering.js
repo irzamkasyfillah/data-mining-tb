@@ -1,10 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import L from 'leaflet';
-import {CircleMarker, MapContainer, Popup, TileLayer} from 'react-leaflet'
+import {CircleMarker, MapContainer, Polygon, Popup, TileLayer} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import {Button} from 'react-bootstrap'
 import LoadingOverlay from 'react-loading-overlay';
 import Router from "next/router";
+import {statesData} from '../../api/result/data_kecamatan'
+import Legend from "./LegendCluster"
+import LegendClusterTop from "./LegendClusterTop"
+
 
 let DefaultIcon = L.icon({
     iconUrl: 'icons/marker-icon.png',
@@ -32,318 +36,278 @@ function PointMarker(props) {
     const coord4 = data?.cluster4_df
     const coord5 = data?.cluster5_df
 
+    const res1 = data?.cluster1_result
+    const res2 = data?.cluster2_result
+    const res3 = data?.cluster3_result
+    const res4 = data?.cluster4_result
+    const res5 = data?.cluster5_result
+
     console.log(data)
     return Object.keys(coord1)?.map((kec) => {
         console.log("selectedData", selectedData, selectedData == kec.split(' (')[0])
         if (!selectedData || (selectedData && selectedData == kec.split(' (')[0])) {
             const [showModal, setShowModal] = React.useState(false);
-        const handleClose = () => setShow(false);
-        const handleShow = () => setShow(true);
+            const handleClose = () => setShow(false);
+            const handleShow = () => setShow(true);
 
-        const resultKec1 = coord1[kec]
-        const resultKec2 = coord2[kec]
-        const resultKec3 = coord3[kec]
-        const resultKec4 = coord4[kec]
-        const resultKec5 = coord5[kec]
+            const resultKec1 = coord1[kec]
+            const resultKec2 = coord2[kec]
+            const resultKec3 = coord3[kec]
+            const resultKec4 = coord4[kec]
+            const resultKec5 = coord5[kec]
 
-        let color_cluster1 = ''
-        const all_color_cluster1 = ['#a70000', '#ff7400', '#ff7b7b']
-        switch (resultKec1['Total']) {
-            case 0:
-                color_cluster1 = all_color_cluster1[0];
-                break
-            case 1:
-                color_cluster1 = all_color_cluster1[1];
-                break
-            case 2:
-                color_cluster1 = all_color_cluster1[2];
-                break
-            default :
-                color_cluster1 = all_color_cluster1[0];
-                break
-        }
+            let color_cluster1 = ''
+            const all_color_cluster1 = ['#a70000', '#ff7400', '#ff7b7b']
+            switch (resultKec1['Total']) {
+                case 0:
+                    color_cluster1 = all_color_cluster1[0];
+                    break
+                case 1:
+                    color_cluster1 = all_color_cluster1[1];
+                    break
+                case 2:
+                    color_cluster1 = all_color_cluster1[2];
+                    break
+                default :
+                    color_cluster1 = all_color_cluster1[0];
+                    break
+            }
 
-        let color_cluster2 = ''
-        const all_color_cluster2 = ['#0f5e9c', '#9D5C0D']
-        switch (resultKec2['Total']) {
-            case 0:
-                color_cluster2 = all_color_cluster2[0];
-                break
-            case 1:
-                color_cluster2 = all_color_cluster2[1];
-                break
-            default :
-                color_cluster2 = all_color_cluster2[0];
-                break
-        }
+            let color_cluster2 = ''
+            const all_color_cluster2 = ['#0f5e9c', '#9D5C0D']
+            switch (resultKec2['Total']) {
+                case 0:
+                    color_cluster2 = all_color_cluster2[0];
+                    break
+                case 1:
+                    color_cluster2 = all_color_cluster2[1];
+                    break
+                default :
+                    color_cluster2 = all_color_cluster2[0];
+                    break
+            }
 
-        let color_cluster3 = ''
-        const all_color_cluster3 = ['#063b00', '#854442', '#089000', '#be9b7b', '#0eff00']
-        switch (resultKec3['Total']) {
-            case 0:
-                color_cluster3 = all_color_cluster3[0];
-                break
-            case 1:
-                color_cluster3 = all_color_cluster3[1];
-                break
-            case 2:
-                color_cluster3 = all_color_cluster3[2];
-                break
-            case 3:
-                color_cluster3 = all_color_cluster3[3];
-                break
-            case 4:
-                color_cluster3 = all_color_cluster3[4];
-                break
-            default :
-                color_cluster3 = all_color_cluster3[0];
-                break
-        }
+            let color_cluster3 = ''
+            const all_color_cluster3 = ['#063b00', '#854442', '#089000', '#be9b7b', '#0eff00']
+            switch (resultKec3['Total']) {
+                case 0:
+                    color_cluster3 = all_color_cluster3[0];
+                    break
+                case 1:
+                    color_cluster3 = all_color_cluster3[1];
+                    break
+                case 2:
+                    color_cluster3 = all_color_cluster3[2];
+                    break
+                case 3:
+                    color_cluster3 = all_color_cluster3[3];
+                    break
+                case 4:
+                    color_cluster3 = all_color_cluster3[4];
+                    break
+                default :
+                    color_cluster3 = all_color_cluster3[0];
+                    break
+            }
 
-        let color_cluster4 = ''
-        const all_color_cluster4 = ['#a98600', '#535353', '#e9d700', '#f8ed62', '#fff9ae']
-        switch (resultKec4['Total']) {
-            case 0:
-                color_cluster4 = all_color_cluster4[0];
-                break
-            case 1:
-                color_cluster4 = all_color_cluster4[1];
-                break
-            case 2:
-                color_cluster4 = all_color_cluster4[2];
-                break
-            case 3:
-                color_cluster4 = all_color_cluster4[3];
-                break
-            case 4:
-                color_cluster4 = all_color_cluster4[4];
-                break
-            default :
-                color_cluster4 = all_color_cluster4[0];
-                break
-        }
+            let color_cluster4 = ''
+            const all_color_cluster4 = ['#a98600', '#535353', '#e9d700', '#f8ed62', '#fff9ae']
+            switch (resultKec4['Total']) {
+                case 0:
+                    color_cluster4 = all_color_cluster4[0];
+                    break
+                case 1:
+                    color_cluster4 = all_color_cluster4[1];
+                    break
+                case 2:
+                    color_cluster4 = all_color_cluster4[2];
+                    break
+                case 3:
+                    color_cluster4 = all_color_cluster4[3];
+                    break
+                case 4:
+                    color_cluster4 = all_color_cluster4[4];
+                    break
+                default :
+                    color_cluster4 = all_color_cluster4[0];
+                    break
+            }
 
-        let color_cluster5 = ''
-        const all_color_cluster5 = ['#660066', '#ee1515', '#8E3200', '#ff0074']
-        switch (resultKec5['Total']) {
-            case 0:
-                color_cluster5 = all_color_cluster5[0];
-                break
-            case 1:
-                color_cluster5 = all_color_cluster5[1];
-                break
-            case 2:
-                color_cluster5 = all_color_cluster5[2];
-                break
-            case 3:
-                color_cluster5 = all_color_cluster5[3];
-                break
-            default :
-                color_cluster5 = all_color_cluster5[0];
-                break
-        }
+            let color_cluster5 = ''
+            const all_color_cluster5 = ['#660066', '#ee1515', '#8E3200', '#ff0074']
+            switch (resultKec5['Total']) {
+                case 0:
+                    color_cluster5 = all_color_cluster5[0];
+                    break
+                case 1:
+                    color_cluster5 = all_color_cluster5[1];
+                    break
+                case 2:
+                    color_cluster5 = all_color_cluster5[2];
+                    break
+                case 3:
+                    color_cluster5 = all_color_cluster5[3];
+                    break
+                default :
+                    color_cluster5 = all_color_cluster5[0];
+                    break
+            }
 
-        const position1 = resultKec1?.coord
-        const position2 = resultKec2?.coord
-        const position3 = resultKec3?.coord
-        const position4 = resultKec4?.coord
-        const position5 = resultKec5?.coord
+            const position1 = resultKec1?.coord
+            const position2 = resultKec2?.coord
+            const position3 = resultKec3?.coord
+            const position4 = resultKec4?.coord
+            const position5 = resultKec5?.coord
 
-        const ket_cluster1 = {
-            0: 'Rata-rata jumlah TB = 4, \nUsia = 3.51 tahun',
-            1: 'Rata-rata jumlah TB = 22,\nUsia = 5.29 tahun',
-            2: 'Rata-rata jumlah TB = 5, \nUsia = 8.04 tahun'
-        }
+            const ket_cluster1 = {
+                0: 'Rata-rata jumlah TB = ' + Math.round(res1['First']['(\'Jumlah TB\', \'mean\')']) + ', \nUsia = ' + Math.round(res1['First']['(\'Usia (mean)\', \'mean\')']) + ' tahun',
+                1: 'Rata-rata jumlah TB = ' + Math.round(res1['Second']['(\'Jumlah TB\', \'mean\')']) + ', \nUsia = ' + Math.round(res1['Second']['(\'Usia (mean)\', \'mean\')']) + ' tahun',
+                2: 'Rata-rata jumlah TB = ' + Math.round(res1['Third']['(\'Jumlah TB\', \'mean\')']) + ', \nUsia = ' + Math.round(res1['Third']['(\'Usia (mean)\', \'mean\')']) + ' tahun'
+            }
 
-        const ket_cluster2 = {
-            0: 'Rata-rata gizi baik = 68.26%, gizi lebih = 27.01%',
-            1: 'Rata-rata gizi kurang = 66.67%, gizi baik = 25%',
-        }
+            const ket_cluster2 = {
+                0: 'Rata-rata gizi baik = ' + Math.round(res2['First']['(\'Persentase anak gizi baik\', \'mean\')']) + '%, gizi lebih = ' + Math.round(res2['First']['(\'Persentase anak gizi lebih\', \'mean\')']) + '%',
+                1: 'Rata-rata gizi kurang = ' + Math.round(res2['Second']['(\'Persentase anak gizi kurang\', \'mean\')']) + '%, gizi baik = ' + Math.round(res2['Second']['(\'Persentase anak gizi baik\', \'mean\')']) + '%',
+            }
 
-        const ket_cluster3 = {
-            0: 'Rata-rata pendapatan 5 - 10 juta = 88.75%',
-            1: 'Rata-rata pendapatan 2.5 - 5 juta = 54.06%',
-            2: 'Rata-rata pendapatan > 10 juta = 36.24%, 5 - 10 juta = 35.45%',
-            3: 'Rata-rata pendapatan < 2.5 juta = 18.06%, 5 - 10 juta = 56.94%',
-            4: 'Rata-rata pendapatan 2.5 - 5 juta = 100%',
-        }
+            const ket_cluster3 = {
+                0: 'Rata-rata pendapatan 5 - 10 juta = ' + Math.round(res3['First']['(\'Pendapatan ( 5.000.001 - 10.000.000 )\', \'mean\')']) + '%',
+                1: 'Rata-rata pendapatan 2.5 - 5 juta = ' + Math.round(res3['Second']['(\'Pendapatan ( 2.500.000 - 5.000.000 )\', \'mean\')']) + '%',
+                2: 'Rata-rata pendapatan > 10 juta = ' + Math.round(res3['Third']['(\'Pendapatan ( > 10.000.000 )\', \'mean\')']) + '%, 5 - 10 juta = ' + Math.round(res3['Third']['(\'Pendapatan ( 5.000.001 - 10.000.000 )\', \'mean\')']) + '%',
+                3: 'Rata-rata pendapatan < 2.5 juta = ' + Math.round(res3['Fourth']['(\'Pendapatan ( < 2.500.000 )\', \'mean\')']) + '%, 5 - 10 juta = ' + Math.round(res3['Fourth']['(\'Pendapatan ( 5.000.001 - 10.000.000 )\', \'mean\')']) + '%',
+                4: 'Rata-rata pendapatan 2.5 - 5 juta = ' + Math.round(res3['Fifth']['(\'Pendapatan ( 2.500.000 - 5.000.000 )\', \'mean\')']) + '%',
+            }
 
-        const ket_cluster4 = {
-            0: 'Rata-rata luas rumah < 36 m^2 = 15.8%, 54 - 120 m^2 = 47.61%',
-            1: 'Rata-rata luas rumah 54 - 120 m^2 = 57.97%',
-            2: 'Rata-rata luas rumah 36 - 54 m^2 = 100%',
-            3: 'Rata-rata luas rumah 54 - 120 m^2 = 100%',
-            4: 'Rata-rata luas rumah > 120 m^2 = 100%',
-        }
+            const ket_cluster4 = {
+                0: 'Rata-rata luas rumah < 36 m^2 = ' + Math.round(res4['First']['(\'Luas rumah ( < 36 m^2 )\', \'mean\')']) + '%, 54 - 120 m^2 = ' + Math.round(res4['First']['(\'Luas rumah ( 54 - 120 m^2 )\', \'mean\')']) + '%',
+                1: 'Rata-rata luas rumah 54 - 120 m^2 = ' + Math.round(res4['Second']['(\'Luas rumah ( 54 - 120 m^2 )\', \'mean\')']) + '%',
+                2: 'Rata-rata luas rumah 36 - 54 m^2 = ' + Math.round(res4['Third']['(\'Luas rumah ( 36 - 54 m^2 )\', \'mean\')']) + '%',
+                3: 'Rata-rata luas rumah 54 - 120 m^2 = ' + Math.round(res4['Fourth']['(\'Luas rumah ( 54 - 120 m^2 )\', \'mean\')']) + '%',
+                4: 'Rata-rata luas rumah > 120 m^2 = ' + Math.round(res4['Fifth']['(\'Luas rumah ( > 120 m^2 )\', \'mean\')']) + '%',
+            }
 
-        const ket_cluster5 = {
-            0: 'Rata-rata telah BCG = 81.63%, \nkeluarga diabetes = 20.64%, \nTB serumah = 29.69%, \nASI eks = 78.87%, \nanak diabetes = 4.13%',
-            1: 'Rata-rata telah BCG = 17.5%, \nASI eks = 35%, \nTB serumah = 17.5%',
-            2: 'Rata-rata anak diabetes = 50%, \nTB serumah = 50%, \ntelah BCG = 50%',
-            3: 'Rata-rata telah BCG = 87.5%, \nASI Eks = 100%, \nkeluarga diabetes = 87.5%',
-        }
+            const ket_cluster5 = {
+                0: 'Rata-rata telah BCG = ' + Math.round(res5['First']['(\'Persentase anak telah BCG\', \'mean\')']) + '%, \nkeluarga diabetes = ' + Math.round(res5['First']['(\'Persentase kasus dengan keluarga menderita diabetes\', \'mean\')']) + '%, \nTB serumah = ' + Math.round(res5['First']['(\'Persentase kasus dengan riwayat TB serumah\', \'mean\')']) + '%, \nASI eks = ' + Math.round(res5['First']['(\'Persentase anak dengan ASI eksklusif\', \'mean\')']) + '%, \nanak diabetes = ' + Math.round(res5['First']['(\'Persentase anak menderita diabetes\', \'mean\')']) + '%',
+                1: 'Rata-rata telah BCG = ' + Math.round(res5['Second']['(\'Persentase anak telah BCG\', \'mean\')']) + '%, \nASI eks = ' + Math.round(res5['Second']['(\'Persentase anak dengan ASI eksklusif\', \'mean\')']) + '%, \nTB serumah = ' + Math.round(res5['Second']['(\'Persentase kasus dengan riwayat TB serumah\', \'mean\')']) + '%',
+                2: 'Rata-rata anak diabetes = ' + Math.round(res5['Third']['(\'Persentase anak menderita diabetes\', \'mean\')']) + '%, \nTB serumah = ' + Math.round(res5['Third']['(\'Persentase kasus dengan riwayat TB serumah\', \'mean\')']) + '%, \ntelah BCG = ' + Math.round(res5['Third']['(\'Persentase anak telah BCG\', \'mean\')']) + '%',
+                3: 'Rata-rata telah BCG = ' + Math.round(res5['Fourth']['(\'Persentase anak telah BCG\', \'mean\')']) + '%, \nASI Eks = ' + Math.round(res5['Fourth']['(\'Persentase anak dengan ASI eksklusif\', \'mean\')']) + '%, \nkeluarga diabetes = ' + Math.round(res5['Fourth']['(\'Persentase kasus dengan keluarga menderita diabetes\', \'mean\')']) + '%',
+            }
 
-        return (
-            <>
-                <CircleMarker
-                    key={kec}
-                    center={position1}
-                    className={`circle-marker visible ${color_cluster1} ${kec.split(' (')[0].replace(' ', '-')}`}
-                    pathOptions={{color: color_cluster1}}
-                    radius={8}
-                    fillOpacity={1.0}
-                >
-                    <Popup>
-                        <h3 style={{textAlign: 'center'}}>
-                            <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
-                        </h3>
-                        <br/>
+            return (
+                <>
+                    <CircleMarker
+                        key={kec}
+                        center={position1}
+                        className={`circle-marker visible ${color_cluster1} ${kec.split(' (')[0].replace(' ', '-')}`}
+                        pathOptions={{color: color_cluster1}}
+                        radius={8}
+                        fillOpacity={1.0}
+                    >
+                        <Popup>
+                            <h3 style={{textAlign: 'center'}}>
+                                <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
+                            </h3>
+                            <br/>
 
-                        <div className="text-center">
-                            {ket_cluster1[resultKec1.Total]}
-                            <br/><br/>
-                            Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
-                        </div>
-
-                    </Popup>
-
-                    {showModal ? (
-                        <>
-                            <div
-                                className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-[1000] outline-none focus:outline-none"
-                            >
-                                <div className="relative w-auto my-6 mx-auto max-w-6xl">
-                                    {/*content*/}
-                                    <div
-                                        className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                        {/*header*/}
-                                        <div
-                                            className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                                            <h3 className="text-3xl font-semibold">
-                                                Kecamatan {kec}
-                                            </h3>
-                                            <button
-                                                className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                                onClick={() => setShowModal(false)}
-                                            >
-                                                        <span
-                                                            className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                                                          ×
-                                                        </span>
-                                            </button>
-                                        </div>
-
-                                        <div
-                                            className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-                                            <button
-                                                className="text-white rounded bg-red-500 background-transparent uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                                type="button"
-                                                onClick={() => setShowModal(false)}
-                                            >
-                                                Tutup
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div className="text-center">
+                                {ket_cluster1[resultKec1.Total]}
+                                <br/><br/>
+                                Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
                             </div>
-                            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-                        </>
-                    ) : null}
 
+                        </Popup>
+                    </CircleMarker>,
 
-                </CircleMarker>,
+                    <CircleMarker
+                        key={kec}
+                        center={position2}
+                        pathOptions={{color: color_cluster2}}
+                        className={`circle-marker visible ${color_cluster2} ${kec.split(' (')[0].replace(' ', '-')}`}
+                        radius={8}
+                        fillOpacity={1.0}
+                    >
+                        <Popup>
+                            <h3 style={{textAlign: 'center'}}>
+                                <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
+                            </h3>
+                            <br/>
 
+                            <div className="text-center">
+                                {ket_cluster2[resultKec2.Total]}
+                                <br/><br/>
+                                Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
+                            </div>
 
-                <CircleMarker
-                    key={kec}
-                    center={position2}
-                    pathOptions={{color: color_cluster2}}
-                    className={`circle-marker visible ${color_cluster2} ${kec.split(' (')[0].replace(' ', '-')}`}
-                    radius={8}
-                    fillOpacity={1.0}
-                >
-                    <Popup>
-                        <h3 style={{textAlign: 'center'}}>
-                            <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
-                        </h3>
-                        <br/>
+                        </Popup>
+                    </CircleMarker>
+                    <CircleMarker
+                        key={kec}
+                        center={position3}
+                        pathOptions={{color: color_cluster3}}
+                        className={`circle-marker visible ${color_cluster3} ${kec.split(' (')[0].replace(' ', '-')}`}
+                        radius={8}
+                        fillOpacity={1.0}
+                    >
+                        <Popup>
+                            <h3 style={{textAlign: 'center'}}>
+                                <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
+                            </h3>
+                            <br/>
 
-                        <div className="text-center">
-                            {ket_cluster2[resultKec2.Total]}
-                            <br/><br/>
-                            Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
-                        </div>
+                            <div className="text-center">
+                                {ket_cluster3[resultKec3.Total]}
+                                <br/><br/>
+                                Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
+                            </div>
 
-                    </Popup>
-                </CircleMarker>
-                <CircleMarker
-                    key={kec}
-                    center={position3}
-                    pathOptions={{color: color_cluster3}}
-                    className={`circle-marker visible ${color_cluster3} ${kec.split(' (')[0].replace(' ', '-')}`}
-                    radius={8}
-                    fillOpacity={1.0}
-                >
-                    <Popup>
-                        <h3 style={{textAlign: 'center'}}>
-                            <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
-                        </h3>
-                        <br/>
+                        </Popup>
+                    </CircleMarker>
+                    <CircleMarker
+                        key={kec}
+                        center={position4}
+                        pathOptions={{color: color_cluster4}}
+                        className={`circle-marker visible ${color_cluster4} ${kec.split(' (')[0].replace(' ', '-')}`}
+                        radius={8}
+                        fillOpacity={1.0}
+                    >
+                        <Popup>
+                            <h3 style={{textAlign: 'center'}}>
+                                <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
+                            </h3>
+                            <br/>
 
-                        <div className="text-center">
-                            {ket_cluster3[resultKec3.Total]}
-                            <br/><br/>
-                            Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
-                        </div>
+                            <div className="text-center">
+                                {ket_cluster4[resultKec4.Total]}
+                                <br/><br/>
+                                Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
+                            </div>
 
-                    </Popup>
-                </CircleMarker>
-                <CircleMarker
-                    key={kec}
-                    center={position4}
-                    pathOptions={{color: color_cluster4}}
-                    className={`circle-marker visible ${color_cluster4} ${kec.split(' (')[0].replace(' ', '-')}`}
-                    radius={8}
-                    fillOpacity={1.0}
-                >
-                    <Popup>
-                        <h3 style={{textAlign: 'center'}}>
-                            <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
-                        </h3>
-                        <br/>
+                        </Popup>
+                    </CircleMarker>
+                    <CircleMarker
+                        key={kec}
+                        center={position5}
+                        pathOptions={{color: color_cluster5}}
+                        className={`circle-marker visible ${color_cluster5} ${kec.split(' (')[0].replace(' ', '-')}`}
+                        radius={8}
+                        fillOpacity={1.0}
+                    >
+                        <Popup>
+                            <h3 style={{textAlign: 'center'}}>
+                                <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
+                            </h3>
+                            <br/>
 
-                        <div className="text-center">
-                            {ket_cluster4[resultKec4.Total]}
-                            <br/><br/>
-                            Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
-                        </div>
+                            <div className="text-center">
+                                {ket_cluster5[resultKec5.Total]}
+                                <br/><br/>
+                                Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
+                            </div>
 
-                    </Popup>
-                </CircleMarker>
-                <CircleMarker
-                    key={kec}
-                    center={position5}
-                    pathOptions={{color: color_cluster5}}
-                    className={`circle-marker visible ${color_cluster5} ${kec.split(' (')[0].replace(' ', '-')}`}
-                    radius={8}
-                    fillOpacity={1.0}
-                >
-                    <Popup>
-                        <h3 style={{textAlign: 'center'}}>
-                            <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
-                        </h3>
-                        <br/>
-
-                        <div className="text-center">
-                            {ket_cluster5[resultKec5.Total]}
-                            <br/><br/>
-                            Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
-                        </div>
-
-                    </Popup>
-                </CircleMarker>
-            </>
-        )
+                        </Popup>
+                    </CircleMarker>
+                </>
+            )
         }
     });
 }
@@ -721,6 +685,9 @@ const Map = (props) => {
     const {data, selectedData, center, loading, setReg} = props
 
     const [selectedColor, setSelectedColor] = useState('')
+    const [map, setMap] = useState(null);
+    const [selectedKec, setSelectedKec] = useState(null);
+    const [showLegend, setShowLegend] = useState(false);
 
     const onClickColor = (color) => {
         let pink = document.querySelectorAll('.circle-marker')
@@ -781,6 +748,18 @@ const Map = (props) => {
         Router.reload()
     };
 
+    function getColor(d) {
+        return (
+            // d > 20 ? '#800026' :
+            d > 20 ? '#BD0026' :
+                d > 15 ? '#E31A1C' :
+                    d > 10 ? '#FC4E2A' :
+                        d > 5 ? '#FD8D3C' :
+                            // d > 1 ? '#FEB24C' :
+                            d > 1 ? '#FED976' :
+                                '#FFEDA0');
+    }
+
     return (
         <>
             <div className="bg-[#343A40] h-full pb-2">
@@ -789,15 +768,100 @@ const Map = (props) => {
                     spinner
                     text='Building cluster, please wait...'>
                     <MapContainer center={center || [-5.136143, 119.469370]} zoom={13} scrollWheelZoom={false}
-                                  className={'cluster-mapid'}>
+                                  className={'cluster-mapid'} whenCreated={setMap}>
                         <TileLayer
                             attribution='&copy; <a href="https://osm.org/copyright" target="_blank">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
 
                         {
+                            Object.keys(statesData).map((state) => {
+                                let jumlah_kasus = 0
+                                for (let k in kec) {
+                                    if (state.includes(k.split(' (')[0])) {
+                                        jumlah_kasus = kec[k]['Jumlah TB']
+                                        continue
+                                    }
+                                }
+                                var coordinates = [];
+                                if (statesData[state].type === 'MultiPolygon') {
+
+                                    var tes = [];
+
+                                    for (const i in statesData[state].coordinates) {
+                                        const coord = statesData[state].coordinates[i][0].map((item) => [item[1], item[0]]);
+                                        tes.push(coord);
+                                        // console.log(tes);
+                                    }
+                                    coordinates = tes;
+                                } else {
+                                    coordinates = statesData[state].coordinates[0].map((item) => [item[1], item[0]]);
+                                }
+
+                                return (<Polygon
+                                        pathOptions={{
+                                            fillColor: getColor(jumlah_kasus),
+                                            fillOpacity: 0.7,
+                                            weight: 2,
+                                            opacity: 1,
+                                            dashArray: 3,
+                                            graphicZIndex: 1,
+                                            zIndex: 1,
+                                            color: 'white'
+                                        }}
+                                        positions={coordinates}
+                                        eventHandlers={{
+                                            mouseover: (e) => {
+                                                // setSelectedKec(state)
+                                                // setShowLegend(true)
+                                                const layer = e.target;
+                                                layer.setStyle({
+                                                    graphicZIndex: 9999999,
+                                                    zIndex: 99999999,
+                                                    weight: 4,
+                                                    color: '#666',
+                                                    dashArray: 3,
+                                                    // fillOpacity: 0.5,
+                                                })
+                                            },
+                                            mouseout: (e) => {
+                                                // setShowLegend(false)
+                                                const layer = e.target;
+                                                layer.setStyle({
+                                                    fillColor: getColor(jumlah_kasus),
+                                                    fillOpacity: 0.7,
+                                                    weight: 2,
+                                                    opacity: 1,
+                                                    dashArray: 3,
+                                                    graphicZIndex: 1,
+                                                    zIndex: 1,
+                                                    color: 'white'
+                                                });
+                                            },
+                                            click: (e) => {
+                                                const layer = e.target;
+                                                console.log('clicked ', layer)
+                                            }
+                                        }}
+                                    >
+                                        <Popup>
+                                            Kecamatan {state}
+                                        </Popup>
+                                    </Polygon>
+
+                                )
+                            })
+                        }
+
+                        {
                             data && <PointMarker data={data} selectedData={selectedData} selectedColor={selectedColor}/>
                         }
+
+                        <Legend map={map} />
+
+                        {/*{*/}
+                        {/*    selectedKec && showLegend ? <LegendClusterTop map={map} selectedKec={selectedKec}/> : null*/}
+                        {/*}*/}
                     </MapContainer>
                 </LoadingOverlay>
                 <br/>
@@ -861,7 +925,9 @@ const Map = (props) => {
                         }}>
 
                         </div>
-                        <div className="col-span-9" style={{color: 'white'}}>Persentase gizi baik, dan gizi lebih tertinggi</div>
+                        <div className="col-span-9" style={{color: 'white'}}>Persentase gizi baik, dan gizi lebih
+                            tertinggi
+                        </div>
                     </div>
                     <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[4])}>
                         <div className="col-span-1" style={{
@@ -1019,7 +1085,8 @@ const Map = (props) => {
                             height: '25px'
                         }}>
                         </div>
-                        <div className="col-span-9" style={{color: 'white'}}> Persentase telah BCG, keluarga diabetes, TB serumah
+                        <div className="col-span-9" style={{color: 'white'}}> Persentase telah BCG, keluarga diabetes,
+                            TB serumah
                             kedua tertinggi
                         </div>
                     </div>
@@ -1047,7 +1114,9 @@ const Map = (props) => {
                         }}>
 
                         </div>
-                        <div className="col-span-9" style={{color: 'white'}}> Persentase anak diabetes dan TB serumah tertinggi</div>
+                        <div className="col-span-9" style={{color: 'white'}}> Persentase anak diabetes dan TB serumah
+                            tertinggi
+                        </div>
                     </div>
                     <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[18])}>
                         <div className="col-span-1" style={{
@@ -1058,7 +1127,7 @@ const Map = (props) => {
                             width: '25px',
                             height: '25px'
                         }}>
-                            
+
 
                         </div>
                         <div className="col-span-9" style={{color: 'white'}}> Persentase telah BCG, ASI eksklusif dan
@@ -1082,5 +1151,4 @@ const Map = (props) => {
 }
 
 export default Map
-
 

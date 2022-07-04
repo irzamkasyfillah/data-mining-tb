@@ -3,7 +3,6 @@ import Router from 'next/router';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Link from 'next/link';
 import { data } from 'autoprefixer';
-// import { Router } from 'next/router';
 import Uploader from '../src/components/Uploader';
 
 class Home extends React.Component {
@@ -15,7 +14,7 @@ class Home extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleGenerateData = this.handleGenerateData.bind(this)
   }
- 
+
   // Callback~
   getFiles(file){
     this.setState({ files: file })
@@ -26,10 +25,11 @@ class Home extends React.Component {
     event.preventDefault()
     const data = new FormData()
     data.append("uploaded_file", files)
+    console.log(data)
     const req = fetch(`http://127.0.0.1:80/uploadfile/`, {
       method: "POST",
       body: data,
-      
+
     })
     .then((req) => {
       this.handleGenerateData()
@@ -38,17 +38,18 @@ class Home extends React.Component {
     Router.push("/dashboard")
   }
 
-  
+
   handleGenerateData = async () => {
     const req = fetch(`http://127.0.0.1:80/asosiasi/`, {
       method: "GET",
     })
     .then((req) => {
+    console.log(req, req.json())
     return req.json()
     })
   }
 
-  
+
   render(){
     return (
       <div className="flex flex-col items-center md:pt-20">
@@ -72,5 +73,4 @@ class Home extends React.Component {
 }
 
 export default Home;
-
 

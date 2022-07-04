@@ -1,39 +1,131 @@
-import re
-
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from geopy.geocoders import Nominatim
-from sklearn.metrics import silhouette_score
-from sklearn.cluster import KMeans
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import StandardScaler
-
+import re
 from data import Data
+from geopy.geocoders import Nominatim
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+from sklearn.preprocessing import StandardScaler
 
 
 def cluster(dataset):
+    # print(dataset)
+    db = {}
+    db_kec = []
+    db_kel = []
+    db_kota = []
+    db_alamat_lengkap = []
+    db_asi_eksklusif = []
+    db_berat = []
+    db_tinggi = []
+    db_diabetes_anak = []
+    db_diabetes_ortu = []
+    db_jenis_kelamin = []
+    db_jumlah_kamar = []
+    db_jumlah_orang = []
+    db_luas_rumah = []
+    db_pekerjaan_ayah = []
+    db_pekerjaan_ibu = []
+    db_pendapatan = []
+    db_daftar_penyakit_opname = []
+    db_riwayat_penyakit_serumah = []
+    db_daftar_penyakit_serumah = []
+    db_pernah_tb = []
+    db_riwayat_opname_anak = []
+    db_sistem_ventilasi = []
+    db_tanggal_lahir = []
+    db_tb_serumah = []
+    db_timestamp = []
+    db_umur = []
+    db_vaksin_bcg = []
+
+    for i in dataset:
+        db_kec.append(i.alamat_kecamatan)
+        db_kel.append(i.alamat_kelurahan)
+        db_kota.append(i.alamat_kota)
+        db_alamat_lengkap.append(i.alamat_lengkap)
+        db_asi_eksklusif.append(i.asi_ekslusif)
+        db_berat.append(i.berat_badan)
+        db_tinggi.append(i.tinggi_badan)
+        db_diabetes_anak.append(i.diabetes_anak)
+        db_diabetes_ortu.append(i.diabetes_serumah)
+        db_jenis_kelamin.append(i.jenis_kelamin)
+        db_jumlah_kamar.append(i.jumlah_kamar)
+        db_jumlah_orang.append(i.jumlah_orang)
+        db_luas_rumah.append(i.luas_rumah)
+        db_pekerjaan_ayah.append(i.pekerjaan_ayah)
+        db_pekerjaan_ibu.append(i.pekerjaan_ibu)
+        db_pendapatan.append(i.pendapatan)
+        db_daftar_penyakit_opname.append(i.penyakit_anak)
+        db_riwayat_penyakit_serumah.append(i.penyakit_lainnya)
+        db_daftar_penyakit_serumah.append(i.penyakit_serumah)
+        db_pernah_tb.append(i.pernah_sedang_tb)
+        db_riwayat_opname_anak.append(i.riwayat_opname_anak)
+        db_sistem_ventilasi.append(i.sistem_ventilasi)
+        db_tanggal_lahir.append(i.tanggal_lahir)
+        db_tb_serumah.append(i.tb_serumah)
+        db_timestamp.append(i.timestamp)
+        db_umur.append(i.umur)
+        db_vaksin_bcg.append(i.vaksin_bcg)
+
+    db['Kelurahan'] = db_kel
+    db['Kecamatan'] = db_kec
+    db['Kab/Kota'] = db_kota
+    db['Alamat lengkap'] = db_alamat_lengkap
+    db['ASI eksklusif'] = db_asi_eksklusif
+    db['Berat badan (dalam kg)'] = db_berat
+    db['Tinggi badan (dalam cm)'] = db_tinggi
+    db['riwayat diabetes anak'] = db_diabetes_anak
+    db['riwayat diabetes keluarga'] = db_diabetes_ortu
+    db['Jenis Kelamin'] = db_jenis_kelamin
+    db['jumlah kamar tidur'] = db_jumlah_kamar
+    db['jumlah orang dalam rumah'] = db_jumlah_orang
+    db['luas rumah'] = db_luas_rumah
+    db['Pekerjaan Ayah'] = db_pekerjaan_ayah
+    db['Pekerjaan Ibu'] = db_pekerjaan_ibu
+    db['Pendapatan Orang Tua'] = db_pendapatan
+    db['daftar penyakit opname'] = db_daftar_penyakit_opname
+    db['riwayat penyakit lain orang serumah'] = db_riwayat_penyakit_serumah
+    db['daftar penyakit lain orang serumah'] = db_daftar_penyakit_serumah
+    db['pernah/sedang TB'] = db_pernah_tb
+    db['riwayat opname'] = db_riwayat_opname_anak
+    db['sistem ventilasi'] = db_sistem_ventilasi
+    db['Tanggal Lahir'] = db_tanggal_lahir
+    db['riwayat TB orang serumah'] = db_tb_serumah
+    db['Timestamp'] = db_timestamp
+    db['Umur'] = db_umur
+    db['riwayat vaksin BCG'] = db_vaksin_bcg
+
+    # print(db)
+
+    df = pd.DataFrame(db)
+    # print(df)
+    data = df.copy()
+
+    #===== BATAS REVISIAN ======#
     # df_original = pd.read_csv('csv/Dataset TB anak.csv')
-    df_original = pd.read_csv(dataset)
+    # df_original = pd.read_csv(dataset)
 
-    data_status_gizi_laki = pd.read_csv('./csv/status_gizi_laki.csv',header=1)
-    data_status_gizi_perempuan = pd.read_csv('./csv/status_gizi_perempuan.csv',header=1)
+    data_status_gizi_laki = pd.read_csv('./csv/status_gizi_laki.csv', header=1)
+    data_status_gizi_perempuan = pd.read_csv('./csv/status_gizi_perempuan.csv', header=1)
 
-    data = df_original.copy()
-    data = data.rename(columns={'Alamat (mohon sertakan nama kelurahan dan kecamatan)': 'Alamat lengkap',
-                                'Apakah anak pernah atau sedang dalam pengobatan tuberkulosis?': 'pernah/sedang TB',
-                                'Apakah anak pernah mengalami penyakit diabetes?': 'riwayat diabetes anak',
-                                'Apakah anak telah menerima imunisasi BCG (Bacillus Calmette-Guérin, imunisasi untuk mencegah penyakit TB)?': 'riwayat vaksin BCG',
-                                'Apakah anak pernah di opname sebelumnya?': 'riwayat opname',
-                                'Jika pernah, anak diopname karena penyakit apa saja?': 'daftar penyakit opname',
-                                'Apakah anak mengkonsumsi ASI secara eksklusif? (ASI Eksklusif adalah pemberian ASI tanpa makanan/minuman (susu formula) tambahan hingga berusia 6 bulan)': 'ASI eksklusif',
-                                'Apakah ada riwayat penyakit tuberkulosis dalam orang serumah?': 'riwayat TB orang serumah',
-                                'Apakah ada riwayat penyakit diabetes dalam keluarga (orang tua)?': 'riwayat diabetes keluarga',
-                                'Apakah ada riwayat penyakit lainnya selain tuberkulosis, diabetes dalam orang  serumah?': 'riwayat penyakit lain orang serumah',
-                                'Jika ada, penyakit apa saja?': 'daftar penyakit lain orang serumah',
-                                'Berapa luas rumah tempat anak tinggal?': 'luas rumah',
-                                'Berapa jumlah kamar tidur dalam rumah?': 'jumlah kamar tidur',
-                                'Berapa jumlah orang yang tinggal dalam satu rumah?': 'jumlah orang dalam rumah',
-                                'Bagaimana sistem ventilasi di rumah Anda? ': 'sistem ventilasi'})
+    # data = df_original.copy()
+    # data = data.rename(columns={'Alamat (mohon sertakan nama kelurahan dan kecamatan)': 'Alamat lengkap',
+    #                             'Apakah anak pernah atau sedang dalam pengobatan tuberkulosis?': 'pernah/sedang TB',
+    #                             'Apakah anak pernah mengalami penyakit diabetes?': 'riwayat diabetes anak',
+    #                             'Apakah anak telah menerima imunisasi BCG (Bacillus Calmette-Guérin, imunisasi untuk mencegah penyakit TB)?': 'riwayat vaksin BCG',
+    #                             'Apakah anak pernah di opname sebelumnya?': 'riwayat opname',
+    #                             'Jika pernah, anak diopname karena penyakit apa saja?': 'daftar penyakit opname',
+    #                             'Apakah anak mengkonsumsi ASI secara eksklusif? (ASI Eksklusif adalah pemberian ASI tanpa makanan/minuman (susu formula) tambahan hingga berusia 6 bulan)': 'ASI eksklusif',
+    #                             'Apakah ada riwayat penyakit tuberkulosis dalam orang serumah?': 'riwayat TB orang serumah',
+    #                             'Apakah ada riwayat penyakit diabetes dalam keluarga (orang tua)?': 'riwayat diabetes keluarga',
+    #                             'Apakah ada riwayat penyakit lainnya selain tuberkulosis, diabetes dalam orang  serumah?': 'riwayat penyakit lain orang serumah',
+    #                             'Jika ada, penyakit apa saja?': 'daftar penyakit lain orang serumah',
+    #                             'Berapa luas rumah tempat anak tinggal?': 'luas rumah',
+    #                             'Berapa jumlah kamar tidur dalam rumah?': 'jumlah kamar tidur',
+    #                             'Berapa jumlah orang yang tinggal dalam satu rumah?': 'jumlah orang dalam rumah',
+    #                             'Bagaimana sistem ventilasi di rumah Anda? ': 'sistem ventilasi'})
 
     # =========================  PRE PROCESSING  ========================== #
     # DATA CLEANING, INTEGRATION, TRANSFORMATION, REDUCTION
@@ -82,10 +174,10 @@ def cluster(dataset):
         def count_z(idx):
             if (imt > status_gender['Median'][idx[0]]):
                 z = (imt - status_gender['Median'][idx[0]]) / (
-                            status_gender['+1 SD'][idx[0]] - status_gender['Median'][idx[0]])
+                        status_gender['+1 SD'][idx[0]] - status_gender['Median'][idx[0]])
             else:
                 z = (imt - status_gender['Median'][idx[0]]) / (
-                            status_gender['Median'][idx[0]] - status_gender['-1 SD'][idx[0]])
+                        status_gender['Median'][idx[0]] - status_gender['-1 SD'][idx[0]])
             return z
 
         if jenis_kelamin == 'Laki - laki':
@@ -144,9 +236,7 @@ def cluster(dataset):
 
     # ============== DATA SELECTION =============== #
 
-    data = data.drop(['Timestamp', 'Umur', 'Tanggal Lahir', 'Alamat lengkap',
-                      'Apakah ada yang pernah atau sedang mengkonsumsi obat tuberkulosis dalam orang serumah?', 'Bulan',
-                      'IMT'], axis=1)
+    data = data.drop(['Timestamp', 'Umur', 'Tanggal Lahir', 'Alamat lengkap', 'Bulan', 'IMT'], axis=1)
     data_positive = data.loc[data['pernah/sedang TB'] == 'Ya'].copy()
     # data_positive = data.copy()
 
@@ -495,7 +585,6 @@ def cluster(dataset):
     }).T
 
     # ======  COUNT LOGITUDE AND LATITUDE FOR ALL KECAMATAN =======#
-
     alamat = []
     for i in cluster1.index:
         splitted = i.split(' (')
@@ -507,7 +596,7 @@ def cluster(dataset):
     for i in range(0, len(alamat)):
         loc = alamat[i]
         location = geolocator.geocode(loc, timeout=None)
-        if location != None:
+        if location is not None:
             m = 0.0025
             coord.append([[location.latitude, location.longitude], [location.latitude + m, location.longitude + m],
                           [location.latitude + m, location.longitude - m],
