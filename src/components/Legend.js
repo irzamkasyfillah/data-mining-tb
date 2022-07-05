@@ -17,7 +17,7 @@ function Legend({ map, data}) {
 
       const str_list_aturan = list_aturan.join(", ")
       content += "</br>" 
-      content += "Penyebab Tuberkulosis pada anak:" + "</br>"
+      content += "Aturan asosiasi yang terbentuk:" + "</br>"
       content += "<p>" + str_list_aturan + "</p>"
 
       const legend = L.control({ position: "bottomright" });
