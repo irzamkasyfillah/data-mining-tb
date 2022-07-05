@@ -158,7 +158,7 @@ function Asosiasi() {
                   type="button"
                   onClick={() => setShowModal(true)}
                 >
-                  Show All
+                  Tampilkan semua aturan
                 </button>
               </div>
               <h2 style={{fontWeight: "bold", fontSize: 25}}>Daftar Kecamatan</h2>
