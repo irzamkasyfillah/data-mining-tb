@@ -628,20 +628,20 @@ def cluster(dataset):
     cluster2[Num_features] = scaler.transform(cluster2[Num_features])
 
     # Actual Clustering
-    kmeans = KMeans(n_clusters=2, random_state=9)
+    kmeans = KMeans(n_clusters=3, random_state=9)
     preds = kmeans.fit_predict(cluster2)
 
     pd.Series(kmeans.labels_).value_counts()
 
     # new column for cluster labels associated with each subject
     cluster2['labels'] = kmeans.labels_
-    # cluster2['Segment'] = cluster2['labels'].map({0:'First', 1:'Second', 2:'Third'})
-    cluster2['Segment'] = cluster2['labels'].map({0: 'First', 1: 'Second'})
+    cluster2['Segment'] = cluster2['labels'].map({0:'First', 1:'Second', 2:'Third'})
+    # cluster2['Segment'] = cluster2['labels'].map({0: 'First', 1: 'Second'})
 
     # Order the cluster
     cluster2['Segment'] = cluster2['Segment'].astype('category')
-    # cluster2['Segment'] = cluster2['Segment'].cat.reorder_categories(['First','Second','Third'])
-    cluster2['Segment'] = cluster2['Segment'].cat.reorder_categories(['First', 'Second'])
+    cluster2['Segment'] = cluster2['Segment'].cat.reorder_categories(['First','Second','Third'])
+    # cluster2['Segment'] = cluster2['Segment'].cat.reorder_categories(['First', 'Second'])
 
     # ============== INVERSE TRANSFORMATION FOR NUMERIC DATA ================#
 

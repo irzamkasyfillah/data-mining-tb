@@ -7,7 +7,6 @@ import LoadingOverlay from 'react-loading-overlay';
 import Router from "next/router";
 import {statesData} from '../../api/result/data_kecamatan'
 import Legend from "./LegendCluster"
-import LegendClusterTop from "./LegendClusterTop"
 
 
 let DefaultIcon = L.icon({
@@ -57,7 +56,7 @@ function PointMarker(props) {
             const resultKec5 = coord5[kec]
 
             let color_cluster1 = ''
-            const all_color_cluster1 = ['#a70000', '#ff7400', '#ff7b7b']
+            const all_color_cluster1 = ['#E31A1C', '#ff7400', '#ff7b7b']
             switch (resultKec1['Total']) {
                 case 0:
                     color_cluster1 = all_color_cluster1[0];
@@ -74,13 +73,16 @@ function PointMarker(props) {
             }
 
             let color_cluster2 = ''
-            const all_color_cluster2 = ['#0f5e9c', '#9D5C0D']
+            const all_color_cluster2 = ['#0f5e9c', '#9D5C0D', '#800026']
             switch (resultKec2['Total']) {
                 case 0:
                     color_cluster2 = all_color_cluster2[0];
                     break
                 case 1:
                     color_cluster2 = all_color_cluster2[1];
+                    break
+                case 2:
+                    color_cluster2 = all_color_cluster2[2];
                     break
                 default :
                     color_cluster2 = all_color_cluster2[0];
@@ -134,7 +136,7 @@ function PointMarker(props) {
             }
 
             let color_cluster5 = ''
-            const all_color_cluster5 = ['#660066', '#ee1515', '#8E3200', '#ff0074']
+            const all_color_cluster5 = ['#660066', '#00ffff', '#8E3200', '#ff0074']
             switch (resultKec5['Total']) {
                 case 0:
                     color_cluster5 = all_color_cluster5[0];
@@ -168,6 +170,7 @@ function PointMarker(props) {
             const ket_cluster2 = {
                 0: 'Rata-rata gizi baik = ' + Math.round(res2['First']['(\'Persentase anak gizi baik\', \'mean\')']) + '%, gizi lebih = ' + Math.round(res2['First']['(\'Persentase anak gizi lebih\', \'mean\')']) + '%',
                 1: 'Rata-rata gizi kurang = ' + Math.round(res2['Second']['(\'Persentase anak gizi kurang\', \'mean\')']) + '%, gizi baik = ' + Math.round(res2['Second']['(\'Persentase anak gizi baik\', \'mean\')']) + '%',
+                2: 'Rata-rata gizi lebih = ' + Math.round(res2['Third']['(\'Persentase anak gizi lebih\', \'mean\')']) + '%'
             }
 
             const ket_cluster3 = {
@@ -708,25 +711,26 @@ const Map = (props) => {
     const kec = data?.cluster1_df
 
     const warna = {
-        0: '#a70000',
+        0: '#E31A1C',
         1: '#ff7400',
         2: '#ff7b7b',
         3: '#0f5e9c',
         4: '#9D5C0D',
-        5: '#063b00',
-        6: '#854442',
-        7: '#089000',
-        8: '#be9b7b',
-        9: '#0eff00',
-        10: '#a98600',
-        11: '#535353',
-        12: '#e9d700',
-        13: '#f8ed62',
-        14: '#fff9ae',
-        15: '#660066',
-        16: '#ee1515',
-        17: '#8E3200',
-        18: '#ff0074'
+        5: '#800026',
+        6: '#063b00',
+        7: '#854442',
+        8: '#089000',
+        9: '#be9b7b',
+        10: '#0eff00',
+        11: '#a98600',
+        12: '#535353',
+        13: '#e9d700',
+        14: '#f8ed62',
+        15: '#fff9ae',
+        16: '#660066',
+        17: '#00ffff',
+        18: '#8E3200',
+        19: '#ff0074'
     }
     // function reloadData() {
     //     setReg(true);
@@ -748,16 +752,16 @@ const Map = (props) => {
         Router.reload()
     };
 
-    function getColor(d) {
-        return (
-            // d > 20 ? '#800026' :
+    const getColor = d => {
+        return d > 25 ? '#800026' :
             d > 20 ? '#BD0026' :
                 d > 15 ? '#E31A1C' :
                     d > 10 ? '#FC4E2A' :
                         d > 5 ? '#FD8D3C' :
-                            // d > 1 ? '#FEB24C' :
-                            d > 1 ? '#FED976' :
-                                '#FFEDA0');
+                            '#FED976';
+        // d > 1 ? '#FEB24C' :
+        // d > 1 ? '#FED976' :
+        // '#FFEDA0');
     }
 
     return (
@@ -777,8 +781,11 @@ const Map = (props) => {
                         {
                             Object.keys(statesData).map((state) => {
                                 let jumlah_kasus = 0
+                                let split_state = state.split(' ')
+                                split_state.splice(-1)
+                                let no_kota = split_state.join(' ')
                                 for (let k in kec) {
-                                    if (state.includes(k.split(' (')[0])) {
+                                    if (no_kota == k.split(' (')[0]) {
                                         jumlah_kasus = kec[k]['Jumlah TB']
                                         continue
                                     }
@@ -857,7 +864,7 @@ const Map = (props) => {
                             data && <PointMarker data={data} selectedData={selectedData} selectedColor={selectedColor}/>
                         }
 
-                        <Legend map={map} />
+                        <Legend map={map}/>
 
                         {/*{*/}
                         {/*    selectedKec && showLegend ? <LegendClusterTop map={map} selectedKec={selectedKec}/> : null*/}
@@ -876,8 +883,8 @@ const Map = (props) => {
                 <div className="ml-2 grid grid-cols-1 gap-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1">
                     <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[0])}>
                         <div className="col-span-1" style={{
-                            color: '#a70000',
-                            backgroundColor: '#a70000',
+                            color: '#E31A1C',
+                            backgroundColor: '#E31A1C',
                             padding: 5,
                             borderRadius: 50,
                             width: '25px',
@@ -925,8 +932,7 @@ const Map = (props) => {
                         }}>
 
                         </div>
-                        <div className="col-span-9" style={{color: 'white'}}>Persentase gizi baik, dan gizi lebih
-                            tertinggi
+                        <div className="col-span-9" style={{color: 'white'}}>Persentase gizi baik tertinggi
                         </div>
                     </div>
                     <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[4])}>
@@ -944,6 +950,19 @@ const Map = (props) => {
                     </div>
                     <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[5])}>
                         <div className="col-span-1" style={{
+                            color: warna[5],
+                            backgroundColor: warna[5],
+                            padding: 5,
+                            borderRadius: 50,
+                            width: '25px',
+                            height: '25px'
+                        }}>
+
+                        </div>
+                        <div className="col-span-9" style={{color: 'white'}}>Persentase gizi lebih tertinggi</div>
+                    </div>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[6])}>
+                        <div className="col-span-1" style={{
                             color: '#063b00',
                             backgroundColor: '#063b00',
                             padding: 5,
@@ -955,7 +974,7 @@ const Map = (props) => {
                         </div>
                         <div className="col-span-9" style={{color: 'white'}}>Pendapatan 5 - 10 juta tertinggi</div>
                     </div>
-                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[6])}>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[7])}>
                         <div className="col-span-1" style={{
                             color: '#854442',
                             backgroundColor: '#854442',
@@ -969,7 +988,7 @@ const Map = (props) => {
                         <div className="col-span-9" style={{color: 'white'}}>Pendapatan 2.5 - 5 juta kedua tertinggi
                         </div>
                     </div>
-                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[7])}>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[8])}>
                         <div className="col-span-1" style={{
                             color: '#089000',
                             backgroundColor: '#089000',
@@ -982,7 +1001,7 @@ const Map = (props) => {
                         </div>
                         <div className="col-span-9" style={{color: 'white'}}> Pendapatan > 10 juta tertinggi</div>
                     </div>
-                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[8])}>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[9])}>
                         <div className="col-span-1" style={{
                             color: '#be9b7b',
                             backgroundColor: '#be9b7b',
@@ -996,7 +1015,7 @@ const Map = (props) => {
                         <div className="col-span-9" style={{color: 'white'}}> {'Pendapatan < 2.5 juta tertinggi'}
                         </div>
                     </div>
-                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[9])}>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[10])}>
                         <div className="col-span-1" style={{
                             color: '#0eff00',
                             backgroundColor: '#0eff00',
@@ -1009,7 +1028,7 @@ const Map = (props) => {
                         </div>
                         <div className="col-span-9" style={{color: 'white'}}> Pendapatan 2.5 - 5 juta tertinggi</div>
                     </div>
-                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[10])}>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[11])}>
                         <div className="col-span-1" style={{
                             color: '#a98600',
                             backgroundColor: '#a98600',
@@ -1022,7 +1041,7 @@ const Map = (props) => {
                         </div>
                         <div className="col-span-9" style={{color: 'white'}}> {'Luas rumah < 36 m^2 tertinggi'}</div>
                     </div>
-                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[11])}>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[12])}>
                         <div className="col-span-1" style={{
                             color: '#535353',
                             backgroundColor: '#535353',
@@ -1036,7 +1055,7 @@ const Map = (props) => {
                         <div className="col-span-9" style={{color: 'white'}}> Luas rumah 54 - 120 m^2 kedua tertinggi
                         </div>
                     </div>
-                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[12])}>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[13])}>
                         <div className="col-span-1" style={{
                             color: '#e9d700',
                             backgroundColor: '#e9d700',
@@ -1049,7 +1068,7 @@ const Map = (props) => {
                         </div>
                         <div className="col-span-9" style={{color: 'white'}}> Luas rumah 36 - 54 m^2 tertinggi</div>
                     </div>
-                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[13])}>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[14])}>
                         <div className="col-span-1" style={{
                             color: '#f8ed62',
                             backgroundColor: '#f8ed62',
@@ -1062,7 +1081,7 @@ const Map = (props) => {
                         </div>
                         <div className="col-span-9" style={{color: 'white'}}> Luas rumah 54 - 120 m^2 tertinggi</div>
                     </div>
-                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[14])}>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[15])}>
                         <div className="col-span-1" style={{
                             color: '#fff9ae',
                             backgroundColor: '#fff9ae',
@@ -1075,7 +1094,7 @@ const Map = (props) => {
                         </div>
                         <div className="col-span-9" style={{color: 'white'}}> Luas rumah > 120 m^2 tertinggi</div>
                     </div>
-                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[15])}>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[16])}>
                         <div className="col-span-1" style={{
                             color: '#660066',
                             backgroundColor: '#660066',
@@ -1090,10 +1109,10 @@ const Map = (props) => {
                             kedua tertinggi
                         </div>
                     </div>
-                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[16])}>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[17])}>
                         <div className="col-span-1" style={{
-                            color: '#ee1515',
-                            backgroundColor: '#ee1515',
+                            color: '#00ffff',
+                            backgroundColor: '#00ffff',
                             padding: 5,
                             borderRadius: 50,
                             width: '25px',
@@ -1103,7 +1122,7 @@ const Map = (props) => {
                         </div>
                         <div className="col-span-9" style={{color: 'white'}}> Persentase telah BCG terendah</div>
                     </div>
-                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[17])}>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[18])}>
                         <div className="col-span-1" style={{
                             color: '#8E3200',
                             backgroundColor: '#8E3200',
@@ -1118,7 +1137,7 @@ const Map = (props) => {
                             tertinggi
                         </div>
                     </div>
-                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[18])}>
+                    <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[19])}>
                         <div className="col-span-1" style={{
                             color: '#ff0074',
                             backgroundColor: '#ff0074',
