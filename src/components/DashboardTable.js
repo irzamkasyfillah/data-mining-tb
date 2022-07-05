@@ -128,14 +128,14 @@ export function DashboardTable({data = []}) {
                 <>
                     <button
                         type="button"
-                        className="mt-2 ml-2 mb-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-1 rounded"
+                        className=" flex text-xsm mt-2 ml-2 mb-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-1 rounded"
                         onClick={() => handleEdit(row.id)}
                     >
                         Edit
                     </button>
                     <button
                         type="button"
-                        className="mt-2 ml-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 my-1 rounded"
+                        className="flex text-xsm mt-2 ml-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 my-1 rounded"
                         onClick={() => {
                             setSelectedId(row.id)
                             setShowModal(true)
@@ -193,7 +193,7 @@ export function DashboardTable({data = []}) {
                     ) : null}
                 </>
             ,
-            name: 'Action'
+            name: 'Aksi'
         }
     ];
 

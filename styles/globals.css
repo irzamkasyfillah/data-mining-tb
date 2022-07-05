@@ -185,6 +185,13 @@
 
 /* Rows Cells Text */
 .rdt_TableCell div:first-child {
+    white-space: unset !important;
+    overflow: unset !important;
+    text-overflow: unset !important;
+}
+
+/* Rows Cells Text */
+.rdt_TableBody div{
 	 white-space: unset !important;
 	 overflow: unset !important;
 	 text-overflow: unset !important;

@@ -99,12 +99,26 @@ function Panduan() {
         setState({...state, [e.target.name]: e.target.value});
     }
 
+    const handleBack = async (event) => {
+        Router.push({
+            pathname: "/dashboard",
+        });
+    };
+
     return (
         <div className="m-5">
             <form
                 className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
                 onSubmit={handleSubmit}>
-                <h2 className="block text-gray-700 text-lg font-bold mb-4">TAMBAH DATA</h2>
+
+                <button
+                    type="button"
+                    onClick={handleBack}
+                    className="float-right mt-2 mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-1 rounded"
+                >
+                    Back
+                </button>
+                <h2 className="block text-gray-700 text-lg font-bold mb-4">EDIT DATA</h2>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="umur">
                         Umur

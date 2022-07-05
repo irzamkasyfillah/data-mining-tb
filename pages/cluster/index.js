@@ -127,9 +127,9 @@ function Cluster() {
                 {data && (
                     <div style={{height: '93vh', overflowY: 'auto',}}>
                         <div className="flex items-center justify-center">
-                            <Button className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5 mb-2"
+                            <Button className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mt-5 mb-2"
                                 onClick={() => setSelectedData('')}>
-                                Show All
+                                Tampilkan semua kecamatan
                             </Button>
                         </div>
                         <h2 className="ml-2 mt-1" style={{fontWeight: "bold", fontSize: 25}}> Daftar Kecamatan</h2>

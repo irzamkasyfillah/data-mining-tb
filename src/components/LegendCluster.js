@@ -16,12 +16,13 @@ function Legend({map}) {
             const legend = L.control({position: "bottomright"});
 
             legend.onAdd = () => {
-                const div = L.DomUtil.create("div", "info legend color");
+                const div = L.DomUtil.create("div", "info2 legend color");
 
                 const grades = [1, 5, 10, 15, 20, 25];
                 let labels = [];
                 let from;
                 let to;
+                labels.push('<span>Jumlah TB</span><br>')
                 for (let i = 0; i < grades.length; i++) {
                     from = i == 0 ? grades[i] : grades[i]+1;
                     to = grades[i + 1];

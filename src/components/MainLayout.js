@@ -6,7 +6,7 @@ import SidebarItem from "../components/SidebarItem"
 const navitem = [
     {
         icon: "/icons/dashboard-icon",
-        label: "Dashboard",
+        label: "Beranda",
 
         href: "/dashboard",
         main: true,
@@ -25,13 +25,13 @@ const navitem = [
         href: "/cluster",
         main: true,
     },
-    // {
-    //     icon: "/icons/event-icon",
-    //     label: "Panduan",
-    //
-    //     href: "/panduan",
-    //     main: true,
-    // },
+    {
+        icon: "/icons/event-icon",
+        label: "Panduan",
+
+        href: "/panduan",
+        main: true,
+    },
 ];
 
 const MainLayout = ({children}) => {
