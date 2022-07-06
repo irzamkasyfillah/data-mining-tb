@@ -14,40 +14,127 @@ from data import Data
 
 
 def preprocessing(dataset):
+    db = {}
+    db_kec = []
+    db_kel = []
+    db_kota = []
+    db_alamat_lengkap = []
+    db_asi_eksklusif = []
+    db_berat = []
+    db_tinggi = []
+    db_diabetes_anak = []
+    db_diabetes_ortu = []
+    db_jenis_kelamin = []
+    db_jumlah_kamar = []
+    db_jumlah_orang = []
+    db_luas_rumah = []
+    db_pekerjaan_ayah = []
+    db_pekerjaan_ibu = []
+    db_pendapatan = []
+    db_daftar_penyakit_opname = []
+    db_riwayat_penyakit_serumah = []
+    db_daftar_penyakit_serumah = []
+    db_pernah_tb = []
+    db_riwayat_opname_anak = []
+    db_sistem_ventilasi = []
+    db_tanggal_lahir = []
+    db_tb_serumah = []
+    db_timestamp = []
+    db_umur = []
+    db_vaksin_bcg = []
+
+    for i in dataset:
+        db_kec.append(i.alamat_kecamatan)
+        db_kel.append(i.alamat_kelurahan)
+        db_kota.append(i.alamat_kota)
+        db_alamat_lengkap.append(i.alamat_lengkap)
+        db_asi_eksklusif.append(i.asi_ekslusif)
+        db_berat.append(i.berat_badan)
+        db_tinggi.append(i.tinggi_badan)
+        db_diabetes_anak.append(i.diabetes_anak)
+        db_diabetes_ortu.append(i.diabetes_serumah)
+        db_jenis_kelamin.append(i.jenis_kelamin)
+        db_jumlah_kamar.append(i.jumlah_kamar)
+        db_jumlah_orang.append(i.jumlah_orang)
+        db_luas_rumah.append(i.luas_rumah)
+        db_pekerjaan_ayah.append(i.pekerjaan_ayah)
+        db_pekerjaan_ibu.append(i.pekerjaan_ibu)
+        db_pendapatan.append(i.pendapatan)
+        db_daftar_penyakit_opname.append(i.penyakit_anak)
+        db_riwayat_penyakit_serumah.append(i.penyakit_lainnya)
+        db_daftar_penyakit_serumah.append(i.penyakit_serumah)
+        db_pernah_tb.append(i.pernah_sedang_tb)
+        db_riwayat_opname_anak.append(i.riwayat_opname_anak)
+        db_sistem_ventilasi.append(i.sistem_ventilasi)
+        db_tanggal_lahir.append(i.tanggal_lahir)
+        db_tb_serumah.append(i.tb_serumah)
+        db_timestamp.append(i.timestamp)
+        db_umur.append(i.umur)
+        db_vaksin_bcg.append(i.vaksin_bcg)
+
+    db['Kelurahan'] = db_kel
+    db['Kecamatan'] = db_kec
+    db['Kab/Kota'] = db_kota
+    db['Alamat lengkap'] = db_alamat_lengkap
+    db['ASI eksklusif'] = db_asi_eksklusif
+    db['Berat badan (dalam kg)'] = db_berat
+    db['Tinggi badan (dalam cm)'] = db_tinggi
+    db['riwayat diabetes anak'] = db_diabetes_anak
+    db['riwayat diabetes keluarga'] = db_diabetes_ortu
+    db['Jenis Kelamin'] = db_jenis_kelamin
+    db['jumlah kamar tidur'] = db_jumlah_kamar
+    db['jumlah orang dalam rumah'] = db_jumlah_orang
+    db['luas rumah'] = db_luas_rumah
+    db['Pekerjaan Ayah'] = db_pekerjaan_ayah
+    db['Pekerjaan Ibu'] = db_pekerjaan_ibu
+    db['Pendapatan Orang Tua'] = db_pendapatan
+    db['daftar penyakit opname'] = db_daftar_penyakit_opname
+    db['riwayat penyakit lain orang serumah'] = db_riwayat_penyakit_serumah
+    db['daftar penyakit lain orang serumah'] = db_daftar_penyakit_serumah
+    db['pernah/sedang TB'] = db_pernah_tb
+    db['riwayat opname'] = db_riwayat_opname_anak
+    db['sistem ventilasi'] = db_sistem_ventilasi
+    db['Tanggal Lahir'] = db_tanggal_lahir
+    db['riwayat TB orang serumah'] = db_tb_serumah
+    db['Timestamp'] = db_timestamp
+    db['Umur'] = db_umur
+    db['riwayat vaksin BCG'] = db_vaksin_bcg
+    df = pd.DataFrame(db)
+    # df = df.copy()
     IMT_laki = pd.read_csv('./csv/status_gizi_laki.csv', header=1)
     IMT_perempuan = pd.read_csv('./csv/status_gizi_perempuan.csv', header=1)
-    df = pd.read_csv(dataset)
+    # df = pd.read_csv(dataset)
     df.replace(np.nan, 'Tidak Ada', inplace=True)
 
-    df = df.rename(columns={
-        'Alamat (mohon sertakan nama kelurahan dan kecamatan)': 'Alamat lengkap',
-        'Apakah anak pernah atau sedang dalam pengobatan tuberkulosis?': 'pernah/sedang TB',
-        'Apakah anak pernah mengalami penyakit diabetes?': 'riwayat diabetes anak',
-        'Apakah anak telah menerima imunisasi BCG (Bacillus Calmette-Guérin, imunisasi untuk mencegah penyakit TB)?': 'riwayat vaksin BCG',
-        'Apakah anak pernah di opname sebelumnya?': 'riwayat opname',
-        'Jika pernah, anak diopname karena penyakit apa saja?': 'daftar penyakit opname',
-        'Apakah anak mengkonsumsi ASI secara eksklusif? (ASI Eksklusif adalah pemberian ASI tanpa makanan/minuman (susu formula) tambahan hingga berusia 6 bulan)': 'ASI eksklusif',
-        'Apakah ada riwayat penyakit tuberkulosis dalam orang serumah?': 'riwayat TB orang serumah',
-        'Apakah ada riwayat penyakit diabetes dalam keluarga (orang tua)?': 'riwayat diabetes keluarga',
-        'Apakah ada riwayat penyakit lainnya selain tuberkulosis, diabetes dalam orang  serumah?': 'riwayat penyakit lain orang serumah',
-        'Jika ada, penyakit apa saja?': 'daftar penyakit lain orang serumah',
-        'Berapa luas rumah tempat anak tinggal?': 'luas rumah',
-        'Berapa jumlah kamar tidur dalam rumah?': 'jumlah kamar tidur',
-        'Berapa jumlah orang yang tinggal dalam satu rumah?': 'jumlah orang dalam rumah',
-        'Bagaimana sistem ventilasi di rumah Anda? ': 'sistem ventilasi'})
+    # df = df.rename(columns={
+    #     'Alamat (mohon sertakan nama kelurahan dan kecamatan)': 'Alamat lengkap',
+    #     'Apakah anak pernah atau sedang dalam pengobatan tuberkulosis?': 'pernah/sedang TB',
+    #     'Apakah anak pernah mengalami penyakit diabetes?': 'riwayat diabetes anak',
+    #     'Apakah anak telah menerima imunisasi BCG (Bacillus Calmette-Guérin, imunisasi untuk mencegah penyakit TB)?': 'riwayat vaksin BCG',
+    #     'Apakah anak pernah di opname sebelumnya?': 'riwayat opname',
+    #     'Jika pernah, anak diopname karena penyakit apa saja?': 'daftar penyakit opname',
+    #     'Apakah anak mengkonsumsi ASI secara eksklusif? (ASI Eksklusif adalah pemberian ASI tanpa makanan/minuman (susu formula) tambahan hingga berusia 6 bulan)': 'ASI eksklusif',
+    #     'Apakah ada riwayat penyakit tuberkulosis dalam orang serumah?': 'riwayat TB orang serumah',
+    #     'Apakah ada riwayat penyakit diabetes dalam keluarga (orang tua)?': 'riwayat diabetes keluarga',
+    #     'Apakah ada riwayat penyakit lainnya selain tuberkulosis, diabetes dalam orang  serumah?': 'riwayat penyakit lain orang serumah',
+    #     'Jika ada, penyakit apa saja?': 'daftar penyakit lain orang serumah',
+    #     'Berapa luas rumah tempat anak tinggal?': 'luas rumah',
+    #     'Berapa jumlah kamar tidur dalam rumah?': 'jumlah kamar tidur',
+    #     'Berapa jumlah orang yang tinggal dalam satu rumah?': 'jumlah orang dalam rumah',
+    #     'Bagaimana sistem ventilasi di rumah Anda? ': 'sistem ventilasi'})
 
     df.drop([
-            'code',
-            'Timestamp',
-             'Tanggal Lahir',
-             'Alamat lengkap',
-             'pernah/sedang TB',
-             'riwayat opname',
-             'riwayat penyakit lain orang serumah',
-             'Apakah ada yang pernah atau sedang mengkonsumsi obat tuberkulosis dalam orang serumah?',
-             'sistem ventilasi'
+        # 'code',
+        'Timestamp',
+        'Tanggal Lahir',
+        'Alamat lengkap',
+        'pernah/sedang TB',
+        'riwayat opname',
+        'riwayat penyakit lain orang serumah',
+        # 'Apakah ada yang pernah atau sedang mengkonsumsi obat tuberkulosis dalam orang serumah?',
+        'sistem ventilasi'
     ],
-            axis='columns', inplace=True)
+        axis='columns', inplace=True)
 
     new = df['Umur'].str.split(r'(\d+)', expand=True)
     new = new.replace([None], '0')
@@ -68,7 +155,8 @@ def preprocessing(dataset):
     df['riwayat TB orang serumah'] = df['riwayat TB orang serumah'] + ' ada riwayat Tuberkulosis orang serumah'
     df['riwayat diabetes keluarga'] = df['riwayat diabetes keluarga'] + ' ada riwayat penyakit diabetes (orang tua)'
     df['daftar penyakit opname'] = df['daftar penyakit opname'] + ' (Penyakit Opname Anak)'
-    df['daftar penyakit lain orang serumah'] = df['daftar penyakit lain orang serumah'] + ' (penyakit lainnya orang serumah)'
+    df['daftar penyakit lain orang serumah'] = df[
+                                                   'daftar penyakit lain orang serumah'] + ' (penyakit lainnya orang serumah)'
 
     tinggi_meter = df['Tinggi badan (dalam cm)'] / 100
     df['IMT'] = df['Berat badan (dalam kg)'] / (pow(tinggi_meter, 2))
@@ -77,10 +165,10 @@ def preprocessing(dataset):
         def count_z(idx):
             if (imt > status_gender['Median'][idx[0]]):
                 z = (imt - status_gender['Median'][idx[0]]) / (
-                            status_gender['+1 SD'][idx[0]] - status_gender['Median'][idx[0]])
+                        status_gender['+1 SD'][idx[0]] - status_gender['Median'][idx[0]])
             else:
                 z = (imt - status_gender['Median'][idx[0]]) / (
-                            status_gender['Median'][idx[0]] - status_gender['-1 SD'][idx[0]])
+                        status_gender['Median'][idx[0]] - status_gender['-1 SD'][idx[0]])
             return z
 
         if jenis_kelamin == 'Laki - laki':
@@ -154,8 +242,8 @@ def preprocessing(dataset):
 
 def coordinate(df):
     df['location'] = df[[
-                        'Kecamatan',
-                        'Kab/Kota']].agg(','.join, axis=1)
+        'Kecamatan',
+        'Kab/Kota']].agg(','.join, axis=1)
     coord = df['location'].apply(lambda x: x.split(','))
 
     geolocator = Nominatim(user_agent="arcgis")
@@ -642,12 +730,12 @@ def count_highest(df):
     df2 = df[df['Kecamatan'].isin(count.index)]
 
     df2["variabel2"] = df2[['Jenis Kelamin', 'Kelurahan', 'Kecamatan',
-                         'Kab/Kota', 'Pekerjaan Ayah', 'Pekerjaan Ibu',
-                         'Pendapatan Orang Tua', 'riwayat diabetes anak', 'riwayat vaksin BCG',
-                         'daftar penyakit opname', 'ASI eksklusif', 'riwayat TB orang serumah',
-                         'riwayat diabetes keluarga', 'daftar penyakit lain orang serumah',
-                         'luas rumah', 'jumlah kamar tidur', 'jumlah orang dalam rumah',
-                         'Tahun', 'Status Gizi']].astype(str).agg(','.join, axis=1)
+                            'Kab/Kota', 'Pekerjaan Ayah', 'Pekerjaan Ibu',
+                            'Pendapatan Orang Tua', 'riwayat diabetes anak', 'riwayat vaksin BCG',
+                            'daftar penyakit opname', 'ASI eksklusif', 'riwayat TB orang serumah',
+                            'riwayat diabetes keluarga', 'daftar penyakit lain orang serumah',
+                            'luas rumah', 'jumlah kamar tidur', 'jumlah orang dalam rumah',
+                            'Tahun', 'Status Gizi']].astype(str).agg(','.join, axis=1)
     data_array2 = df2["variabel2"].apply(lambda x: x.split(','))
     df2.drop(['variabel2'], axis='columns', inplace=True)
 
@@ -674,7 +762,7 @@ def asosiasi(dataset, min_support=0.35, min_threshold=0.9):
     dict_kec = getKecamatandict(list_kec, data_array)
     dict_kec_rules_location = visualisation(dict_kec, rules, locations, polygons)
 
-    #cross asosiasi
+    # cross asosiasi
     highest_kec, data_array2, highest_kec_name = count_highest(df)
     transform2 = transform(data_array2)
     frequent_pattern2 = fpgrowth(transform2, min_support)
@@ -715,7 +803,6 @@ def asosiasi(dataset, min_support=0.35, min_threshold=0.9):
 
     with open("./rules/list_aturan.json", "w") as outfile:
         json.dump(list_aturan, outfile)
-
 
     print(keckota)
     print(frequent_pattern)

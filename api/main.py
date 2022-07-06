@@ -323,10 +323,12 @@ async def read_root(background_task: BackgroundTasks, db: Session = Depends(get_
         os.remove('./rules/location.json')
     if os.path.exists('./rules/data.json'):
         os.remove('./rules/data.json')
-    background_task.add_task(asosiasi, dataset, 0.35, 0.9)
+
+    data = db.query(Data).all()
+    background_task.add_task(asosiasi, data, 0.35, 0.9)
     return {
         'message': 'Running association...',
-        'dataset': dataset
+        'dataset': data
     }
 
 
