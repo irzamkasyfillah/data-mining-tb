@@ -60,8 +60,8 @@ function PointsLayer(props) {
                     <>
                         <p style={{fontWeight: "bold", fontSize: "16px"}}>{kec}</p>
                         <div>
-                            <p style={{margin: "0px 0", fontSize: "13px"}}>Aturan Asosiasi yang terbentuk:</p>
-                            <p style={{margin: "0px 0", fontSize: "13px"}}>{antecedent}, berhubungan dengan {consequent}</p>
+                            <p style={{margin: "0px 0", fontSize: "16px"}}>Variabel yang berkaitan terhadapat Tuberkulosis anak:</p>
+                            <p style={{margin: "0px 0", fontSize: "16px"}}>{antecedent}, berhubungan dengan {consequent}</p>
                         </div>
                     </>
                 )}
@@ -124,7 +124,7 @@ const Map = (props) => {
     }
 
     return (
-        <MapContainer center={center || [-5.136143, 119.469370]} zoom={13} scrollWheelZoom={true} className={'mapid'} whenCreated={setMap}>
+        <MapContainer center={center || [-5.136143, 119.469370]} zoom={14} scrollWheelZoom={true} className={'mapid'} whenCreated={setMap}>
             <TileLayer
                 attribution='&copy; <a href="https://osm.org/copyright" target="_blank">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
