@@ -7,7 +7,7 @@ import LoadingOverlay from 'react-loading-overlay';
 import Router from "next/router";
 import {statesData} from '../../api/result/data_kecamatan'
 import Legend from "./LegendCluster"
-import {inter} from './data_interpretasig'
+import {inter} from './data_interpretasi'
 import {InterpretasiCluster} from './InterpretasiCluster'
 
 
