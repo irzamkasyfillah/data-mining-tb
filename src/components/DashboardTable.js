@@ -46,30 +46,37 @@ export function DashboardTable({data = []}) {
         {
             selector: (row) => row.jenis_kelamin,
             name: "Jenis Kelamin",
+            width: "130px",
         },
         {
             selector: (row) => row.alamat_kelurahan,
             name: "Kelurahan",
+            width: "130px",
         },
         {
             selector: (row) => row.alamat_kecamatan,
             name: "Kecamatan",
+            width: "140px",
         },
         {
             selector: (row) => row.alamat_kota,
             name: "Kab/Kota",
+            width: "130px",
         },
         {
             selector: (row) => row.pekerjaan_ayah,
             name: "Pekerjaan Ayah",
+            width: "130px",
         },
         {
             selector: (row) => row.pekerjaan_ibu,
             name: "Pekerjaan Ibu",
+            width: "130px",
         },
         {
             selector: (row) => row.pendapatan,
             name: "Pendapatan Orang Tua",
+            width: "140px",
         },
         {
             selector: (row) => row.diabetes_anak,
@@ -86,6 +93,7 @@ export function DashboardTable({data = []}) {
         {
             selector: (row) => row.penyakit_anak,
             name: "Penyakit Saat Opname",
+            width: "185px",
         },
         {
             selector: (row) => row.asi_ekslusif,
@@ -94,6 +102,7 @@ export function DashboardTable({data = []}) {
         {
             selector: (row) => row.tb_serumah,
             name: "Riwayat Tuberkulosis Orang Serumah",
+            width: "140px",
         },
         {
             selector: (row) => row.diabetes_serumah,
@@ -106,10 +115,12 @@ export function DashboardTable({data = []}) {
         {
             selector: (row) => row.penyakit_serumah,
             name: "Penyakit Orang Serumah",
+            width: "130px",
         },
         {
             selector: (row) => row.luas_rumah,
             name: "Luas Rumah",
+            width: "150px",
         },
         // {
         //     selector: (row) => row.jumlah_kamar,
@@ -128,14 +139,14 @@ export function DashboardTable({data = []}) {
                 <>
                     <button
                         type="button"
-                        className=" flex text-xsm mt-2 ml-2 mb-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-1 rounded"
+                        className=" flex text-xsm mt-2 ml-2 mb-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 my-1 rounded"
                         onClick={() => handleEdit(row.id)}
                     >
                         Edit
                     </button>
                     <button
                         type="button"
-                        className="flex text-xsm mt-2 ml-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 my-1 rounded"
+                        className="flex text-xsm mt-2 ml-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-1 my-1 rounded"
                         onClick={() => {
                             setSelectedId(row.id)
                             setShowModal(true)

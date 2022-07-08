@@ -1,4 +1,5 @@
 import DataTable from 'react-data-table-component';
+import '../../styles/AturanAsosiasi.module.css';
 
 export function AturanAsosiasi({modalData}) {
         const columns = [
