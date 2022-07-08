@@ -77,7 +77,7 @@ function Asosiasi() {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data)
+                console.log(data, 'ini data dashobard table')
                 setData(data)
                 setLoading(false)
             })
