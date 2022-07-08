@@ -147,6 +147,7 @@ export function DashboardTable({data = []}) {
                     <button
                         type="button"
                         className="flex text-xsm mt-2 ml-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-1 my-1 rounded"
+                        style={{fontSize: "16px"}}
                         onClick={() => {
                             setSelectedId(row.id)
                             setShowModal(true)

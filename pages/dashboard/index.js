@@ -140,7 +140,7 @@ function Asosiasi() {
                     <div className="grid justify-items-center p-3 lg:p-5 flex flex-col md:flex-row w-full">
                         <div
                             className="bg-white rounded-md shadow-lg max-w-full dasboardTable overflow-x-auto overflow-y-hidden">
-                            <div className="text-center justify-items-center items w-full font-semibold mt-3 mb-2">
+                            <div className="text-center justify-items-center items w-full font-semibold mt-3 mb-2" style={{fontSize: "20px"}}>
                                 DATASET TUBERKULOSIS PADA ANAK
                             </div>
                             <hr/>
