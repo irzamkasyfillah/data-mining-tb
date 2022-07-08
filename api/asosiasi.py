@@ -100,28 +100,9 @@ def preprocessing(dataset):
     db['Umur'] = db_umur
     db['riwayat vaksin BCG'] = db_vaksin_bcg
     df = pd.DataFrame(db)
-    # df = df.copy()
     IMT_laki = pd.read_csv('./csv/status_gizi_laki.csv', header=1)
     IMT_perempuan = pd.read_csv('./csv/status_gizi_perempuan.csv', header=1)
-    # df = pd.read_csv(dataset)
     df.replace(np.nan, 'Tidak Ada', inplace=True)
-
-    # df = df.rename(columns={
-    #     'Alamat (mohon sertakan nama kelurahan dan kecamatan)': 'Alamat lengkap',
-    #     'Apakah anak pernah atau sedang dalam pengobatan tuberkulosis?': 'pernah/sedang TB',
-    #     'Apakah anak pernah mengalami penyakit diabetes?': 'riwayat diabetes anak',
-    #     'Apakah anak telah menerima imunisasi BCG (Bacillus Calmette-Guérin, imunisasi untuk mencegah penyakit TB)?': 'riwayat vaksin BCG',
-    #     'Apakah anak pernah di opname sebelumnya?': 'riwayat opname',
-    #     'Jika pernah, anak diopname karena penyakit apa saja?': 'daftar penyakit opname',
-    #     'Apakah anak mengkonsumsi ASI secara eksklusif? (ASI Eksklusif adalah pemberian ASI tanpa makanan/minuman (susu formula) tambahan hingga berusia 6 bulan)': 'ASI eksklusif',
-    #     'Apakah ada riwayat penyakit tuberkulosis dalam orang serumah?': 'riwayat TB orang serumah',
-    #     'Apakah ada riwayat penyakit diabetes dalam keluarga (orang tua)?': 'riwayat diabetes keluarga',
-    #     'Apakah ada riwayat penyakit lainnya selain tuberkulosis, diabetes dalam orang  serumah?': 'riwayat penyakit lain orang serumah',
-    #     'Jika ada, penyakit apa saja?': 'daftar penyakit lain orang serumah',
-    #     'Berapa luas rumah tempat anak tinggal?': 'luas rumah',
-    #     'Berapa jumlah kamar tidur dalam rumah?': 'jumlah kamar tidur',
-    #     'Berapa jumlah orang yang tinggal dalam satu rumah?': 'jumlah orang dalam rumah',
-    #     'Bagaimana sistem ventilasi di rumah Anda? ': 'sistem ventilasi'})
 
     df.drop([
         # 'code',

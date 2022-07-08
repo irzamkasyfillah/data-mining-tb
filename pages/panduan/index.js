@@ -202,7 +202,7 @@ function Panduan() {
                                 </div>
 
                                 <p className="mt-4 ml-8 mr-4">
-                                    Aturan Asosiasi yang terbentuk:
+                                    Variabel yang berkaitan terhadapat Tuberkulosis anak:
                                     Tidak Ada (Penyakit Opname Anak), Ya Anak Telah BCG, Tidak Ada (penyakit lainnya
                                     orang serumah), berhubungan dengan Ya ASI Ekslusif.
                                     Variabel yang sangat berpengaruh terhadap Tuberkulosis Anak di kecamatan Panakkukang
