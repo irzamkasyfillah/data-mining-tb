@@ -105,14 +105,12 @@ def preprocessing(dataset):
     df.replace(np.nan, 'Tidak Ada', inplace=True)
 
     df.drop([
-        # 'code',
         'Timestamp',
         'Tanggal Lahir',
         'Alamat lengkap',
         'pernah/sedang TB',
         'riwayat opname',
         'riwayat penyakit lain orang serumah',
-        # 'Apakah ada yang pernah atau sedang mengkonsumsi obat tuberkulosis dalam orang serumah?',
         'sistem ventilasi'
     ],
         axis='columns', inplace=True)
@@ -226,9 +224,7 @@ def coordinate(df):
         'Kecamatan',
         'Kab/Kota']].agg(','.join, axis=1)
     coord = df['location'].apply(lambda x: x.split(','))
-
     geolocator = Nominatim(user_agent="arcgis")
-    # print(geolocator)
 
     keckota = []
     polygons = {}
@@ -237,14 +233,11 @@ def coordinate(df):
         keckota_item = ','.join(str(x) for x in j)
         keckota.append(keckota_item)
         location = geolocator.geocode(keckota_item, geometry='geojson', timeout=None)
-        # print(location)
         if location != None:
             loc.append([location.address, location.latitude, location.longitude])
             geometry = location.raw['geojson']
-            # geometry = geometry if len(geometry['type']) > 1 else geometry[0]
             kec_name = [str(x) for x in j][0]
             polygons[kec_name] = geometry
-            # print(location.latitude, location.longitude)
 
     locations = pd.DataFrame(loc, columns=['address', 'lat', 'long'])
 
@@ -391,8 +384,6 @@ class FPTree(object):
             child_node = FPNode(item, count, node)
             self.nodes[item].append(child_node)
             node = child_node
-
-        # print(node)
 
     def is_path(self):
         if len(self.root.children) > 1:
@@ -798,7 +789,6 @@ def asosiasi(dataset, min_support=0.35, min_threshold=0.9):
     return {
         'df': df,
         'data_array': data_array,
-        # 'list_kota': list_kota,
         'fp': frequent_pattern,
         'rules': rules.to_json(),
         'locations': keckota,
