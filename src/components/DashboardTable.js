@@ -32,7 +32,7 @@ export function DashboardTable({data = []}) {
         //     name: "Timestamp",
         // },
         {
-            selector: (row) => row.umur,
+            selector: (row) => row.key,
             name: "Umur",
         },
         {
