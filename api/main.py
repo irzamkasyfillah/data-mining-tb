@@ -294,7 +294,7 @@ def read_data():
     if os.path.exists("./rules/location.json") and os.path.exists("./rules/data.json"):
         with open('./rules/location.json', 'r') as data1:
             data_lokasi = json.load(data1)
-        with open('./rules/data.json', 'r') as data:
+        with open('./rules/data2.json', 'r') as data:
             data_asosiasi = json.load(data)
         with open('./rules/data_highest.json', 'r') as data:
             data_highest = json.load(data)
@@ -395,7 +395,6 @@ async def do_cluster(background_task: BackgroundTasks, db: Session = Depends(get
         os.remove("./result/cluster5_df.json")
 
     data = db.query(Data).all()
-    # background_task.add_task(cluster, dataset)
     background_task.add_task(cluster, data)
     return {
         'message': 'Running cluster...',
