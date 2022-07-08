@@ -10,6 +10,7 @@ export function AturanAsosiasi({modalData}) {
             {
                 name: 'Aturan Asosiasi',
                 selector: (row) => row.aturan,
+                width: "480px",
             },
         ]
 
