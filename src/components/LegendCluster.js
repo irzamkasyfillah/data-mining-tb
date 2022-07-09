@@ -24,7 +24,8 @@ function Legend({map}) {
                 let to;
                 labels.push('<span>Jumlah TB</span><br>')
                 for (let i = 0; i < grades.length; i++) {
-                    from = i == 0 ? grades[i] : grades[i]+1;
+                    // from = i == 0 ? grades[i] : grades[i]+1;
+                    from = grades[i];
                     to = grades[i + 1];
 
                     labels.push(
