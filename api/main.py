@@ -294,7 +294,7 @@ def read_data():
     if os.path.exists("./rules/location.json") and os.path.exists("./rules/data.json"):
         with open('./rules/location.json', 'r') as data1:
             data_lokasi = json.load(data1)
-        with open('./rules/data.json', 'r') as data:
+        with open('./rules/data2.json', 'r') as data:
             data_asosiasi = json.load(data)
         with open('./rules/data_highest.json', 'r') as data:
             data_highest = json.load(data)
