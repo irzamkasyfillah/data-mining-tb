@@ -8,13 +8,15 @@ export function InterpretasiCluster({modalData}) {
                 const result = row.kecamatan.split('\n').map(e => `${e}<br/>`).join('')
                 return <div className="text-sm" dangerouslySetInnerHTML={{__html: result}}></div>
             },
+            width: '240px'
         },
         {
-            name: 'INTERPRETASI CLUSTER DAN REKOMENDASI',
+            name: 'INTERPRETASI',
             selector: function (row) {
                 const result = row.interpretasi.split('\n').map(e => `${e}<br/>`).join('')
                 return <div className="text-sm" dangerouslySetInnerHTML={{__html: result}}></div>
-            }
+            },
+            // width: '480px'
         },
     ]
 

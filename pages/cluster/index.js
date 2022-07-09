@@ -93,12 +93,12 @@ function Cluster() {
                     const view = (
                         <div key={kec} onClick={() => handleClick(kec, kab)}>
                             <div className="rounded overflow-hidden shadow-lg">
-                                <div className="px-6 pt-4">
+                                <div className="px-4 pt-4">
                                     <div className="flex flex-col">
                                         <button
                                             className="box-border appearance-none cursor-pointer focus:outline-none flex items-center justify-between"
                                         >
-                                            <p className="font-bold text-xl mb-2 inline-block">{kec}</p>
+                                            <p className="font-semibold text-lg mb-2 inline-block">{kec}</p>
 
                                         </button>
                                     </div>
@@ -115,7 +115,7 @@ function Cluster() {
             })
             return Object.keys(listKabView).map(kab => (
                 <div key={kab}>
-                    <h2 style={{fontWeight: "bold", fontSize: 20, margin: "4px 0px 0px 8px"}}>{kab.toUpperCase()}</h2>
+                    <h2 style={{fontWeight: "bold", fontSize: 16, margin: "8px 0px 0px 8px"}}>{kab.toUpperCase()}</h2>
                     {listKabView[kab]}
                 </div>
             ))
@@ -127,12 +127,12 @@ function Cluster() {
                 {data && (
                     <div style={{height: '93vh', overflowY: 'auto',}}>
                         <div className="flex items-center justify-center">
-                            <Button className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mt-5 mb-2"
+                            <Button className="ml-2 mr-2 bg-blue-500 hover:bg-blue-700 text-sm text-white font-semibold py-2 px-3 rounded mt-5 mb-2"
                                 onClick={() => setSelectedData('')}>
                                 Tampilkan semua kecamatan
                             </Button>
                         </div>
-                        <h2 className="ml-2 mt-1" style={{fontWeight: "bold", fontSize: 25}}> Daftar Kecamatan</h2>
+                        <h2 className="ml-2 mt-1" style={{fontWeight: "bold", fontSize: 20}}> Daftar Kecamatan</h2>
                         {generateKec()}
                     </div>
                 )}

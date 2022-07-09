@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css'
 import {Button} from 'react-bootstrap'
 import LoadingOverlay from 'react-loading-overlay';
 import Router from "next/router";
-import {statesData} from '../../api/result/data_kecamatan'
+import {statesData} from './data_kecamatan'
 import Legend from "./LegendCluster"
 import {inter} from './data_interpretasi'
 import {InterpretasiCluster} from './InterpretasiCluster'
@@ -165,27 +165,27 @@ function PointMarker(props) {
             const position5 = resultKec5?.coord
 
             const ket_cluster1 = {
-                0: 'Rata-rata jumlah TB = ' + Math.round(res1['First']['(\'Jumlah TB\', \'mean\')']) + ', \nUsia = ' + Math.round(res1['First']['(\'Usia (mean)\', \'mean\')']) + ' tahun',
-                1: 'Rata-rata jumlah TB = ' + Math.round(res1['Second']['(\'Jumlah TB\', \'mean\')']) + ', \nUsia = ' + Math.round(res1['Second']['(\'Usia (mean)\', \'mean\')']) + ' tahun',
-                2: 'Rata-rata jumlah TB = ' + Math.round(res1['Third']['(\'Jumlah TB\', \'mean\')']) + ', \nUsia = ' + Math.round(res1['Third']['(\'Usia (mean)\', \'mean\')']) + ' tahun'
+                0: 'Rata-rata jumlah TB = ' + Math.round(res1['First']['(\'Jumlah TB\', \'mean\')']) + '\nUsia = ' + Math.round(res1['First']['(\'Usia (mean)\', \'mean\')']) + ' tahun',
+                1: 'Rata-rata jumlah TB = ' + Math.round(res1['Second']['(\'Jumlah TB\', \'mean\')']) + '\nUsia = ' + Math.round(res1['Second']['(\'Usia (mean)\', \'mean\')']) + ' tahun',
+                2: 'Rata-rata jumlah TB = ' + Math.round(res1['Third']['(\'Jumlah TB\', \'mean\')']) + '\nUsia = ' + Math.round(res1['Third']['(\'Usia (mean)\', \'mean\')']) + ' tahun'
             }
 
             const ket_cluster2 = {
-                0: 'Rata-rata gizi baik = ' + Math.round(res2['First']['(\'Persentase anak gizi baik\', \'mean\')']) + '%, gizi lebih = ' + Math.round(res2['First']['(\'Persentase anak gizi lebih\', \'mean\')']) + '%',
-                1: 'Rata-rata gizi kurang = ' + Math.round(res2['Second']['(\'Persentase anak gizi kurang\', \'mean\')']) + '%, gizi baik = ' + Math.round(res2['Second']['(\'Persentase anak gizi baik\', \'mean\')']) + '%',
+                0: 'Rata-rata gizi baik = ' + Math.round(res2['First']['(\'Persentase anak gizi baik\', \'mean\')']) + '%\ngizi lebih = ' + Math.round(res2['First']['(\'Persentase anak gizi lebih\', \'mean\')']) + '%',
+                1: 'Rata-rata gizi kurang = ' + Math.round(res2['Second']['(\'Persentase anak gizi kurang\', \'mean\')']) + '%\ngizi baik = ' + Math.round(res2['Second']['(\'Persentase anak gizi baik\', \'mean\')']) + '%',
                 2: 'Rata-rata gizi lebih = ' + Math.round(res2['Third']['(\'Persentase anak gizi lebih\', \'mean\')']) + '%'
             }
 
             const ket_cluster3 = {
                 0: 'Rata-rata pendapatan 5 - 10 juta = ' + Math.round(res3['First']['(\'Pendapatan ( 5.000.001 - 10.000.000 )\', \'mean\')']) + '%',
                 1: 'Rata-rata pendapatan 2.5 - 5 juta = ' + Math.round(res3['Second']['(\'Pendapatan ( 2.500.000 - 5.000.000 )\', \'mean\')']) + '%',
-                2: 'Rata-rata pendapatan > 10 juta = ' + Math.round(res3['Third']['(\'Pendapatan ( > 10.000.000 )\', \'mean\')']) + '%, 5 - 10 juta = ' + Math.round(res3['Third']['(\'Pendapatan ( 5.000.001 - 10.000.000 )\', \'mean\')']) + '%',
-                3: 'Rata-rata pendapatan < 2.5 juta = ' + Math.round(res3['Fourth']['(\'Pendapatan ( < 2.500.000 )\', \'mean\')']) + '%, 5 - 10 juta = ' + Math.round(res3['Fourth']['(\'Pendapatan ( 5.000.001 - 10.000.000 )\', \'mean\')']) + '%',
+                2: 'Rata-rata pendapatan > 10 juta = ' + Math.round(res3['Third']['(\'Pendapatan ( > 10.000.000 )\', \'mean\')']) + '%\n5 - 10 juta = ' + Math.round(res3['Third']['(\'Pendapatan ( 5.000.001 - 10.000.000 )\', \'mean\')']) + '%',
+                3: 'Rata-rata pendapatan < 2.5 juta = ' + Math.round(res3['Fourth']['(\'Pendapatan ( < 2.500.000 )\', \'mean\')']) + '%\n5 - 10 juta = ' + Math.round(res3['Fourth']['(\'Pendapatan ( 5.000.001 - 10.000.000 )\', \'mean\')']) + '%',
                 4: 'Rata-rata pendapatan 2.5 - 5 juta = ' + Math.round(res3['Fifth']['(\'Pendapatan ( 2.500.000 - 5.000.000 )\', \'mean\')']) + '%',
             }
 
             const ket_cluster4 = {
-                0: 'Rata-rata luas rumah < 36 m^2 = ' + Math.round(res4['First']['(\'Luas rumah ( < 36 m^2 )\', \'mean\')']) + '%, 54 - 120 m^2 = ' + Math.round(res4['First']['(\'Luas rumah ( 54 - 120 m^2 )\', \'mean\')']) + '%',
+                0: 'Rata-rata luas rumah < 36 m^2 = ' + Math.round(res4['First']['(\'Luas rumah ( < 36 m^2 )\', \'mean\')']) + '%\n54 - 120 m^2 = ' + Math.round(res4['First']['(\'Luas rumah ( 54 - 120 m^2 )\', \'mean\')']) + '%',
                 1: 'Rata-rata luas rumah 54 - 120 m^2 = ' + Math.round(res4['Second']['(\'Luas rumah ( 54 - 120 m^2 )\', \'mean\')']) + '%',
                 2: 'Rata-rata luas rumah 36 - 54 m^2 = ' + Math.round(res4['Third']['(\'Luas rumah ( 36 - 54 m^2 )\', \'mean\')']) + '%',
                 3: 'Rata-rata luas rumah 54 - 120 m^2 = ' + Math.round(res4['Fourth']['(\'Luas rumah ( 54 - 120 m^2 )\', \'mean\')']) + '%',
@@ -193,13 +193,17 @@ function PointMarker(props) {
             }
 
             const ket_cluster5 = {
-                0: 'Rata-rata telah BCG = ' + Math.round(res5['First']['(\'Persentase anak telah BCG\', \'mean\')']) + '%, \nkeluarga diabetes = ' + Math.round(res5['First']['(\'Persentase kasus dengan keluarga menderita diabetes\', \'mean\')']) + '%, \nTB serumah = ' + Math.round(res5['First']['(\'Persentase kasus dengan riwayat TB serumah\', \'mean\')']) + '%, \nASI eks = ' + Math.round(res5['First']['(\'Persentase anak dengan ASI eksklusif\', \'mean\')']) + '%, \nanak diabetes = ' + Math.round(res5['First']['(\'Persentase anak menderita diabetes\', \'mean\')']) + '%',
-                1: 'Rata-rata telah BCG = ' + Math.round(res5['Second']['(\'Persentase anak telah BCG\', \'mean\')']) + '%, \nASI eks = ' + Math.round(res5['Second']['(\'Persentase anak dengan ASI eksklusif\', \'mean\')']) + '%, \nTB serumah = ' + Math.round(res5['Second']['(\'Persentase kasus dengan riwayat TB serumah\', \'mean\')']) + '%',
-                2: 'Rata-rata anak diabetes = ' + Math.round(res5['Third']['(\'Persentase anak menderita diabetes\', \'mean\')']) + '%, \nTB serumah = ' + Math.round(res5['Third']['(\'Persentase kasus dengan riwayat TB serumah\', \'mean\')']) + '%, \ntelah BCG = ' + Math.round(res5['Third']['(\'Persentase anak telah BCG\', \'mean\')']) + '%',
-                3: 'Rata-rata telah BCG = ' + Math.round(res5['Fourth']['(\'Persentase anak telah BCG\', \'mean\')']) + '%, \nASI Eks = ' + Math.round(res5['Fourth']['(\'Persentase anak dengan ASI eksklusif\', \'mean\')']) + '%, \nkeluarga diabetes = ' + Math.round(res5['Fourth']['(\'Persentase kasus dengan keluarga menderita diabetes\', \'mean\')']) + '%',
+                0: 'Rata-rata telah BCG = ' + Math.round(res5['First']['(\'Persentase anak telah BCG\', \'mean\')']) + '%\nkeluarga diabetes = ' + Math.round(res5['First']['(\'Persentase kasus dengan keluarga menderita diabetes\', \'mean\')']) + '%\nTB serumah = ' + Math.round(res5['First']['(\'Persentase kasus dengan riwayat TB serumah\', \'mean\')']) + '%\nASI eks = ' + Math.round(res5['First']['(\'Persentase anak dengan ASI eksklusif\', \'mean\')']) + '%\nanak diabetes = ' + Math.round(res5['First']['(\'Persentase anak menderita diabetes\', \'mean\')']) + '%',
+                1: 'Rata-rata telah BCG = ' + Math.round(res5['Second']['(\'Persentase anak telah BCG\', \'mean\')']) + '%\nASI eks = ' + Math.round(res5['Second']['(\'Persentase anak dengan ASI eksklusif\', \'mean\')']) + '%\nTB serumah = ' + Math.round(res5['Second']['(\'Persentase kasus dengan riwayat TB serumah\', \'mean\')']) + '%',
+                2: 'Rata-rata anak diabetes = ' + Math.round(res5['Third']['(\'Persentase anak menderita diabetes\', \'mean\')']) + '%\nTB serumah = ' + Math.round(res5['Third']['(\'Persentase kasus dengan riwayat TB serumah\', \'mean\')']) + '%\ntelah BCG = ' + Math.round(res5['Third']['(\'Persentase anak telah BCG\', \'mean\')']) + '%',
+                3: 'Rata-rata telah BCG = ' + Math.round(res5['Fourth']['(\'Persentase anak telah BCG\', \'mean\')']) + '%\nASI Eks = ' + Math.round(res5['Fourth']['(\'Persentase anak dengan ASI eksklusif\', \'mean\')']) + '%\nkeluarga diabetes = ' + Math.round(res5['Fourth']['(\'Persentase kasus dengan keluarga menderita diabetes\', \'mean\')']) + '%',
             }
 
-            const result = ket_cluster1[resultKec1.Total].split('\n').map(e => `${e}<br/>`).join('')
+            const result1 = ket_cluster1[resultKec1.Total].split('\n').map(e => `${e}<br/>`).join('')
+            const result2 = ket_cluster2[resultKec2.Total].split('\n').map(e => `${e}<br/>`).join('')
+            const result3 = ket_cluster3[resultKec3.Total].split('\n').map(e => `${e}<br/>`).join('')
+            const result4 = ket_cluster4[resultKec4.Total].split('\n').map(e => `${e}<br/>`).join('')
+            const result5 = ket_cluster5[resultKec5.Total].split('\n').map(e => `${e}<br/>`).join('')
 
             return (
                 <div className="text-lg">
@@ -213,14 +217,14 @@ function PointMarker(props) {
                     >
                         <Popup>
                             <h3 style={{textAlign: 'center'}}>
-                                <b style={{color: 'darkslategray'}} className="text-md" >Kecamatan {kec}</b>
+                                <b style={{color: 'darkslategray', fontSize : '14px'}} >Kecamatan {kec}</b>
                             </h3>
                             <br/>
 
-                            <div className="text-center text-md">
-                                <div dangerouslySetInnerHTML={{__html: result}}></div>
+                            <div className="text-right" style={{fontSize : '14px'}}>
+                                <div dangerouslySetInnerHTML={{__html: result1}}></div>
                                 <br/><br/>
-                                Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
+                                Jumlah TB anak = {resultKec1['Jumlah TB']}
                             </div>
 
                         </Popup>
@@ -236,15 +240,15 @@ function PointMarker(props) {
                     >
                         <Popup>
                             <h3 style={{textAlign: 'center'}}>
-                                <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
+                                <b style={{color: 'darkslategray', fontSize : '14px'}}>Kecamatan {kec}</b>
                             </h3>
                             <br/>
 
-                            <div className="text-center">
-                                <div dangerouslySetInnerHTML={{__html: ket_cluster2[resultKec2.Total]}}></div>
+                            <div className="text-right" style={{fontSize : '14px'}}>
+                                <div dangerouslySetInnerHTML={{__html: result2}} ></div>
                                 {/*{ket_cluster2[resultKec2.Total]}*/}
                                 <br/><br/>
-                                Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
+                                Jumlah TB anak = {resultKec1['Jumlah TB']}
                             </div>
 
                         </Popup>
@@ -259,14 +263,15 @@ function PointMarker(props) {
                     >
                         <Popup>
                             <h3 style={{textAlign: 'center'}}>
-                                <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
+                                <b style={{color: 'darkslategray', fontSize : '14px'}}>Kecamatan {kec}</b>
                             </h3>
                             <br/>
 
-                            <div className="text-center">
-                                {ket_cluster3[resultKec3.Total]}
+                            <div className="text-right" style={{fontSize : '14px'}}>
+                                <div dangerouslySetInnerHTML={{__html: result3}}></div>
+                                {/*{ket_cluster3[resultKec3.Total]}*/}
                                 <br/><br/>
-                                Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
+                                Jumlah TB anak = {resultKec1['Jumlah TB']}
                             </div>
 
                         </Popup>
@@ -280,15 +285,16 @@ function PointMarker(props) {
                         fillOpacity={1.0}
                     >
                         <Popup>
-                            <h3 style={{textAlign: 'center'}}>
-                                <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
+                            <h3 style={{textAlign: 'center'}} >
+                                <b style={{color: 'darkslategray', fontSize : '14px'}} >Kecamatan {kec}</b>
                             </h3>
                             <br/>
 
-                            <div className="text-center">
-                                {ket_cluster4[resultKec4.Total]}
+                            <div className="text-right" style={{fontSize : '14px'}}>
+                                <div dangerouslySetInnerHTML={{__html: result4}}></div>
+                                {/*{ket_cluster4[resultKec4.Total]}*/}
                                 <br/><br/>
-                                Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
+                                Jumlah TB anak = {resultKec1['Jumlah TB']}
                             </div>
 
                         </Popup>
@@ -303,14 +309,15 @@ function PointMarker(props) {
                     >
                         <Popup>
                             <h3 style={{textAlign: 'center'}}>
-                                <b style={{color: 'darkslategray'}}>Kecamatan {kec}</b>
+                                <b style={{color: 'darkslategray', fontSize : '14px'}}>Kecamatan {kec}</b>
                             </h3>
                             <br/>
 
-                            <div className="text-center">
-                                {ket_cluster5[resultKec5.Total]}
+                            <div className="text-right" style={{fontSize : '14px'}}>
+                                <div dangerouslySetInnerHTML={{__html: result5}}></div>
+                                {/*{ket_cluster5[resultKec5.Total]}*/}
                                 <br/><br/>
-                                Jumlah kasus TB anak : {resultKec1['Jumlah TB']}
+                                Jumlah TB anak = {resultKec1['Jumlah TB']}
                             </div>
 
                         </Popup>
@@ -483,7 +490,12 @@ const Map = (props) => {
                                         }}
                                     >
                                         <Popup>
-                                            Kecamatan {state}
+                                            <div className="text-center" style={{color: 'darkslategray',fontSize: '14px', }}>
+                                                <b>Kecamatan {state}</b>
+                                                    <br/>
+                                                <br/>
+                                                Jumlah TB anak : {jumlah_kasus}
+                                            </div>
                                         </Popup>
                                     </Polygon>
 
@@ -789,12 +801,12 @@ const Map = (props) => {
                 </div>
 
                 <div className="flex items-center justify-center">
-                    <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5 mb-5"
+                    <Button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded mt-5 mb-5"
                             onClick={() => onClickColor('')}>
                         Tampilkan semua cluster
                     </Button>
                     <Button
-                        className="ml-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5 mb-5"
+                        className="ml-8 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded mt-5 mb-5"
                         onClick={() => setShowModal(true)}>
                         Interpretasi Hasil Cluster
                     </Button>

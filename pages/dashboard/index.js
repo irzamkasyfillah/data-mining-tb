@@ -67,8 +67,9 @@ function Asosiasi() {
         const req = fetch(`http://127.0.0.1:8080/data-delete-all`, {
             method: "DELETE"
         })
-        fetchData()
+        // fetchData()
         setShowModal(false)
+        Router.reload(window.location.pathname)
     };
 
     const fetchData = async () => {

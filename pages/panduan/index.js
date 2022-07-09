@@ -230,7 +230,7 @@ function Panduan() {
                                 <p className="ml-10 font-semibold">
                                     a. Peta
                                 </p>
-                                <p className="mfl-14 mr-4">
+                                <p className="ml-14 mr-4">
                                     Menampilkan peta hasil klasterisasi dataset tuberkulosis pada anak.
                                     Peta yang ditampilkan menunjukkan polygon batasan-batasan untuk setiap kecamatan,
                                     dimana setiap kecamatan memiliki warna polygon yang berbeda tergantung dari jumlah

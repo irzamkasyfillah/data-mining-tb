@@ -161,7 +161,7 @@ function Asosiasi() {
                   Tampilkan semua aturan
                 </button>
               </div>
-              <h2 style={{fontWeight: "bold", fontSize: 25}}>Daftar Kecamatan</h2>
+              <h2 style={{fontWeight: "bold", fontSize: 25}} className="ml-2">Daftar Kecamatan</h2>
               <div className="px-8">
                 <TextField
                   id="outlined-basic"
