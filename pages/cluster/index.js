@@ -96,10 +96,9 @@ function Cluster() {
                                 <div className="px-4 pt-4">
                                     <div className="flex flex-col">
                                         <button
-                                            className="box-border appearance-none cursor-pointer focus:outline-none flex items-center justify-between"
+                                            className="text-left box-border appearance-none cursor-pointer focus:outline-none"
                                         >
                                             <p className="font-semibold text-lg mb-2 inline-block">{kec}</p>
-
                                         </button>
                                     </div>
                                 </div>

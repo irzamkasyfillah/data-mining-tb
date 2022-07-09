@@ -808,7 +808,7 @@ const Map = (props) => {
                     <Button
                         className="ml-8 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded mt-5 mb-5"
                         onClick={() => setShowModal(true)}>
-                        Interpretasi Hasil Cluster
+                        Interpretasi hasil cluster
                     </Button>
                 </div>
             </div>

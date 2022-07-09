@@ -276,6 +276,10 @@ function Panduan() {
                                 <div className="mt-4 flex items-center justify-center">
                                     <img src="/images/panakkukang2.png" className="h-48"/>
                                 </div>
+                                <p className="ml-14 mt-4 mr-4">
+                                    Untuk melihat interpretasi hasil klaster dan rekomendasi yang dapat diberikan dari
+                                    hasil clustering, klik tombol 'Interpretasi hasil cluster'.
+                                </p>
                                 <p className="ml-10 mt-4 font-semibold">
                                     b. Daftar kecamatan
                                 </p>
