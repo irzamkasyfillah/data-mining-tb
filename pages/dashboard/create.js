@@ -87,7 +87,7 @@ function Panduan() {
                         id="umur"
                         name="umur"
                         type="text"
-                        placeholder="Umur"
+                        placeholder="Contoh : 6 tahun"
                         onChange={handleChange}
                         value={state.umur}>
                     </input>
