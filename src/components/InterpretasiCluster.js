@@ -49,6 +49,7 @@ export function InterpretasiCluster({modalData}) {
             columns={columns}
             data={modalData}
             pagination
+            customStyles={customStyles}
         />
     );
 
