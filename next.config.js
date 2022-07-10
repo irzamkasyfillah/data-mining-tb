@@ -1,4 +1,5 @@
 module.exports = {
+  generateEtags: false,
   reactStrictMode: true,
   async redirects() {
     return [
