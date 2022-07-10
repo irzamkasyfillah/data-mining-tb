@@ -22,8 +22,9 @@ export function DashboardTable({data = []}) {
     const handleDelete = (id) => {
         const req = fetch(`https://tuber-api.ilpez.tech/data-delete/${id}`, {
             method: "DELETE"
+        }).then(() => {
+            Router.reload(window.location.pathname)
         })
-        Router.reload(window.location.pathname)
     }
 
     const columns = [
