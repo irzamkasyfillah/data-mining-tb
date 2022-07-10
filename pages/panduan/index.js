@@ -68,13 +68,13 @@ function Panduan() {
                                 <p>Website ini terdiri atas 4 halaman, yaitu Halaman Beranda, Halaman Asosiasi, Halaman
                                     Clustering, dan Halaman Panduan.</p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/sidebar.png" className="h-48"/>
+                                    <img src="/images/sidebar.png" className="h-48"/>
                                 </div>
                             </div>
                             <div className="mt-5 ml-2 mr-2">
                                 <p className="font-semibold">1. Halaman Beranda</p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/beranda.png" className="h-80"/>
+                                    <img src="/images/beranda.png" className="h-80"/>
                                 </div>
                                 <p className="mt-4 ml-4 mr-4">
                                     Pada halaman beranda menampilkan tabel yang berisi dataset tuberkulosis pada anak.
@@ -90,13 +90,13 @@ function Panduan() {
                                     {"1. Klik tombol 'Tambah Data', maka akan diarahkan ke halaman tambah data."}
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/tambah-data-1.png" className="h-40"/>
+                                    <img src="/images/tambah-data-1.png" className="h-40"/>
                                 </div>
                                 <p className="ml-14">
                                     {"2. Isi semua form yang diperlukan. Lalu klik tombol 'Submit'"}
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/submit.png" className="h-32"/>
+                                    <img src="/images/submit.png" className="h-32"/>
                                 </div>
 
                                 <p className="ml-10 mt-4 font-semibold">
@@ -106,13 +106,13 @@ function Panduan() {
                                     {"1. Pada kolom aksi di tabel, klik tombol 'Edit', maka akan diarahkan ke halaman edit data."}
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/edit.png" className="h-64"/>
+                                    <img src="/images/edit.png" className="h-64"/>
                                 </div>
                                 <p className="ml-14">
                                    {"2. Lalu isi form yang akan di-edit. Setelah itu klik tombol 'Submit'."}
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/hal-edit.png" className="h-40"/>
+                                    <img src="/images/hal-edit.png" className="h-40"/>
                                 </div>
 
                                 <p className="ml-10 mt-4 font-semibold">
@@ -122,7 +122,7 @@ function Panduan() {
                                    {"1. Pada kolom aksi di tabel, klik tombol 'Hapus',"}
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/edit.png" className="h-64"/>
+                                    <img src="/images/edit.png" className="h-64"/>
                                 </div>
 
                                 <p className="ml-10 mt-4 font-semibold">
@@ -132,7 +132,7 @@ function Panduan() {
                                     {"Untuk melakukan proses data mining asosiasi dan clustering, klik tombol 'Generate Data Asosiasi' dan 'Generate Data Cluster'. Hasil dari asosiasi dan clustering dapat dilihat pada Halaman Asosiasi dan Halaman Clustering."}
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/generate.png" className="h-32"/>
+                                    <img src="/images/generate.png" className="h-32"/>
                                 </div>
                             </div>
                             <div className="mt-5 ml-2 mr-2">
@@ -142,14 +142,14 @@ function Panduan() {
                                     Tekan tombol asosiasi pada sidebar dan akan diarahkan ke halaman asosiasi
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/sidebar.png" className="h-40"/>
+                                    <img src="/images/sidebar.png" className="h-40"/>
                                 </div>
                                 <p className="mt-4 ml-4 mr-4">
                                     2. Pada halaman asosiasi, terdapat dua bagian yaitu bagian daftar kecamatan dan
                                     bagian peta
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/hal-asosiasi.png" className="h-80"/>
+                                    <img src="/images/hal-asosiasi.png" className="h-80"/>
                                 </div>
 
                                 <p className="mt-4 ml-4 mr-4">
@@ -157,14 +157,14 @@ function Panduan() {
                                     kecamatan pada peta dan hasil aturan asosiasi.
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/poly-asosiasi.png" className="h-80"/>
+                                    <img src="/images/poly-asosiasi.png" className="h-80"/>
                                 </div>
 
                                 <p className="mt-4 ml-4 mr-4">
                                     4. Terdapat fitur pencarian untuk mencari kecamatan tertentu
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/search.png" className="h-40"/>
+                                    <img src="/images/search.png" className="h-40"/>
                                 </div>
 
                                 <p className="mt-4 ml-4 mr-4">
@@ -172,10 +172,10 @@ function Panduan() {
                                     asosiasi di setiap kecamatan
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/tampilkan-aturan.png" className="h-14"/>
+                                    <img src="/images/tampilkan-aturan.png" className="h-14"/>
                                 </div>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/tabel-aturan.png" style={{height: '600px'}}/>
+                                    <img src="/images/tabel-aturan.png" style={{height: '600px'}}/>
                                 </div>
 
                                 <p className="mt-4 ml-4 mr-4">
@@ -184,7 +184,7 @@ function Panduan() {
                                     Misalnya pada kecamatan Panakkukang
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/1poly.png" className="h-80"/>
+                                    <img src="/images/1poly.png" className="h-80"/>
                                 </div>
 
                                 <p className="mt-4 ml-8 mr-4">
@@ -205,7 +205,7 @@ function Panduan() {
                             <div className="mt-5 ml-2 mr-2">
                                 <p className="font-semibold">3. Halaman Cluster</p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/hal-cluster.png" className="h-96"/>
+                                    <img src="/images/hal-cluster.png" className="h-96"/>
                                 </div>
                                 <p className="mt-4 ml-4 mr-4">
                                     Halaman clustering terdiri dari 3 bagian, yaitu pada bagian kanan atas terdapat
@@ -227,7 +227,7 @@ function Panduan() {
                                     suatu kecamatan.
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/peta.png" className="h-80"/>
+                                    <img src="/images/peta.png" className="h-80"/>
                                 </div>
                                 <p className="ml-10 mt-4 font-semibold">
                                     b. Daftar Klaster
@@ -243,7 +243,7 @@ function Panduan() {
 
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/klaster.png" className="h-64"/>
+                                    <img src="/images/klaster.png" className="h-64"/>
                                 </div>
                                 <p className="ml-14 mt-4 mr-4">
                                     Apabila salah satu lingkaran/klaster di daftar klaster diklik maka dalam petanya
@@ -252,7 +252,7 @@ function Panduan() {
                                     {"'Tampilkan semua klaster'."}
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/klik-klaster.png" className="h-64"/>
+                                    <img src="/images/klik-klaster.png" className="h-64"/>
                                 </div>
                                 <p className="ml-14 mt-4 mr-4">
                                     Apabila salah satu lingkaran/klaster di peta diklik, maka akan menampilkan informasi
@@ -260,7 +260,7 @@ function Panduan() {
                                     klaster tersebut seperti pada gambar:
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/panakkukang2.png" className="h-48"/>
+                                    <img src="/images/panakkukang2.png" className="h-48"/>
                                 </div>
                                 <p className="ml-14 mt-4 mr-4">
                                     Untuk melihat interpretasi hasil klaster dan rekomendasi yang dapat diberikan dari
@@ -273,7 +273,7 @@ function Panduan() {
                                     Menampilkan seluruh kecamatan yang ada dalam dataset.
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/daftar-kec.png" className="h-64"/>
+                                    <img src="/images/daftar-kec.png" className="h-64"/>
                                 </div>
                                 <p className="ml-14 mt-4">
                                     Apabila salah satu kecamatan diklik, misalnya kecamatan Panakukkang, maka dalam
@@ -282,13 +282,13 @@ function Panduan() {
                                     klik tombol {"'Tampilkan semua kecamatan'."}
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/panakkukang.png" className="h-64"/>
+                                    <img src="/images/panakkukang.png" className="h-64"/>
                                 </div>
                             </div>
                             <div className="mt-5 ml-2 mr-2">
                                 <p className="font-semibold">4. Halaman Panduan</p>
                                 <div className="mt-4 flex items-center justify-center">
-                                    <Image alt="" src="/images/hal-panduan.png" className="h-80"/>
+                                    <img src="/images/hal-panduan.png" className="h-80"/>
                                 </div>
                                 <p className="mt-4 ml-4 mr-4 mb-4">
                                     Halaman ini berisi panduan penggunaan website, dimulai dari cara menambah, mengedit,
