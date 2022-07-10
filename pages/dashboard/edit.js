@@ -1,6 +1,6 @@
 import {withMainLayout} from "../../src/components/MainLayout"
 import React, {useEffect, useState} from "react";
-import {useRouter} from 'next/router';
+import Router, {useRouter} from 'next/router';
 
 
 function Panduan() {
@@ -89,10 +89,11 @@ function Panduan() {
             method: "PUT",
             body: JSON.stringify(data),
         })
-
-        router.push({
-            pathname: "/dashboard",
-        });
+            .then(() => {
+                router.push({
+                    pathname: "/dashboard",
+                });
+            })
     };
 
     function handleChange(e) {

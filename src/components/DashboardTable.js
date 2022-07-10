@@ -23,7 +23,9 @@ export function DashboardTable({data = []}) {
         const req = fetch(`http://127.0.0.1:8080/data-delete/${id}`, {
             method: "DELETE"
         })
-        Router.reload(window.location.pathname)
+            .then(() => {
+                Router.reload(window.location.pathname)
+            })
     }
 
     const columns = [
