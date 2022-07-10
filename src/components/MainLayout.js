@@ -95,22 +95,8 @@ const MainLayout = ({children}) => {
                     } mt-4`}
                 >
                     <div className={`md:block  hidden md:p-0`}>
-                        {/* <Image
-              src="/images/logo-bubble-.svg"
-              alt="logo bubble"
-              width="50"
-              height="40"
-              layout="intrinsic"
-            /> */}
                     </div>
                     <div className={`${!open ? "md:hidden" : "md:block"}  hidden md:p-0`}>
-                        {/* <Image
-              src="/images/logoText.svg"
-              alt="logo text"
-              width="120"
-              height="60"
-              layout="intrinsic"
-            /> */}
                     </div>
                 </div>
 
