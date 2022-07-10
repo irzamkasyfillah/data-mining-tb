@@ -96,13 +96,13 @@ function Panduan() {
                                     Langkah-langkah untuk menambah data yaitu:<br/>
                                 </p>
                                 <p className="ml-14">
-                                    1. Klik tombol 'Tambah Data', maka akan diarahkan ke halaman tambah data.
+                                    {"1. Klik tombol 'Tambah Data', maka akan diarahkan ke halaman tambah data."}
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
                                     <img src="/images/tambah-data-1.png" className="h-40"/>
                                 </div>
                                 <p className="ml-14">
-                                    2. Isi semua form yang diperlukan. Lalu klik tombol 'Submit'
+                                    {"2. Isi semua form yang diperlukan. Lalu klik tombol 'Submit'"}
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
                                     <img src="/images/submit.png" className="h-32"/>
@@ -112,14 +112,13 @@ function Panduan() {
                                     b. Mengedit Data
                                 </p>
                                 <p className="ml-14">
-                                    1. Pada kolom aksi di tabel, klik tombol 'Edit', maka akan diarahkan ke halaman edit
-                                    data.
+                                    {"1. Pada kolom aksi di tabel, klik tombol 'Edit', maka akan diarahkan ke halaman edit data."}
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
                                     <img src="/images/edit.png" className="h-64"/>
                                 </div>
                                 <p className="ml-14">
-                                    2. Lalu isi form yang akan di-edit. Setelah itu klik tombol 'Submit'.
+                                   {"2. Lalu isi form yang akan di-edit. Setelah itu klik tombol 'Submit'."}
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
                                     <img src="/images/hal-edit.png" className="h-40"/>
@@ -129,7 +128,7 @@ function Panduan() {
                                     c. Menghapus Data
                                 </p>
                                 <p className="ml-14">
-                                    1. Pada kolom aksi di tabel, klik tombol 'Hapus',
+                                   {"1. Pada kolom aksi di tabel, klik tombol 'Hapus',"}
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
                                     <img src="/images/edit.png" className="h-64"/>
@@ -139,11 +138,7 @@ function Panduan() {
                                     d. Melakukan Asosiasi dan Clustering
                                 </p>
                                 <p className="ml-14">
-                                    Untuk melakukan proses data mining asosiasi dan clustering, klik tombol 'Generate
-                                    Data Asosiasi' dan
-                                    'Generate Data Cluster'. Hasil dari asosiasi dan clustering dapat dilihat pada
-                                    Halaman Asosiasi dan
-                                    Halaman Clustering.
+                                    {"Untuk melakukan proses data mining asosiasi dan clustering, klik tombol 'Generate Data Asosiasi' dan 'Generate Data Cluster'. Hasil dari asosiasi dan clustering dapat dilihat pada Halaman Asosiasi dan Halaman Clustering."}
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
                                     <img src="/images/generate.png" className="h-32"/>
@@ -263,7 +258,7 @@ function Panduan() {
                                     Apabila salah satu lingkaran/klaster di daftar klaster diklik maka dalam petanya
                                     akan menampilkan kecamatan apa saja
                                     yang termasuk dalam klaster tersebut. Untuk menampilkan semua klaster klik tombol
-                                    'Tampilkan semua klaster'.
+                                    {"'Tampilkan semua klaster'."}
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
                                     <img src="/images/klik-klaster.png" className="h-64"/>
@@ -278,7 +273,7 @@ function Panduan() {
                                 </div>
                                 <p className="ml-14 mt-4 mr-4">
                                     Untuk melihat interpretasi hasil klaster dan rekomendasi yang dapat diberikan dari
-                                    hasil clustering, klik tombol 'Interpretasi hasil cluster'.
+                                    hasil clustering, klik tombol {"'Interpretasi hasil cluster'."}
                                 </p>
                                 <p className="ml-10 mt-4 font-semibold">
                                     b. Daftar kecamatan
@@ -293,7 +288,7 @@ function Panduan() {
                                     Apabila salah satu kecamatan diklik, misalnya kecamatan Panakukkang, maka dalam
                                     tampilan peta akan menampilkan klaster-klaster apa saja yang termasuk dalam kecamatan
                                     Panakkukang seperti pada gambar di bawah. Untuk menampilkan semua daftar kecamatan,
-                                    klik tombol 'Tampilkan semua kecamatan'.
+                                    klik tombol {"'Tampilkan semua kecamatan'."}
                                 </p>
                                 <div className="mt-4 flex items-center justify-center">
                                     <img src="/images/panakkukang.png" className="h-64"/>

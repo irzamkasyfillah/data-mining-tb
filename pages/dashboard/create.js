@@ -225,7 +225,7 @@ function Panduan() {
                         <option value="< 2.500.000">{'< 2.500.000'}</option>
                         <option value="2.500.000 - 5.000.000">2.500.000 - 5.000.000</option>
                         <option value="5.000.001 - 10.000.000">5.000.001 - 10.000.000</option>
-                        <option value="> 10.000.000">> 10.000.000</option>
+                        <option value="> 10.000.000">{"> 10.000.000"}</option>
                     </select>
                 </div>
                 <div className="mb-6 ">
@@ -353,7 +353,7 @@ function Panduan() {
                         <option value="< 36 m^2">{'< 36 m^2'}</option>
                         <option value="36 - 54 m^2">36 - 54 m^2</option>
                         <option value="54 - 120 m^2">54 - 120 m^2</option>
-                        <option value="> 120 m^2">> 120 m^2</option>
+                        <option value="> 120 m^2">{'> 120 m^2'}</option>
                     </select>
                 </div>
                 <div className="flex items-center justify-center">

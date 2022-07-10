@@ -55,7 +55,7 @@ function PointsLayer(props) {
         const pathOptions = { fillColor: 'red', fillOpacity: fillOpacity }
 
         return (
-            <PolygonMarker className={`polygon-marker ${index} hidden`} pathOptions={pathOptions} positions={polygon} 
+            <PolygonMarker className={`polygon-marker ${index} hidden`} pathOptions={pathOptions} positions={polygon} key={index}
                 content={(
                     <>
                         <p style={{fontWeight: "bold", fontSize: "16px"}}>{kec}</p>

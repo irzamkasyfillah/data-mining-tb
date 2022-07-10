@@ -444,6 +444,7 @@ const Map = (props) => {
                                 }
 
                                 return (<Polygon
+                                        key={state}
                                         pathOptions={{
                                             fillColor: getColor(jumlah_kasus),
                                             fillOpacity: 0.7,
