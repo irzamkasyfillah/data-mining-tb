@@ -89,11 +89,11 @@ function Panduan() {
         const req = fetch(`https://tuber-api.ilpez.tech/data-update/${router.query.id}`, {
             method: "PUT",
             body: JSON.stringify(data),
+        }).then(() => {
+            router.push({
+                pathname: "/dashboard",
+            });
         })
-
-        router.push({
-            pathname: "/dashboard",
-        });
     };
 
     function handleChange(e) {

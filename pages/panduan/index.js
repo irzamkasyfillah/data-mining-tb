@@ -24,11 +24,8 @@ function Panduan() {
 
         const req = fetch(`https://tuber-api.ilpez.tech/create`, {
             method: "POST",
-            // headers: {'Content-type': 'application/json'},
             body: JSON.stringify(data),
         })
-        // Router.push("/dashboard")
-        // }
     };
 
     const fetchData = async () => {
