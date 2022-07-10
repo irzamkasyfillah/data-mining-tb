@@ -21,7 +21,7 @@ export function Data_Table({data = []}) {
 
     const handleDelete = (id) => {
         console.log(id)
-        const req = fetch(`http://127.0.0.1:8080/delete/${id}`, {
+        const req = fetch(`https://tuber-api.ilpez.tech/delete/${id}`, {
             method: "DELETE"
         })
         Router.reload(window.location.pathname)

@@ -20,7 +20,7 @@ function Panduan() {
 
         console.log(JSON.stringify(data), 'data')
 
-        const req = fetch(`http://127.0.0.1:8080/create`, {
+        const req = fetch(`https://tuber-api.ilpez.tech/create`, {
             method: "POST",
             // headers: {'Content-type': 'application/json'},
             body: JSON.stringify(data),

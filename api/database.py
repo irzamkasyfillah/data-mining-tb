@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Table, MetaData, Column, Integer, String, 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "mysql://root:@localhost:3306/tuberkulosis"
+SQLALCHEMY_DATABASE_URL = "mysql://tuber:password@localhost:3306/tuberkulosis"
 
 metadata = MetaData()
 

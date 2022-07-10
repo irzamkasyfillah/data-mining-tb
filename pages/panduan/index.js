@@ -21,7 +21,7 @@ function Panduan() {
 
         console.log(JSON.stringify(data), 'data')
 
-        const req = fetch(`http://127.0.0.1:8080/create`, {
+        const req = fetch(`https://tuber-api.ilpez.tech/create`, {
             method: "POST",
             // headers: {'Content-type': 'application/json'},
             body: JSON.stringify(data),
@@ -31,7 +31,7 @@ function Panduan() {
     };
 
     const fetchData = async () => {
-        const req = await fetch(`http://127.0.0.1:8080/read`, {
+        const req = await fetch(`https://tuber-api.ilpez.tech/read`, {
             method: "GET",
         })
             .then((res) => res.json()

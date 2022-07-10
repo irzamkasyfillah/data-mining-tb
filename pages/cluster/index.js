@@ -28,7 +28,7 @@ function Cluster() {
             //     setLoading(false)
             // } else {
             setLoading(true);
-            const req = await fetch(`http://127.0.0.1:8080/cluster`, {
+            const req = await fetch(`https://tuber-api.ilpez.tech/cluster`, {
                 method: "GET",
             })
                 .then((res) => res.json())

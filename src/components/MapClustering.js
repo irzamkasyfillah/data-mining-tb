@@ -380,7 +380,7 @@ const Map = (props) => {
     }
 
     const handleCluster = () => {
-        const req = fetch(`http://127.0.0.1:8080/run_cluster`, {
+        const req = fetch(`https://tuber-api.ilpez.tech/run_cluster`, {
             method: "POST",
         })
         Router.push({
@@ -642,7 +642,7 @@ const Map = (props) => {
                         }}>
 
                         </div>
-                        <div className="col-span-9" style={{color: 'white'}}> Pendapatan > 10 juta tertinggi</div>
+                        <div className="col-span-9" style={{color: 'white'}}> {'Pendapatan > 10 juta tertinggi'}</div>
                     </div>
                     <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[9])}>
                         <div className="col-span-1" style={{
@@ -735,7 +735,7 @@ const Map = (props) => {
                         }}>
 
                         </div>
-                        <div className="col-span-9" style={{color: 'white'}}> Luas rumah > 120 m^2 tertinggi</div>
+                        <div className="col-span-9" style={{color: 'white'}}> {'Luas rumah > 120 m^2 tertinggi'}</div>
                     </div>
                     <div className="grid grid-cols-10 gap-1" onClick={() => onClickColor(warna[16])}>
                         <div className="col-span-1" style={{
