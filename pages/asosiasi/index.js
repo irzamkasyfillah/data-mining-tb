@@ -73,7 +73,7 @@ function Asosiasi() {
           <div key={resultKec?.index} onClick={() => handleClick(resultKec, kec)}>
             <Accordion title={kec} content={(
               <div>
-                <p>Variabel yang berkaitan terhadapat Tuberkulosis anak:</p>
+                <p>Variabel yang berkaitan terhadap Tuberkulosis anak:</p>
                 <p>antecedent : {antecedent}</p>
                 <p>consequent : {consequent}</p>
               </div>

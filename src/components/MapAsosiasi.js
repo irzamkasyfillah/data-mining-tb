@@ -60,7 +60,7 @@ function PointsLayer(props) {
                     <>
                         <p style={{fontWeight: "bold", fontSize: "16px"}}>{kec}</p>
                         <div>
-                            <p style={{margin: "0px 0", fontSize: "16px"}}>Variabel yang berkaitan terhadapat Tuberkulosis anak:</p>
+                            <p style={{margin: "0px 0", fontSize: "16px"}}>Variabel yang berkaitan terhadap Tuberkulosis anak:</p>
                             <p style={{margin: "0px 0", fontSize: "16px"}}>{antecedent}, berhubungan dengan {consequent}</p>
                         </div>
                     </>

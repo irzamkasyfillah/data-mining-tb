@@ -52,12 +52,12 @@ export function DashboardTable({data = []}) {
         {
             selector: (row) => row.alamat_kelurahan,
             name: "Kelurahan",
-            width: "130px",
+            width: "170px",
         },
         {
             selector: (row) => row.alamat_kecamatan,
             name: "Kecamatan",
-            width: "140px",
+            width: "150px",
         },
         {
             selector: (row) => row.alamat_kota,
