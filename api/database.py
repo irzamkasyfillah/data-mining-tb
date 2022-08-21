@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 SQLALCHEMY_DATABASE_URL = "mysql://tuber:password@localhost:3306/tuberkulosis"
+# SQLALCHEMY_DATABASE_URL = "mysql://root@localhost:3306/tuberkulosis"
 
 metadata = MetaData()
 
@@ -10,7 +11,6 @@ data = Table(
     "data",
     metadata,
     Column("id", Integer, primary_key=True),
-    # Column("code", String(255), unique=True, index=True),
     Column("code", String(255)),
     Column("timestamp", String(255)),
     Column("tanggal_lahir", String(255)),

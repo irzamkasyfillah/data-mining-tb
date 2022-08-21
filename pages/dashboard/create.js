@@ -40,6 +40,7 @@ function Panduan() {
         }
 
         const req = fetch(`https://tuber-api.ilpez.tech/data-create`, {
+        // const req = fetch(`http://127.0.0.1:8080/data-create`, {
             method: "POST",
             // headers: {'Content-type': 'application/json'},
             body: JSON.stringify(data),

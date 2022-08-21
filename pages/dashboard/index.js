@@ -27,6 +27,7 @@ function Asosiasi() {
             const data = new FormData();
             data.append("uploaded_file", files);
             const req = await fetch(`https://tuber-api.ilpez.tech/uploadfile`, {
+            // const req = await fetch(`http://127.0.0.1:8080/uploadfile`, {
                 method: "POST",
                 body: data,
             }).then((req) => {
@@ -40,6 +41,7 @@ function Asosiasi() {
 
     const handleAsosiasi = () => {
         const req = fetch(`https://tuber-api.ilpez.tech/run_asosiasi`, {
+        // const req = fetch(`http://127.0.0.1:8080/run_asosiasi`, {
             method: "POST",
         })
         // Router.push({
@@ -74,6 +76,7 @@ function Asosiasi() {
 
     const fetchData = async () => {
         const req = await fetch(`https://tuber-api.ilpez.tech/get_data`, {
+        // const req = await fetch(`http://127.0.0.1:8080/get_data`, {
             method: "GET",
         })
             .then((res) => res.json())

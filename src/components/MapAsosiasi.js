@@ -12,6 +12,7 @@ let DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
+
 function PointsLayer(props) {
     const { data, selectedIndex } = props;
     const result = data?.dict_kec_rules_location
@@ -20,8 +21,15 @@ function PointsLayer(props) {
     const opacities = [0.9, 0.75, 0.6, 0.45, 0.3, 0.15]
     let current_opacities_index = 0
 
+    const getKota2 = (kec, locations) => {
+        const kota = locations.find(location => location?.split(',')[0] == kec)
+        return kota?.split(',')[1]
+    }
+
     return Object.keys(result)?.map((kec) => {
         const resultKec = result[kec]
+        const locations = data?.locations
+        const kota = locations.find(location => location?.split(',')[0] == kec)?.split(',')[1].replaceAll(' ', '_').toLowerCase()
         const index = resultKec?.index
         let polygon = resultKec?.polygons?.coordinates
         if (resultKec?.polygons?.type === "Polygon" && polygon?.length === 1) {
@@ -55,7 +63,7 @@ function PointsLayer(props) {
         const pathOptions = { fillColor: 'red', fillOpacity: fillOpacity }
 
         return (
-            <PolygonMarker className={`polygon-marker ${index} hidden`} pathOptions={pathOptions} positions={polygon} key={index}
+            <PolygonMarker className={`polygon-marker ${index} ${kota} hidden`} pathOptions={pathOptions} positions={polygon} key={index}
                 content={(
                     <>
                         <p style={{fontWeight: "bold", fontSize: "16px"}}>{kec}</p>
@@ -104,27 +112,37 @@ function PointMarker(props) {
 }
 
 const Map = (props) => {
-    const {data, selectedData, center} = props;
+    const {data, selectedData, center, selectedKota} = props;
     const [map, setMap] = useState(null);
 
-    const onClickItem = (query) => {
+    const onClickItem = (query, selectedKota) => {
         let elements = document.querySelectorAll('.polygon-marker')
         for (let i = 0; i < elements.length; i++) {
-            if (query !== '' && !elements[i].classList.contains(query)) {
-                elements[i].classList.remove('visible')
-                elements[i].classList.add('hidden')
-            } else if (query === '' && elements[i].classList.contains('hidden')) {
-                elements[i].classList.remove('hidden')
-                elements[i].classList.add('visible')
+            if (selectedKota){
+                if (elements[i].classList.contains(selectedKota)) {
+                    elements[i].classList.remove('hidden')
+                    elements[i].classList.add('visible')
+                } else {
+                    elements[i].classList.add('hidden')
+                    elements[i].classList.remove('visible')
+                }
             } else {
-                elements[i].classList.remove('hidden')
-                elements[i].classList.add('visible')
+                if (query !== '' && !elements[i].classList.contains(query)) {
+                    elements[i].classList.remove('visible')
+                    elements[i].classList.add('hidden')
+                } else if (query === '' && elements[i].classList.contains('hidden')) {
+                    elements[i].classList.remove('hidden')
+                    elements[i].classList.add('visible')
+                } else {
+                    elements[i].classList.remove('hidden')
+                    elements[i].classList.add('visible')
+                }
             }
         }
     }
 
     return (
-        <MapContainer center={center || [-5.136143, 119.469370]} zoom={14} scrollWheelZoom={true} className={'mapid'} whenCreated={setMap}>
+        <MapContainer center={center || [-5.136143, 119.469370]} zoom={selectedKota ? 11:14} scrollWheelZoom={true} className={'mapid'} whenCreated={setMap}>
             <TileLayer
                 attribution='&copy; <a href="https://osm.org/copyright" target="_blank">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -134,7 +152,7 @@ const Map = (props) => {
                 data && <PointsLayer selectedIndex={selectedData?.index} data={data} />
             }
             {
-                data && onClickItem(selectedData?.index) 
+                data && onClickItem(selectedData?.index, selectedKota) 
             }
             {
                 data && <Legend map={map} data={data} />

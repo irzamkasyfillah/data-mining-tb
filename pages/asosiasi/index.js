@@ -8,6 +8,7 @@ import { TextField } from '@mui/material'
 import ReactDOM from 'react-dom';
 import { AturanAsosiasi } from '../../src/components/AturanAsosiasi'
 
+
 function Asosiasi() {
   const router = useRouter()
   const [loading, setLoading] = useState(false);
@@ -31,6 +32,7 @@ function Asosiasi() {
     const dataExist = localStorage.getItem("result")
      if (!dataExist) {
       const req = fetch(`https://tuber-api.ilpez.tech/asosiasi`, {
+      // const req = fetch(`http://127.0.0.1:8080/asosiasi`, {
         method: "GET",
       })
       .then((res) => res.json())
@@ -103,16 +105,20 @@ function Asosiasi() {
   const handleClick = (data, kec) => {
     setSelectedData(data)
     const center = [data?.lat, data?.long]
+    setSelectedKota(null)
     setCenter(center)
   }
 
   const handleClickKota = (kota) => {
-    setSelectedKota(kota)
+    setSelectedKota(kota.replaceAll(' ', '_').toLowerCase())
+    const dataKota = data.data_kota[kota+',Indonesia']
+    const center = [dataKota?.latitude, dataKota?.longitude]
+    setCenter(center)
   }
 
   const getKota = (kec, locations) => {
-    const kota = locations.find(location => location.split(',')[0] == kec)
-    return kota.split(',')[1]
+    const kota = locations.find(location => location?.split(',')[0] == kec)
+    return kota?.split(',')[1]
   }
 
   const generateKec = () => {
@@ -186,6 +192,7 @@ function Asosiasi() {
           <Map
             data={data}
             selectedData={selectedData}
+            selectedKota={selectedKota}
             center={center || [-5.136143, 119.469370]}
             />
         </div>

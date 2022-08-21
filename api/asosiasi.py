@@ -244,6 +244,20 @@ def coordinate(df):
     return locations, geolocator, polygons, keckota
 
 
+def coordinateKota(df):
+    dict_locations = {}
+    coord = set(df['Kab/Kota'] + ',Indonesia')
+    geolocator = Nominatim(user_agent="arcgis")
+    for kota in coord:
+        location = geolocator.geocode(kota, timeout=None)
+        dict_locations[kota] = {
+            'address': location.address,
+            'latitude': location.latitude,
+            'longitude': location.longitude
+        }
+    return dict_locations
+
+
 def transform(data_array, sparse=False):
     unique_items = set()
 
@@ -733,6 +747,7 @@ def asosiasi(dataset, min_support=0.35, min_threshold=0.9):
     list_kec = getKecamatan(df)
     dict_kec = getKecamatandict(list_kec, data_array)
     dict_kec_rules_location = visualisation(dict_kec, rules, locations, polygons)
+    kota = coordinateKota(df)
 
     # cross asosiasi
     highest_kec, data_array2, highest_kec_name = count_highest(df)
@@ -776,6 +791,9 @@ def asosiasi(dataset, min_support=0.35, min_threshold=0.9):
     with open("./rules/list_aturan.json", "w") as outfile:
         json.dump(list_aturan, outfile)
 
+    with open("./rules/kota.json", "w") as outfile:
+        json.dump(kota, outfile)
+
     print(keckota)
     print(frequent_pattern)
     print(rules2)
@@ -796,5 +814,6 @@ def asosiasi(dataset, min_support=0.35, min_threshold=0.9):
         'highest_kec': highest_kec,
         'list_antecedents_unique': list_antecedents_unique,
         'list_consequents_unique': list_consequents_unique,
-        'list_aturan': list_aturan
+        'list_aturan': list_aturan,
+        'kota': kota
     }

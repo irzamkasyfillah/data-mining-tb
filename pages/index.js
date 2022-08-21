@@ -26,6 +26,7 @@ class Home extends React.Component {
     const data = new FormData()
     data.append("uploaded_file", files)
     const req = fetch(`https://tuber-api.ilpez.tech/uploadfile/`, {
+    // const req = fetch(`http://127.0.0.1:8080/uploadfile/`, {
       method: "POST",
       body: data,
 
@@ -40,6 +41,7 @@ class Home extends React.Component {
 
   handleGenerateData = async () => {
     const req = fetch(`https://tuber-api.ilpez.tech/asosiasi/`, {
+    // const req = fetch(`http://127.0.0.1:8080/asosiasi/`, {
       method: "GET",
     })
     .then((req) => {

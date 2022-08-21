@@ -304,6 +304,8 @@ def read_data():
             data_list_consequents = json.load(data)
         with open('./rules/list_aturan.json', 'r') as data:
             data_list_aturan = json.load(data)
+        with open('./rules/kota.json', 'r') as data:
+            data_kota = json.load(data)
 
         return {
             'locations': data_lokasi,
@@ -311,7 +313,8 @@ def read_data():
             'highest_kec': data_highest,
             'list_antecedents_unique': data_list_antecedents,
             'list_consequents_unique': data_list_consequents,
-            'list_aturan': data_list_aturan
+            'list_aturan': data_list_aturan,
+            'data_kota': data_kota
         }
     else:
         return False
