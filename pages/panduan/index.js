@@ -19,9 +19,6 @@ function Panduan() {
         for (let [key, value] of Object.entries(state)) {
             data[key] = value
         }
-
-        console.log(JSON.stringify(data), 'data')
-
         const req = fetch(`https://tuber-api.ilpez.tech/create`, {
             method: "POST",
             body: JSON.stringify(data),

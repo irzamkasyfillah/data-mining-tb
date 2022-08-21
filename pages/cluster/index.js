@@ -20,8 +20,6 @@ function Cluster() {
 
     const handleGenerateData = async () => {
         const dataExist = localStorage.getItem("result2")
-        // console.log("tes")
-        // console.log(router?.query, reg)
         if (!dataExist) {
             //     const data = JSON.parse(dataExist)
             //     setData(data)
@@ -37,7 +35,6 @@ function Cluster() {
                     if (data) {
                         setData(data)
                         setLoading(false)
-                        console.log('sudah load', data)
                         setReg(false)
                     }
                 })
@@ -52,21 +49,6 @@ function Cluster() {
 
     const handleClick = (kec, kab) => {
         setSelectedData(kec)
-        // let pink = document.querySelectorAll('.circle-marker')
-        // for (let i = 0; i < pink.length; i++) {
-        //     if (kec !== '' && !pink[i].classList.contains(kec.replace(' ', '-'))) {
-        //         console.log('if 1')
-        //         pink[i].classList.remove('visible')
-        //         pink[i].classList.add('hidden')
-        //     } else if (kec === '' && pink[i].classList.contains('hidden')) {
-        //         pink[i].classList.remove('hidden')
-        //         pink[i].classList.add('visible')
-        //     } else {
-        //         pink[i].classList.remove('hidden')
-        //         pink[i].classList.add('visible')
-        //     }
-        // }
-        // Set center if kec clicked
         const coord1 = data?.cluster1_df
         const resultKec1 = coord1[`${kec} (${kab})`]
         const position1 = resultKec1?.coord
@@ -85,7 +67,6 @@ function Cluster() {
                 listKab[kab] = [...listKab[kab], split[0]]
             }
         })
-        console.log("locations", listKab)
 
             const listKabView = {}
             Object.keys(listKab).map(kab => {

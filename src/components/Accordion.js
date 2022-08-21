@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 
 
-export const Accordion = ({ title, content }) => {
+export const Accordion = ({ title, content, style }) => {
   const [active, setActive] = useState(false)
   const [height, setHeight] = useState('0px')
   const [rotate, setRotate] = useState('transform duration-700 ease')
@@ -16,7 +16,7 @@ export const Accordion = ({ title, content }) => {
   }
 
   return (
-    <div className="rounded overflow-hidden shadow-lg">
+    <div className="rounded overflow-hidden shadow-lg" style={{...style}}>
         <div className="px-6 pt-4">
             <div className="flex flex-col">
                 <button

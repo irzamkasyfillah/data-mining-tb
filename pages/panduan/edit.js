@@ -36,10 +36,6 @@ function Panduan() {
             data[key] = value
         }
 
-        console.log(JSON.stringify(data), 'data')
-
-        console.log(router.query.id, 'ini id')
-
         const req = fetch(`https://tuber-api.ilpez.tech/update/${router.query.id}`, {
             method: "PUT",
             body: JSON.stringify(data),

@@ -42,8 +42,6 @@ function Panduan() {
             .then((res) => res.json()
             )
             .then((data) => {
-                console.log(data, 'ini datanya')
-                // setState(data);
                 setState({
                     umur : data['umur'],
                     tinggi : data['tinggi_badan'],
@@ -83,8 +81,6 @@ function Panduan() {
         for (let [key, value] of Object.entries(state)) {
             data[key] = value
         }
-
-        console.log(data, 'data')
 
         const req = fetch(`https://tuber-api.ilpez.tech/data-update/${router.query.id}`, {
             method: "PUT",

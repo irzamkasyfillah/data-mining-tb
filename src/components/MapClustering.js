@@ -43,10 +43,7 @@ function PointMarker(props) {
     const res4 = data?.cluster4_result
     const res5 = data?.cluster5_result
 
-    console.log(inter, 'ini interpretasi')
-    // console.log(data)
     return Object.keys(coord1)?.map((kec) => {
-        console.log("selectedData", selectedData, selectedData == kec.split(' (')[0])
         if (!selectedData || (selectedData && selectedData == kec.split(' (')[0])) {
             const [showModal, setShowModal] = React.useState(false);
             const handleClose = () => setShow(false);
@@ -436,7 +433,6 @@ const Map = (props) => {
                                     for (const i in statesData[state].coordinates) {
                                         const coord = statesData[state].coordinates[i][0].map((item) => [item[1], item[0]]);
                                         tes.push(coord);
-                                        // console.log(tes);
                                     }
                                     coordinates = tes;
                                 } else {
@@ -486,7 +482,6 @@ const Map = (props) => {
                                             },
                                             click: (e) => {
                                                 const layer = e.target;
-                                                console.log('clicked ', layer)
                                             }
                                         }}
                                     >

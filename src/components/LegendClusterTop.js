@@ -3,15 +3,11 @@ import L from "leaflet";
 import { useEffect } from "react";
 
 function LegendClusterTop({ map, selectedKec}) {
-  console.log(map);
   useEffect(() => {
     if (map) {
       // const highest_kec_json = data?.highest_kec
       // const highest_kec = JSON.parse(highest_kec_json)
       // const list_aturan = data?.list_aturan
-      // console.log("highest_kec",data);
-      // console.log("highest_kec",highest_kec);
-      // console.log("list_aturan", list_aturan);
       let content = (`
                    <div>
                         Kecamatan ${selectedKec}                   

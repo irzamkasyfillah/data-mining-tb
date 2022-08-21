@@ -3,7 +3,6 @@ import L from "leaflet";
 import { useEffect } from "react";
 
 function Legend({ map, data}) {
-  console.log(map);
   useEffect(() => {
     if (map) {
       const highest_kec_json = data?.highest_kec

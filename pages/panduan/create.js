@@ -18,8 +18,6 @@ function Panduan() {
             data[key] = value
         }
 
-        console.log(JSON.stringify(data), 'data')
-
         const req = fetch(`https://tuber-api.ilpez.tech/create`, {
             method: "POST",
             // headers: {'Content-type': 'application/json'},

@@ -39,8 +39,6 @@ function Panduan() {
             data[key] = value
         }
 
-        console.log(data, 'data')
-
         const req = fetch(`https://tuber-api.ilpez.tech/data-create`, {
             method: "POST",
             // headers: {'Content-type': 'application/json'},

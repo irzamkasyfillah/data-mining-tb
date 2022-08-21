@@ -20,7 +20,6 @@ export function Data_Table({data = []}) {
     }
 
     const handleDelete = (id) => {
-        console.log(id)
         const req = fetch(`https://tuber-api.ilpez.tech/delete/${id}`, {
             method: "DELETE"
         })

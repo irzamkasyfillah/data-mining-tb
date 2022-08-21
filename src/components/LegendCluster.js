@@ -2,7 +2,6 @@ import L from "leaflet";
 import {useEffect} from "react";
 
 function Legend({map}) {
-    console.log(map);
     useEffect(() => {
         if (map) {
             const getColor = d => {

@@ -25,7 +25,6 @@ class Home extends React.Component {
     event.preventDefault()
     const data = new FormData()
     data.append("uploaded_file", files)
-    console.log(data)
     const req = fetch(`https://tuber-api.ilpez.tech/uploadfile/`, {
       method: "POST",
       body: data,
@@ -44,7 +43,6 @@ class Home extends React.Component {
       method: "GET",
     })
     .then((req) => {
-    console.log(req, req.json())
     return req.json()
     })
   }

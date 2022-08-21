@@ -19,6 +19,7 @@ function Asosiasi() {
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState([])
   const [listKota, setListKota] = useState({})
+  const [selectedKota, setSelectedKota] = useState(null)
 
   const Map = dynamic(
     () => import('../../src/components/MapAsosiasi'), // replace '@components/map' with your component's location
@@ -65,6 +66,7 @@ function Asosiasi() {
         const kota = getKota(kec, locations)
         const antecedent = resultKec?.antecedents?.join(', ')
         const consequent = resultKec?.consequents?.join(', ')
+        const index = resultKec?.index
 
         processedModalData.push({ kec, aturan: antecedent + " berhubungan dengan " + consequent})
 
@@ -77,7 +79,7 @@ function Asosiasi() {
                 <p>antecedent : {antecedent}</p>
                 <p>consequent : {consequent}</p>
               </div>
-            )}/>
+            )} style={index===selectedData?.index ?{backgroundColor: 'rgba(0,0,0,0.2)'}:{}}/>
           </div>
         )
       }
@@ -96,12 +98,16 @@ function Asosiasi() {
 
   useEffect(() => {
     handleGenListKota(inputText)
-  }, [inputText, data])
+  }, [inputText, data, selectedData])
 
   const handleClick = (data, kec) => {
     setSelectedData(data)
     const center = [data?.lat, data?.long]
     setCenter(center)
+  }
+
+  const handleClickKota = (kota) => {
+    setSelectedKota(kota)
   }
 
   const getKota = (kec, locations) => {
@@ -125,7 +131,7 @@ function Asosiasi() {
 
     return Object.keys(listKota, filteredData).map(kota => (
       <div key={kota}>
-        <h2 style={{fontWeight: "bold", fontSize: 20, margin: "4px 0px 0px 8px"}}>{kota}</h2>
+        <h2 style={{fontWeight: "bold", fontSize: 20, margin: "4px 0px 0px 8px"}} onClick={() => handleClickKota(kota)}>{kota}</h2>
         {listKota[kota]}
       </div>
 
